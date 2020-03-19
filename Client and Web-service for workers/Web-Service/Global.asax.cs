@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Web_Service.DataBase;
 
 namespace Web_Service
 {
@@ -13,10 +14,13 @@ namespace Web_Service
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            // Настройка подключения к базе данных
+            DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
+
         }
     }
 }

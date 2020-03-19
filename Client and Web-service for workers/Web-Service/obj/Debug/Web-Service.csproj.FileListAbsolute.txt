@@ -88,3 +88,12 @@ C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\r
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csproj.CopyComplete
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.dll
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.pdb
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csprojAssemblyReference.cache
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web_Service.Properties.Resources.resources
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csproj.GenerateResource.cache
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\BouncyCastle.Crypto.dll
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Google.Protobuf.dll
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Renci.SshNet.dll
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Google.Protobuf.xml
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Renci.SshNet.xml
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\MySql.Data.dll
