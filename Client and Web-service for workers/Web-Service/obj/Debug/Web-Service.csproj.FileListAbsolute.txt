@@ -97,3 +97,5 @@ C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\R
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Google.Protobuf.xml
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\Renci.SshNet.xml
 C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\MySql.Data.dll
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\log4net.dll
+C:\Projects\C#\Диплом\Client and Web-service for workers\Web-Service\bin\log4net.xml

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Web_Service.DataBase;
 
 namespace Web_Service.Controllers
 {
@@ -15,6 +16,8 @@ namespace Web_Service.Controllers
         /// </summary>
         public HttpResponseMessage Get()
         {
+            Logger.Log.Debug("api/Connection GET Получено сообщение");
+            Logger.Log.Info("api/Connection GET Сообщение обработано");
             return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK, Content = new StringContent("Ok") };
         }
     }
