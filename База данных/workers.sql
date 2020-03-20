@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 18 2020 г., 17:35
+-- Время создания: Мар 20 2020 г., 19:27
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -35,6 +35,22 @@ CREATE TABLE IF NOT EXISTS `plans` (
   `Total` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   KEY `Id_Worker` (`WorkerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `sessions`
+--
+
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `WorkerId` int(11) NOT NULL,
+  `Token` varchar(40) NOT NULL,
+  `ClientInfo` text NOT NULL,
+  `Created` datetime NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `WorkerId` (`WorkerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -76,15 +92,15 @@ CREATE TABLE IF NOT EXISTS `statuslogs` (
 CREATE TABLE IF NOT EXISTS `workers` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(30) NOT NULL,
-  ` Surname` varchar(30) NOT NULL,
-  ` Patronymic` varchar(30) NOT NULL,
-  `BirthDate` date NOT NULL,
+  ` Surname` varchar(30) DEFAULT NULL,
+  ` Patronymic` varchar(30) DEFAULT NULL,
+  `BirthDate` date DEFAULT NULL,
   `Mail` varchar(60) DEFAULT NULL,
-  `Position` varchar(30) NOT NULL,
-  `Rate` int(11) NOT NULL,
-  `AccessLevel` int(11) NOT NULL,
-  `Login` varchar(30) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Position` varchar(30) DEFAULT NULL,
+  `Rate` int(11) DEFAULT NULL,
+  `AccessLevel` int(11) DEFAULT NULL,
+  `Login` varchar(40) NOT NULL,
+  `Password` varchar(40) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Login` (`Login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -103,8 +119,8 @@ ALTER TABLE `plans`
 -- Ограничения внешнего ключа таблицы `statuslogs`
 --
 ALTER TABLE `statuslogs`
-  ADD CONSTRAINT `statuslogs_ibfk_2` FOREIGN KEY (`StatusCode`) REFERENCES `statuses` (`Code`),
-  ADD CONSTRAINT `statuslogs_ibfk_1` FOREIGN KEY (`WorkerId`) REFERENCES `workers` (`Id`);
+  ADD CONSTRAINT `statuslogs_ibfk_1` FOREIGN KEY (`WorkerId`) REFERENCES `workers` (`Id`),
+  ADD CONSTRAINT `statuslogs_ibfk_2` FOREIGN KEY (`StatusCode`) REFERENCES `statuses` (`Code`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
