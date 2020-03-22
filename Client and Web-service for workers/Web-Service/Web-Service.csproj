@@ -152,6 +152,7 @@
     <Compile Include="Controllers\AuthoController.cs" />
     <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MessageTemplate.cs" />
     <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="DataBase\DBClient.cs" />
     <Compile Include="DataBase\DBWorkerMySql.cs" />

@@ -22,7 +22,6 @@ namespace Web_Service.Controllers
         public async Task<HttpResponseMessage> Get(HttpRequestMessage message)
         {
             Logger.Log.Debug("api/Connection GET Получено сообщение");
-            Logger.Log.Info("api/Connection GET Сообщение обработано");
 
             return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK, Content = new StringContent(await message.Content.ReadAsStringAsync()) };
         }
