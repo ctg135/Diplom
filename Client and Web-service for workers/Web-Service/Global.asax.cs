@@ -21,7 +21,12 @@ namespace Web_Service
             DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
             // Настройка логгера
             Logger.InitLogger();
-            Logger.Log.Info("Логгирование запущено");
+            Logger.Log.Info("Сервер запущен!");
+        }
+
+        private void WebApiApplication_Disposed(object sender, EventArgs e)
+        {
+            Logger.Log.Info("Сервер завершает работу");
         }
     }
 }

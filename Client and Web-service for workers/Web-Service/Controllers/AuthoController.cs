@@ -22,7 +22,7 @@ namespace Web_Service.Controllers
         /// <returns></returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
-            Logger.Log.Info($"api/Autho POST Получено сообщение от {request.Headers.UserAgent.ToString()}");
+            Logger.AuthoLog.Info($"POST Получено сообщение от {request.Headers.UserAgent.ToString()}");
             HttpResponseMessage response = new HttpResponseMessage();
             
             Autho data = new Autho();
@@ -32,13 +32,13 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.Log.Error($"api/Autho POST Ошибка сериализации полученного сообщения: {exc.Message} в \"{await request.Content.ReadAsStringAsync()}\"");
+                Logger.AuthoLog.Error($"POST Ошибка сериализации полученного сообщения: {exc.Message} в \"{await request.Content.ReadAsStringAsync()}\"");
                 return MessageTemplate.BadProcessingMessage;
             }
 
             if(string.IsNullOrEmpty(data.Login) && string.IsNullOrEmpty(data.Password))
             {
-                Logger.Log.Error("api/Autho POST Пустые данные авторизации");
+                Logger.AuthoLog.Error("POST Пустые данные авторизации");
                 return MessageTemplate.BadMessage;
             }
 
@@ -50,13 +50,13 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.Log.Error($"api/Autho POST Ошибка поиска сотрудника: {exc.Message}");
+                Logger.AuthoLog.Error($"POST Ошибка поиска сотрудника: {exc.Message}");
                 return MessageTemplate.UserNotFound;
             }
 
             if(WorkerId == string.Empty)
             {
-                Logger.Log.Error("api/Autho POST Работник не найден");
+                Logger.AuthoLog.Error("POST Работник не найден");
                 return MessageTemplate.UserNotFound;
             }
 
@@ -75,13 +75,13 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.Log.Error($"api/Autho POST Не удалось создать сессию: {exc.Message}");
+                Logger.AuthoLog.Error($"api/Autho POST Не удалось создать сессию: {exc.Message}");
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.Log.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
+            Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
             response.Content = new StringContent(sessionHash);
-            Logger.Log.Info($"api/Autho POST Отправка ответа {request.Headers.UserAgent.ToString()}");
+            Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {request.Headers.UserAgent.ToString()}");
             return response;
         }
 
