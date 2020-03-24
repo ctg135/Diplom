@@ -92,8 +92,8 @@ CREATE TABLE IF NOT EXISTS `statuslogs` (
 CREATE TABLE IF NOT EXISTS `workers` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(30) NOT NULL,
-  ` Surname` varchar(30) DEFAULT NULL,
-  ` Patronymic` varchar(30) DEFAULT NULL,
+  `Surname` varchar(30) DEFAULT NULL,
+  `Patronymic` varchar(30) DEFAULT NULL,
   `BirthDate` date DEFAULT NULL,
   `Mail` varchar(60) DEFAULT NULL,
   `Position` varchar(30) DEFAULT NULL,
