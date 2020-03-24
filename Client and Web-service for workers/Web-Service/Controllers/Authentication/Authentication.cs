@@ -21,7 +21,25 @@ namespace Web_Service.Controllers
         /// <returns>Результат авторизации</returns>
         public static AuthenticationResult Authenticate(string Session, string ClientInfo)
         {
+            string WorkerId = string.Empty;
+            string Client   = string.Empty;
 
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(Session);
+                Client   = DBClient.GetClientInfo(Session);
+            }
+            catch(Exception exc)
+            {
+                Logger.AuthoLog.Error("Ошибка поиска сессии", exc);
+                return AuthenticationResult.SessionNotFound;
+            }
+
+            if (string.IsNullOrEmpty(WorkerId) || string.IsNullOrEmpty(Client))
+                return AuthenticationResult.SessionNotFound;
+
+            if (ClientInfo != Client)
+                return AuthenticationResult.ClientNotFound;
 
             return AuthenticationResult.Ok;
         }
@@ -32,7 +50,7 @@ namespace Web_Service.Controllers
         /// <param name="Password">Пароль пользователя</param>
         /// <param name="ClientInfo">Информация о клиенте</param>
         /// <returns>Хэш новой созданной сессии</returns>
-        public static string CreateNewSession(string Login, string Password, string ClientInfo, DateTime Date)
+        public static string CreateSessionHash(string Login, string Password, string ClientInfo, DateTime Date)
         {
             var hash = Encoding.UTF8.GetBytes(Login + Password + ClientInfo + DateTime.Now.ToString());
 

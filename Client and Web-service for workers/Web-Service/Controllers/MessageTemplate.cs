@@ -68,6 +68,49 @@ namespace Web_Service.Controllers
                 };
             }
         }
+        /// <summary>
+        /// Сообщение о ненайденной сессии при авторизации
+        /// </summary>
+        public static HttpResponseMessage SessionNotFound
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Сессия не была найдена\"}"),
+                    StatusCode = HttpStatusCode.Unauthorized
+                };
+            }
+        }
+        /// <summary>
+        /// Сообщение о ненайденном клиенте при авторизации
+        /// </summary>   
+        public static HttpResponseMessage ClientNotFound
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Такой клиент не блы найден\"}"),
+                    StatusCode = HttpStatusCode.Unauthorized
+                };
+            }
+        }
+        /// <summary>
+        /// Сообщение о ненайденном сотруднике при поиске
+        /// </summary>
+        public static HttpResponseMessage WorkerNotFound
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Работник с таким номером не был найден\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
+        
 
     }
 }

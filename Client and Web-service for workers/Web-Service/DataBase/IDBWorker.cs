@@ -22,7 +22,7 @@ namespace Web_Service.DataBase
         /// <exception cref="System.Exception">Ошибка команды, при её наличии</exception>
         void ExecuteQuery(string query);
         /// <summary>
-        /// Функция выполения команды к базе данных
+        /// Функция выполения проверки подключения к базе данных
         /// </summary>
         /// <exception cref="System.Exception">Ошибка команды</exception>
         bool CheckConnection();

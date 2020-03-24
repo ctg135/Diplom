@@ -14,15 +14,16 @@ namespace Web_Service.Controllers
 {
     public class AuthoController : ApiController
     {
-        // POST: api/Autho
         /// <summary>
         /// Авторизация
+        /// <br><c>POST: api/Autho</c></br>
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
-            Logger.AuthoLog.Info($"POST Получено сообщение от {request.Headers.UserAgent.ToString()}");
+            string ClientInfo = request.Headers.UserAgent.ToString();
+            Logger.AuthoLog.Info($"POST Получено сообщение от {ClientInfo}");
             HttpResponseMessage response = new HttpResponseMessage();
             
             Autho data = new Autho();
@@ -54,7 +55,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.UserNotFound;
             }
 
-            if(WorkerId == string.Empty)
+            if(string.IsNullOrEmpty(WorkerId))
             {
                 Logger.AuthoLog.Error("POST Работник не найден");
                 return MessageTemplate.UserNotFound;
@@ -62,16 +63,16 @@ namespace Web_Service.Controllers
 
             DateTime dateOfCreation = DateTime.Now;
 
-            string sessionHash = Authentication.CreateNewSession(
+            string sessionHash = Authentication.CreateSessionHash(
                 data.Login,
                 data.Password,
-                request.Headers.UserAgent.ToString(),
+                ClientInfo,
                 dateOfCreation
             );
 
             try
             {
-                DBClient.CreateSession(WorkerId, sessionHash, request.Headers.UserAgent.ToString(), dateOfCreation);
+                DBClient.CreateSession(WorkerId, sessionHash, ClientInfo, dateOfCreation);
             }
             catch (Exception exc)
             {
@@ -81,7 +82,7 @@ namespace Web_Service.Controllers
 
             Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
             response.Content = new StringContent(sessionHash);
-            Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {request.Headers.UserAgent.ToString()}");
+            Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
             return response;
         }
 
@@ -89,23 +90,6 @@ namespace Web_Service.Controllers
         public string Get(int id)
         {
             return "value";
-        }
-
-        // POST: api/Autho
-        public HttpResponseMessage Get(HttpRequestMessage request)
-        {
-            HttpResponseMessage response = new HttpResponseMessage();
-            return response;
-        }
-
-        // PUT: api/Autho/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Autho/5
-        public void Delete(int id)
-        {
         }
     }
 }

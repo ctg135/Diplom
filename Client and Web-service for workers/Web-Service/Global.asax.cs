@@ -17,11 +17,19 @@ namespace Web_Service
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            // Настройка подключения к базе данных
-            DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
             // Настройка логгера
             Logger.InitLogger();
             Logger.Log.Info("Сервер запущен!");
+            // Настройка подключения к базе данных
+            DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
+            if(DBClient.DB.CheckConnection())
+            {
+                Logger.Log.Info("Подключение к базе данных установлено");
+            }
+            else
+            {
+                Logger.Log.Error("Подключение к базе данных отсутствует");
+            }
         }
 
         private void WebApiApplication_Disposed(object sender, EventArgs e)

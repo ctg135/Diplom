@@ -20,6 +20,7 @@ namespace Web_Service
         /// Логгер для контроллера api/Autho
         /// </summary>
         public static ILog AuthoLog { get; } = LogManager.GetLogger("LOGGER_AUTHO");
+        public static ILog WorkerLog { get; } = LogManager.GetLogger("LOGGER_WORKER");
         /// <summary>
         /// Инициализация логгеров
         /// </summary>

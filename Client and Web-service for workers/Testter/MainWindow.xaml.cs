@@ -38,6 +38,9 @@ namespace Testter
                 case "Autho":
                     Model.Text = JsonConvert.SerializeObject(new Autho() { Login = "testLogin", Password = "testPassword" });
                     break;
+                case "Request":
+                    Model.Text = JsonConvert.SerializeObject(new Request() { Session = null, Query = null } );
+                    break;
             }
         }
 

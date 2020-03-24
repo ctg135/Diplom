@@ -37,6 +37,7 @@
         <TextBox x:Name="Model" HorizontalAlignment="Left" Height="23" Margin="9,418,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="481"/>
         <ComboBox x:Name="ModelSelector" HorizontalAlignment="Left" Margin="9,387,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem>Autho</ComboBoxItem>
+            <ComboBoxItem>Request</ComboBoxItem>
         </ComboBox>
         <Label Content="Сериализовать модель" HorizontalAlignment="Left" Margin="15,351,0,0" VerticalAlignment="Top"/>
         <Button Content="Сериализовать" HorizontalAlignment="Left" Margin="145,388,0,0" VerticalAlignment="Top" Width="130" Click="Button_Click"/>
