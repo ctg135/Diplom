@@ -136,29 +136,22 @@ namespace Web_Service.DataBase
         /// <summary>
         /// Функция получения статуса работника по id
         /// </summary>
-        /// <param name="WorkerId"></param>
+        /// <param name="WorkerId">Идентификатор работника</param>
         /// <returns>Статус работника</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static Status GetStatus(string WorkerId, DateTime Date)
+        public static StatusCode GetStatus(string WorkerId, DateTime Date)
         {
-            DataTable data = DB.MakeQuery($"SELECT `StatusCode` FROM `statuslogs` WHERE `WorkerId` = '{WorkerId}' AND `SetDate` = '{Date.ToString("yyyy-MM-dd")}'");
+            DataTable data = DB.MakeQuery($"SELECT `StatusCode`, `SetDate`, `SetTime` FROM `statuslogs` WHERE `WorkerId` = '{WorkerId}' AND `SetDate` = '{Date.ToString("yyyy-MM-dd")}'");
 
             if(data.Rows.Count == 0)
             {
-                data = DB.MakeQuery("SELECT * FROM `statuses` WHERE `Code` = '1'");
+                return new StatusCode() { Code = "1", LastUpdate = ""};
                 // !!!!
             }
             else
             {
-                data = DB.MakeQuery($"SELECT * FROM `statuses` WHERE `Code`='{data.Rows[0][0].ToString()}'");
+                return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = data.Rows[0]["SetDate"].ToString() + " " + data.Rows[0]["SetTime"].ToString() };
             }
-
-            return new Status()
-            { 
-                Code = data.Rows[0]["Code"].ToString(),
-                Title = data.Rows[0]["Title"].ToString(),
-                Description = data.Rows[0]["Description"].ToString()
-            };
         }
         public static void LogStatus(string WorkerId, string CodeStatus, DateTime Setted)
         {
@@ -170,6 +163,13 @@ namespace Web_Service.DataBase
                 { "StatusCode", CodeStatus }
             });
         }
+        /// <summary>
+        /// Функция для получения планов на количсество дней от указанной даты
+        /// </summary>
+        /// <param name="WorkerId">Идентификатор работника</param>
+        /// <param name="StartDay">Начальынй день</param>
+        /// <param name="DaysCount">Количество дней</param>
+        /// <exception cref="Exception">Ошибка запроса</exception>
         public static IEnumerable<Plan> GetPlans(string WorkerId, DateTime StartDay, int DaysCount)
         {
             List<Plan> plans = new List<Plan>();
