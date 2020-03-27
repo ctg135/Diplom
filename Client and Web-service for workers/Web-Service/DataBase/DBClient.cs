@@ -110,5 +110,65 @@ namespace Web_Service.DataBase
             };
             return worker;
         }
+        /// <summary>
+        /// Функция выбор всех видов статуса работников
+        /// </summary>
+        /// <returns>Все статусы</returns>
+        /// <exception cref="Exception">Ошибка запроса</exception>
+        public static IEnumerable<Status> GetStatuses()
+        {
+            List<Status> statuses = new List<Status>();
+
+            DataTable data = DB.SelectTable("statuses");
+
+            foreach(DataRow row in data.Rows)
+            {
+                statuses.Add(new Status()
+                {
+                    Code        = row["Code"].ToString(),
+                    Title       = row["Title"].ToString(),
+                    Description = row["Description"].ToString()
+                });
+            }
+
+            return statuses;
+        }
+        /// <summary>
+        /// Функция получения статуса работника по id
+        /// </summary>
+        /// <param name="WorkerId"></param>
+        /// <returns>Статус работника</returns>
+        /// <exception cref="Exception">Ошибка запроса</exception>
+        public static Status GetStatus(string WorkerId, DateTime Date)
+        {
+            DataTable data = DB.MakeQuery($"SELECT `StatusCode` FROM `statuslogs` WHERE `WorkerId` = '{WorkerId}' AND `SetDate` = '{Date.ToString("yyyy-MM-dd")}'");
+
+            if(data.Rows.Count == 0)
+            {
+                data = DB.MakeQuery("SELECT * FROM `statuses` WHERE `Code` = '1'");
+                // !!!!
+            }
+            else
+            {
+                data = DB.MakeQuery($"SELECT * FROM `statuses` WHERE `Code`='{data.Rows[0][0].ToString()}'");
+            }
+
+            return new Status()
+            { 
+                Code = data.Rows[0]["Code"].ToString(),
+                Title = data.Rows[0]["Title"].ToString(),
+                Description = data.Rows[0]["Description"].ToString()
+            };
+        }
+        public static void LogStatus(string WorkerId, string CodeStatus, DateTime Setted)
+        {
+            DB.Insert("statuslogs", new Dictionary<string, string>()
+            {
+                { "WorkerId", WorkerId },
+                { "SetDate", Setted.ToString("yyyy-MM-dd") },
+                { "SetTime", Setted.ToString("hh:mm:ss") },
+                { "StatusCode", CodeStatus }
+            });
+        }
     }
 }

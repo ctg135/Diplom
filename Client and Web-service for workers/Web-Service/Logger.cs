@@ -21,6 +21,7 @@ namespace Web_Service
         /// </summary>
         public static ILog AuthoLog { get; } = LogManager.GetLogger("LOGGER_AUTHO");
         public static ILog WorkerLog { get; } = LogManager.GetLogger("LOGGER_WORKER");
+        public static ILog StatusLog { get; } = LogManager.GetLogger("LOGGER_STATUS");
         /// <summary>
         /// Инициализация логгеров
         /// </summary>

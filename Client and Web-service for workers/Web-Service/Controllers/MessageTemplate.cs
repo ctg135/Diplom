@@ -36,7 +36,7 @@ namespace Web_Service.Controllers
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Ошибка обработки сообщения\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.Conflict
                 };
             }
         }
