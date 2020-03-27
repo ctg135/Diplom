@@ -146,8 +146,9 @@ namespace Web_Service.Controllers
             catch(Exception exc)
             {
                 Logger.StatusLog.Error("POST Ошибка установки статуса", exc);
-            }           
+            }
 
+            Logger.StatusLog.Info($"PUT Отправка ответа {ClientInfo}");
             return response;
         }
     }

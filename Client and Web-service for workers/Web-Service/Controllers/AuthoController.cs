@@ -85,11 +85,5 @@ namespace Web_Service.Controllers
             Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
             return response;
         }
-
-        // GET: api/Autho/5
-        public string Get(int id)
-        {
-            return "value";
-        }
     }
 }

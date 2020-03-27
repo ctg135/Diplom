@@ -76,15 +76,5 @@ namespace Web_Service.Controllers
             Logger.WorkerLog.Info($"POST Отправка ответа {ClientInfo}");
             return response;
         }
-
-        // PUT: api/Worker/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Worker/5
-        public void Delete(int id)
-        {
-        }
     }
 }

@@ -170,5 +170,28 @@ namespace Web_Service.DataBase
                 { "StatusCode", CodeStatus }
             });
         }
+        public static IEnumerable<Plan> GetPlans(string WorkerId, DateTime StartDay, int DaysCount)
+        {
+            List<Plan> plans = new List<Plan>();
+
+            DataTable data = DB.MakeQuery($"SELECT * FROM `plans` WHERE `WorkerId` = '{WorkerId}' " +
+                $"AND `Date` >= '{DateTime.Now.ToString("yyyy-MM-dd")}' " +
+                $"AND `Date` <= '{DateTime.Now.AddDays(DaysCount).ToString("yyyy-MM-dd")}'");
+
+            foreach(DataRow row in data.Rows)
+            {
+                plans.Add(new Plan() 
+                { 
+                    Id         = row["Id"].ToString(),
+                    WorkerId   = row["WorkerId"].ToString(),
+                    Date       = row["Date"].ToString(),
+                    StartOfDay = row["StartOfDay"].ToString(),
+                    EndOfDay   = row["EndOfDay"].ToString(),
+                    Total      = row["Total"].ToString()
+                });
+            }
+
+            return plans;
+        }
     }
 }

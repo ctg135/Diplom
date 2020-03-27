@@ -153,6 +153,7 @@
     <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessageTemplate.cs" />
+    <Compile Include="Controllers\PlanController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="DataBase\DBClient.cs" />
@@ -163,6 +164,7 @@
     </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Models\Autho.cs" />
+    <Compile Include="Models\Plan.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Worker.cs" />
@@ -177,6 +179,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Views\Home\Index.aspx.cs">
       <DependentUpon>Index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
