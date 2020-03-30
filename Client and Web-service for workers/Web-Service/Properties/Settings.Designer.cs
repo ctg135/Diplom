@@ -67,5 +67,50 @@ namespace Web_Service.Properties {
                 return ((string)(this["DBPwd"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("[\"4\",\"6\",\"7\"]")]
+        public string LongStatuses {
+            get {
+                return ((string)(this["LongStatuses"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1800000")]
+        public int PeriodCheckConnection {
+            get {
+                return ((int)(this["PeriodCheckConnection"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Status_NotStated {
+            get {
+                return ((string)(this["Status_NotStated"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:30:00")]
+        public string DisconnectTime {
+            get {
+                return ((string)(this["DisconnectTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public string Status_Finished {
+            get {
+                return ((string)(this["Status_Finished"]));
+            }
+        }
     }
 }

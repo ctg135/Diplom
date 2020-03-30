@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Text;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace Web_Service.Controllers
@@ -19,11 +21,43 @@ namespace Web_Service.Controllers
         /// <code>GET: api/Connection</code>
         /// Производит проверку подключения к серверу
         /// </summary>
-        public async Task<HttpResponseMessage> Get(HttpRequestMessage message)
+        public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
-            Logger.Log.Debug("api/Connection GET Получено сообщение");
+            string ClientInfo = request.Headers.UserAgent.ToString();
+            Logger.ConnectionLog.Info($"POST Получено сообщение от {ClientInfo}");
+            HttpResponseMessage response = new HttpResponseMessage();
 
-            return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK, Content = new StringContent(await message.Content.ReadAsStringAsync()) };
+            string Session = "";
+
+            try
+            {
+                var json = JObject.Parse(await request.Content.ReadAsStringAsync());
+                Session = (string)json["Session"];
+            }
+            catch (Exception exc)
+            {
+                Logger.ConnectionLog.Error("POST Ошибка сериализации", exc);
+                return MessageTemplate.BadMessage;
+            }
+
+            if (string.IsNullOrEmpty(Session))
+            {
+                Logger.ConnectionLog.Error("POST Пустой номер сессии");
+                return MessageTemplate.BadMessage;
+            }
+
+            try
+            {
+                DBClient.UpdateSession(Session, DateTime.Now);
+            }
+            catch(Exception exc)
+            {
+                Logger.ConnectionLog.Error("POST Ошибка обновления сессии", exc);
+                return MessageTemplate.BadProcessingMessage;
+            }
+
+            Logger.ConnectionLog.Info($"POST Статус обновлён для {ClientInfo}");
+            return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK };
         }
     }
 }

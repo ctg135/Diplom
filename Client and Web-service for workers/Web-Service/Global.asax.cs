@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Threading;
 using Web_Service.DataBase;
 
 namespace Web_Service
@@ -14,14 +15,21 @@ namespace Web_Service
     {       
         protected void Application_Start()
         {
+            // Настройка маршрутизации
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
             // Настройка логгера
+
             Logger.InitLogger();
             Logger.Log.Info("Сервер запущен!");
+
             // Настройка подключения к базе данных
+
             DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
+
             if(DBClient.DB.CheckConnection())
             {
                 Logger.Log.Info("Подключение к базе данных установлено");
@@ -30,11 +38,21 @@ namespace Web_Service
             {
                 Logger.Log.Error("Подключение к базе данных отсутствует");
             }
-        }
 
-        private void WebApiApplication_Disposed(object sender, EventArgs e)
+            DBClient.LongStatuses = new List<string>(ReaderConfig.LongStatuses);
+            DBClient.State_NotState = ReaderConfig.Status_NotStated;
+            DBClient.State_Finished = ReaderConfig.Status_Finished;
+            DBClient.DisconnectTime = ReaderConfig.DisconnectTime;
+
+            // Настройка процедуры проверки подключений
+
+            var timer = new Timer(new TimerCallback(OnTimer));
+            timer.Change(0, ReaderConfig.PeriodCheckConnection);
+        }
+        private static void OnTimer(object obj)
         {
-            Logger.Log.Info("Сервер завершает работу");
+            Logger.Log.Info("Проверка подключений");
+            DBClient.CheckActiveSessions(DateTime.Now);
         }
     }
 }

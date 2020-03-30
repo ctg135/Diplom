@@ -64,6 +64,7 @@ namespace Web_Service.Controllers
             }
 
             string WorkerId = DBClient.GetWorkerId(Session);
+            Logger.StatusLog.Debug("POST Просмотр статуса для " + WorkerId);
 
             switch (Authentication.Authenticate(Session, ClientInfo))
             {
@@ -82,6 +83,7 @@ namespace Web_Service.Controllers
             try
             {
                 var status = DBClient.GetStatus(WorkerId, DateTime.Now);
+                DBClient.UpdateSession(Session, DateTime.Now);
                 response.Content = new StringContent(JsonConvert.SerializeObject(status));
             }
             catch(Exception exc)
@@ -139,13 +141,15 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
+            Logger.StatusLog.Debug("Put установка статуса для " + WorkerId);
+
             try
             {
                 DBClient.LogStatus(WorkerId, NewStatusWorker, DateTime.Now);
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Error("POST Ошибка установки статуса", exc);
+                Logger.StatusLog.Error("PUT Ошибка установки статуса", exc);
             }
 
             Logger.StatusLog.Info($"PUT Отправка ответа {ClientInfo}");
