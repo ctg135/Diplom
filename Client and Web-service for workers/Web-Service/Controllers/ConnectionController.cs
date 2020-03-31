@@ -19,7 +19,7 @@ namespace Web_Service.Controllers
     {
         /// <summary>
         /// <code>GET: api/Connection</code>
-        /// Производит проверку подключения к серверу
+        /// Производит обновление времени жизни сессии
         /// </summary>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
@@ -27,7 +27,7 @@ namespace Web_Service.Controllers
             Logger.ConnectionLog.Info($"POST Получено сообщение от {ClientInfo}");
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = "";
+            string Session = string.Empty;
 
             try
             {

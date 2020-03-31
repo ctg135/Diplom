@@ -28,7 +28,7 @@ namespace Web_Service.Controllers
             Logger.WorkerLog.Info($"POST Получено сообщение от {ClientInfo}");
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = "";
+            string Session = string.Empty;
 
             try
             {
@@ -52,17 +52,6 @@ namespace Web_Service.Controllers
             switch (Authentication.Authenticate(Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
-                    Worker worker = new Worker();
-                    try
-                    {
-                        worker = DBClient.GetWorker(WorkerId);
-                    }
-                    catch(Exception exc)
-                    {
-                        Logger.WorkerLog.Error("POST Ошибка поиска работника", exc);
-                        return MessageTemplate.WorkerNotFound;
-                    }
-                    response.Content = new StringContent(JsonConvert.SerializeObject(worker));
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -73,6 +62,20 @@ namespace Web_Service.Controllers
                     Logger.WorkerLog.Info("POST Клиент не найден");
                     return MessageTemplate.ClientNotFound;
             }
+
+
+            Worker worker = new Worker();
+            try
+            {
+                worker = DBClient.GetWorker(WorkerId);
+            }
+            catch (Exception exc)
+            {
+                Logger.WorkerLog.Error("POST Ошибка поиска работника", exc);
+                return MessageTemplate.WorkerNotFound;
+            }
+            response.Content = new StringContent(JsonConvert.SerializeObject(worker));
+
             Logger.WorkerLog.Info($"POST Отправка ответа {ClientInfo}");
             return response;
         }

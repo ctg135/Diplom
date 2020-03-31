@@ -177,12 +177,12 @@ namespace Web_Service.DataBase
                 }
                 else
                 {
-                    return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("yyyy-MM-dd") + " " + data.Rows[0]["SetTime"].ToString() };
+                    return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("dd:MM:yyyy") + " " + data.Rows[0]["SetTime"].ToString() };
                 }
             }
             else
             {
-                return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("yyyy-MM-dd") + " " + data.Rows[0]["SetTime"].ToString() };
+                return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("dd:MM:yyyy") + " " + data.Rows[0]["SetTime"].ToString() };
             }
         }
         /// <summary>
@@ -267,25 +267,44 @@ namespace Web_Service.DataBase
         {
             DataTable notConnected = DB.MakeQuery($"SELECT `WorkerId` FROM `sessions` WHERE TIMEDIFF(now(), `LastUpdate`) > TIME('{DisconnectTime}')");
 
+            Logger.Log.Debug($"Всего неактивных сессий - {notConnected.Rows.Count}");
+
             foreach(DataRow row in notConnected.Rows )
             {
                 string WorkerId = row[0].ToString();
                 string status = GetStatus(WorkerId, TimeOfCheck).Code;
 
-                Logger.Log.Debug(WorkerId);
+                Logger.Log.Debug("Для №" + WorkerId + " - устаревшая сессия");
 
                 if (!IsLongStatus(status) && status != State_Finished)
                 {
                     DataTable lastConnect = DB.MakeQuery($"SELECT `LastUpdate` FROM `sessions` WHERE `WorkerId` = '{WorkerId}' ORDER BY `LastUpdate` DESC;");
 
-                    if (lastConnect.Rows.Count == 0) break;
+                    if (lastConnect.Rows.Count == 0) continue;
 
                     if (status != State_Finished || !IsLongStatus(status))
-                        LogStatus(WorkerId, State_Finished, DateTime.Parse(lastConnect.Rows[0][0].ToString()));
-                    Logger.Log.Debug("Удаление устаревшей сессии");
+                    {
+                        try
+                        {
+                            Logger.Log.Debug("Установка статуса завершенного дня для " + WorkerId);
+                            LogStatus(WorkerId, State_Finished, DateTime.Parse(lastConnect.Rows[0][0].ToString()));
+                        }
+                        catch(Exception exc)
+                        {
+                            Logger.Log.Error("Ошибка установки статуса", exc);
+                        }
+                    }
                 }
 
-                DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `WorkerId` = {WorkerId}");
+                Logger.Log.Debug("Удаление сессии...");
+                try
+                {
+                    DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `WorkerId` = {WorkerId}");
+                }
+                catch(Exception exc)
+                {
+                    Logger.Log.Error("Ошибка удаления сессии", exc);
+                }
             }
         }
     }

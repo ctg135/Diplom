@@ -14,7 +14,12 @@ namespace Web_Service.Controllers
 {
     public class StatusController : ApiController
     {
-        // GET: api/Status
+        /// <summary>
+        /// Контроллер для получения всех статусов
+        /// <code>GET: api/Status</code>
+        /// </summary>
+        /// <param name="request">Запрос</param>
+        /// <returns>Сообщение-ответ</returns>
         public async Task<HttpResponseMessage> Get(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -36,7 +41,12 @@ namespace Web_Service.Controllers
             return response;
         }
 
-        // POST: api/Status
+        /// <summary>
+        /// Контроллер для получения статуса работника
+        /// <code>POST: api/Status</code>
+        /// </summary>
+        /// <param name="request">Запрос</param>
+        /// <returns>Сообщение-ответ</returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -44,7 +54,7 @@ namespace Web_Service.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = "";
+            string Session = string.Empty;
 
             try
             {
@@ -62,8 +72,17 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Error("POST Пустой номер сессии");
                 return MessageTemplate.BadMessage;
             }
+            string WorkerId = string.Empty;
 
-            string WorkerId = DBClient.GetWorkerId(Session);
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(Session);
+            }
+            catch(Exception exc)
+            {
+                Logger.StatusLog.Error("POST Ошибка поиска сотрудника", exc);
+            }
+            
             Logger.StatusLog.Debug("POST Просмотр статуса для " + WorkerId);
 
             switch (Authentication.Authenticate(Session, ClientInfo))
@@ -96,7 +115,12 @@ namespace Web_Service.Controllers
             return response;
         }
 
-        // PUT: api/Status/5
+        /// <summary>
+        /// Контроллер для установки статуса
+        /// <code>PUT: api/Status/</code>
+        /// </summary>
+        /// <param name="request">Запрос</param>
+        /// <returns>Сообщение-ответ</returns>
         public async Task<HttpResponseMessage> Put(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -141,7 +165,7 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.StatusLog.Debug("Put установка статуса для " + WorkerId);
+            Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для №{WorkerId}");
 
             try
             {

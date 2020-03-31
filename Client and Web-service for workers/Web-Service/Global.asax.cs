@@ -53,6 +53,7 @@ namespace Web_Service
         {
             Logger.Log.Info("Проверка подключений");
             DBClient.CheckActiveSessions(DateTime.Now);
+            Logger.Log.Info("Проверка подключений завершена");
         }
     }
 }

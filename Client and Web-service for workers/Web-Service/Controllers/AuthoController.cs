@@ -16,7 +16,7 @@ namespace Web_Service.Controllers
     {
         /// <summary>
         /// Авторизация
-        /// <br><c>POST: api/Autho</c></br>
+        /// <code>POST: api/Autho</code>
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -51,7 +51,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error($"POST Ошибка поиска сотрудника: {exc.Message}");
+                Logger.AuthoLog.Error($"POST Ошибка поиска сотрудника", exc);
                 return MessageTemplate.UserNotFound;
             }
 
@@ -81,7 +81,7 @@ namespace Web_Service.Controllers
             }
 
             Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
-            response.Content = new StringContent(sessionHash);
+            response.Content = new StringContent($"\{\"Session\":\"{sessionHash}\"\}");
             Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
             return response;
         }

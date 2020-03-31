@@ -112,6 +112,7 @@ namespace Testter
                     temp += $" * {val}\n";
                 }
             }
+            temp += responseMessage.StatusCode + " " + responseMessage.ReasonPhrase;
             temp += "C O N T E N T  H E A D E R S\n";
             if (responseMessage.Content != null)
                 foreach(var header in responseMessage.Content.Headers)
