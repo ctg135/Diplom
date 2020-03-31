@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
@@ -24,8 +21,6 @@ namespace Web_Service.Controllers
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
             Logger.AuthoLog.Info($"POST Получено сообщение от {ClientInfo}");
-            object temp = Logger.AuthoLog;
-            Logger.AuthoLog.Info(temp.ToString());
             HttpResponseMessage response = new HttpResponseMessage();
             
             Autho data = new Autho();
