@@ -81,7 +81,7 @@ namespace Web_Service.Controllers
             }
 
             Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
-            response.Content = new StringContent($"\{\"Session\":\"{sessionHash}\"\}");
+            response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
             Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
             return response;
         }

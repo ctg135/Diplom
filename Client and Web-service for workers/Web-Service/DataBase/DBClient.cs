@@ -274,7 +274,7 @@ namespace Web_Service.DataBase
                 string WorkerId = row[0].ToString();
                 string status = GetStatus(WorkerId, TimeOfCheck).Code;
 
-                Logger.Log.Debug("Для №" + WorkerId + " - устаревшая сессия");
+                Logger.Log.Debug("Для #" + WorkerId + " - устаревшая сессия");
 
                 if (!IsLongStatus(status) && status != State_Finished)
                 {

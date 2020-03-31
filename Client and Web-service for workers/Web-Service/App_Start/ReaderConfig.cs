@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 namespace Web_Service
 {
     /// <summary>
@@ -35,15 +36,26 @@ namespace Web_Service
             }
         }
         /// <summary>
-        /// 
+        /// Период проверки обновления сессий на активные подключения
         /// </summary>
         public static int PeriodCheckConnection
         {
             get
             {
-                return Properties.Settings.Default.PeriodCheckConnection;
+                int period = 0;
+                DateTime Period = DateTime.Parse(Properties.Settings.Default.PeriodCheckConnection);
+
+                period += Period.Millisecond;
+                period += Period.Second * 1000;
+                period += Period.Minute * 60 * 1000;
+                period += Period.Hour * 60 * 60 * 1000;
+
+                return period;
             }
         }
+        /// <summary>
+        /// Код неустановленного статуса
+        /// </summary>
         public static string Status_NotStated
         {
             get
@@ -51,6 +63,9 @@ namespace Web_Service
                 return Properties.Settings.Default.Status_NotStated;
             }
         }
+        /// <summary>
+        /// Время жизни сессии
+        /// </summary>
         public static string DisconnectTime
         {
             get
@@ -58,6 +73,9 @@ namespace Web_Service
                 return Properties.Settings.Default.DisconnectTime;
             }
         }
+        /// <summary>
+        /// Код статуса завершенного рабочего дня
+        /// </summary>
         public static string Status_Finished
         {
             get

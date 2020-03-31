@@ -79,10 +79,10 @@ namespace Web_Service.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1800000")]
-        public int PeriodCheckConnection {
+        [global::System.Configuration.DefaultSettingValueAttribute("00:30:00")]
+        public string PeriodCheckConnection {
             get {
-                return ((int)(this["PeriodCheckConnection"]));
+                return ((string)(this["PeriodCheckConnection"]));
             }
         }
         

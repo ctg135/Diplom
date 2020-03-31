@@ -83,7 +83,7 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Error("POST Ошибка поиска сотрудника", exc);
             }
             
-            Logger.StatusLog.Debug("POST Просмотр статуса для " + WorkerId);
+            Logger.StatusLog.Debug("POST Просмотр статуса для #" + WorkerId);
 
             switch (Authentication.Authenticate(Session, ClientInfo))
             {
@@ -165,7 +165,7 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для №{WorkerId}");
+            Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
 
             try
             {
