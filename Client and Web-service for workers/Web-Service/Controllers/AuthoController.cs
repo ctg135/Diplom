@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Web_Service.Models;
 using Web_Service.DataBase;
 using System.Threading.Tasks;
-
+using Web_Service.Loggers;
 
 namespace Web_Service.Controllers
 {
@@ -24,6 +24,8 @@ namespace Web_Service.Controllers
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
             Logger.AuthoLog.Info($"POST Получено сообщение от {ClientInfo}");
+            object temp = Logger.AuthoLog;
+            Logger.AuthoLog.Info(temp.ToString());
             HttpResponseMessage response = new HttpResponseMessage();
             
             Autho data = new Autho();
@@ -76,13 +78,13 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error($"api/Autho POST Не удалось создать сессию: {exc.Message}");
+                Logger.AuthoLog.Error($"POST Не удалось создать сессию: {exc.Message}");
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
-            response.Content = new StringContent($"\{\"Session\":\"{sessionHash}\"\}");
-            Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
+            Logger.AuthoLog.Info($"POST создана сессия {sessionHash} для #{WorkerId}");
+            response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
+            Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");
             return response;
         }
     }
