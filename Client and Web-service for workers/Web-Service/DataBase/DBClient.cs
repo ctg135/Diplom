@@ -254,20 +254,26 @@ namespace Web_Service.DataBase
         /// <param name="TimeOfCheck">Время проверки</param>
         public static void CheckActiveSessions(DateTime TimeOfCheck)
         {
-            DataTable notConnected = DB.MakeQuery($"SELECT `WorkerId` FROM `sessions` WHERE TIMEDIFF(now(), `LastUpdate`) > TIME('{DisconnectTime}')");
+            if(Logger.Log.IsDebugEnabled)
+            {
+                string allSessionCount = DB.MakeQuery("SELECT COUNT(*) FROM `sessions`").Rows[0][0].ToString();
+                Logger.Log.Debug($"Всего сессий - {allSessionCount}");
+            }
 
+            DataTable notConnected = DB.MakeQuery($"SELECT `WorkerId`, `Token` FROM `sessions` WHERE TIMEDIFF(now(), `LastUpdate`) > TIME('{DisconnectTime}')");
             Logger.Log.Debug($"Всего неактивных сессий - {notConnected.Rows.Count}");
 
-            foreach(DataRow row in notConnected.Rows )
+            foreach( DataRow row in notConnected.Rows )
             {
                 string WorkerId = row[0].ToString();
-                string status = GetStatus(WorkerId, TimeOfCheck).Code;
+                string Session  = row[1].ToString();
+                string status   = GetStatus(WorkerId, TimeOfCheck).Code;
 
-                Logger.Log.Debug("Для #" + WorkerId + " - устаревшая сессия");
+                Logger.Log.Debug("Для #" + WorkerId + " - устаревшая сессия " + Session);
 
                 if (!IsLongStatus(status) && status != State_Finished)
                 {
-                    DataTable lastConnect = DB.MakeQuery($"SELECT `LastUpdate` FROM `sessions` WHERE `WorkerId` = '{WorkerId}' ORDER BY `LastUpdate` DESC;");
+                    DataTable lastConnect = DB.MakeQuery($"SELECT `LastUpdate` FROM `sessions` WHERE `Token` = '{Session}' ORDER BY `LastUpdate` DESC;");
 
                     if (lastConnect.Rows.Count == 0) continue;
 
@@ -288,7 +294,7 @@ namespace Web_Service.DataBase
                 Logger.Log.Debug("Удаление сессии...");
                 try
                 {
-                    DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `WorkerId` = {WorkerId}");
+                    DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `Token` = {Session}");
                 }
                 catch(Exception exc)
                 {

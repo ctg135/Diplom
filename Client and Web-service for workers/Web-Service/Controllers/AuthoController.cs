@@ -66,7 +66,7 @@ namespace Web_Service.Controllers
                 dateOfCreation
             );
 
-            Logger.AuthoLog.Info($"POST сгенерирована сессия {sessionHash} для #{WorkerId}");
+            Logger.AuthoLog.Info($"POST Сгенерирована сессия {sessionHash} для #{WorkerId}");
 
             try
             {
@@ -78,7 +78,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"POST Сессия {sessionHash} создана");
+            Logger.AuthoLog.Info($"POST Сессия {sessionHash} создана в базе данных");
             
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
             Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");
