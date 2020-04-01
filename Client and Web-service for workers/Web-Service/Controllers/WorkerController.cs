@@ -40,11 +40,20 @@ namespace Web_Service.Controllers
 
             if(string.IsNullOrEmpty(Session))
             {
-                Logger.WorkerLog.Error("POST Пустой номер сессии");
-                return MessageTemplate.BadMessage;
+                Logger.WorkerLog.Warn("POST Пустой номер сессии");
             }
 
-            string WorkerId = DBClient.GetWorkerId(Session);
+            string WorkerId = string.Empty;
+
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(Session);
+            }
+            catch (Exception exc)
+            {
+                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                return MessageTemplate.UserNotFound;
+            }
 
             switch (Authentication.Authenticate(Session, ClientInfo))
             {
@@ -60,17 +69,18 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-
             Worker worker = new Worker();
+
             try
             {
                 worker = DBClient.GetWorker(WorkerId);
             }
             catch (Exception exc)
             {
-                Logger.WorkerLog.Error("POST Ошибка поиска работника", exc);
+                Logger.WorkerLog.Fatal("POST Ошибка поиска работника", exc);
                 return MessageTemplate.WorkerNotFound;
             }
+
             response.Content = new StringContent(JsonConvert.SerializeObject(worker));
 
             Logger.WorkerLog.Info($"POST Отправка ответа {ClientInfo}");

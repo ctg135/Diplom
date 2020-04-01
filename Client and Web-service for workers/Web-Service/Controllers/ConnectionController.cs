@@ -37,8 +37,7 @@ namespace Web_Service.Controllers
 
             if (string.IsNullOrEmpty(Session))
             {
-                Logger.ConnectionLog.Error("POST Пустой номер сессии");
-                return MessageTemplate.BadMessage;
+                Logger.ConnectionLog.Warn("POST Пустой номер сессии");
             }
 
             try
@@ -47,11 +46,11 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.ConnectionLog.Error("POST Ошибка обновления сессии", exc);
+                Logger.ConnectionLog.Fatal("POST Ошибка обновления сессии", exc);
                 return MessageTemplate.BadProcessingMessage;
             }
 
-            Logger.ConnectionLog.Info($"POST Статус обновлён для {ClientInfo}");
+            Logger.ConnectionLog.Info($"POST Сессия {Session} обновлена");
             return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK };
         }
     }

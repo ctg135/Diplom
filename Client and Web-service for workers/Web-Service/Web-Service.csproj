@@ -164,7 +164,7 @@
     </Compile>
     <Compile Include="Loggers\Logger.cs" />
     <Compile Include="Loggers\LoggerDecorator.cs" />
-    <Compile Include="Loggers\MyLogger.cs" />
+    <Compile Include="Loggers\FatalLogger.cs" />
     <Compile Include="Models\Autho.cs" />
     <Compile Include="Models\Plan.cs" />
     <Compile Include="Models\Request.cs" />

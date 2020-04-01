@@ -34,10 +34,9 @@ namespace Web_Service.Controllers
                 return MessageTemplate.BadProcessingMessage;
             }
 
-            if(string.IsNullOrEmpty(data.Login) && string.IsNullOrEmpty(data.Password))
+            if(string.IsNullOrEmpty(data.Login) || string.IsNullOrEmpty(data.Password))
             {
-                Logger.AuthoLog.Error("POST Пустые данные авторизации");
-                return MessageTemplate.BadMessage;
+                Logger.AuthoLog.Warn("POST Пустые данные авторизации");
             }
 
             string WorkerId = string.Empty;
@@ -48,13 +47,13 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error($"POST Ошибка поиска сотрудника", exc);
+                Logger.AuthoLog.Fatal($"POST Ошибка поиска сотрудника #{WorkerId}", exc);
                 return MessageTemplate.UserNotFound;
             }
 
             if(string.IsNullOrEmpty(WorkerId))
             {
-                Logger.AuthoLog.Error("POST Работник не найден");
+                Logger.AuthoLog.Error($"POST Работник #{WorkerId} не найден");
                 return MessageTemplate.UserNotFound;
             }
 
@@ -67,17 +66,20 @@ namespace Web_Service.Controllers
                 dateOfCreation
             );
 
+            Logger.AuthoLog.Info($"POST сгенерирована сессия {sessionHash} для #{WorkerId}");
+
             try
             {
                 DBClient.CreateSession(WorkerId, sessionHash, ClientInfo, dateOfCreation);
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error($"POST Не удалось создать сессию: {exc.Message}");
+                Logger.AuthoLog.Fatal($"POST Не удалось создать сессию для #{WorkerId}", exc);
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"POST создана сессия {sessionHash} для #{WorkerId}");
+            Logger.AuthoLog.Info($"POST Сессия {sessionHash} создана");
+            
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
             Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");
 

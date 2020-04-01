@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -30,7 +31,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Error("GET Ошибка получения статусов", exc);
+                Logger.StatusLog.Fatal("GET Ошибка получения статусов", exc);
                 return MessageTemplate.BadProcessingMessage;
             }
 
@@ -66,9 +67,9 @@ namespace Web_Service.Controllers
 
             if (string.IsNullOrEmpty(Session))
             {
-                Logger.StatusLog.Error("POST Пустой номер сессии");
-                return MessageTemplate.BadMessage;
+                Logger.StatusLog.Warn("POST Пустой номер сессии");
             }
+
             string WorkerId = string.Empty;
 
             try
@@ -77,7 +78,8 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Error("POST Ошибка поиска сотрудника", exc);
+                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                return MessageTemplate.UserNotFound;
             }
             
             Logger.StatusLog.Debug("POST Просмотр статуса для #" + WorkerId);
@@ -88,11 +90,11 @@ namespace Web_Service.Controllers
                     break;
 
                 case AuthenticationResult.SessionNotFound:
-                    Logger.StatusLog.Info("POST Сессия не найдена");
+                    Logger.StatusLog.Error($"POST Сессия {Session} не найдена");
                     return MessageTemplate.SessionNotFound;
 
                 case AuthenticationResult.ClientNotFound:
-                    Logger.StatusLog.Info("POST Клиент не найден");
+                    Logger.StatusLog.Error($"POST Клиент #{WorkerId} не найден");
                     return MessageTemplate.ClientNotFound;
             }
 
@@ -103,7 +105,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Error("Ошибка получения статуса", exc);
+                Logger.StatusLog.Fatal("Ошибка получения статуса", exc);
                 return MessageTemplate.BadProcessingMessage;
             }
 
@@ -141,11 +143,20 @@ namespace Web_Service.Controllers
 
             if (string.IsNullOrEmpty(Session))
             {
-                Logger.StatusLog.Error("PUT Пустой номер сессии");
-                return MessageTemplate.BadMessage;
+                Logger.StatusLog.Warn("PUT Пустой номер сессии");
             }
 
-            string WorkerId = DBClient.GetWorkerId(Session);
+            string WorkerId = string.Empty;
+
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(Session);
+            }
+            catch (Exception exc)
+            {
+                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                return MessageTemplate.UserNotFound;
+            }
 
             switch (Authentication.Authenticate(Session, ClientInfo))
             {
@@ -153,11 +164,11 @@ namespace Web_Service.Controllers
                     break;
 
                 case AuthenticationResult.SessionNotFound:
-                    Logger.StatusLog.Info("PUT Сессия не найдена");
+                    Logger.StatusLog.Error("PUT Сессия не найдена");
                     return MessageTemplate.SessionNotFound;
 
                 case AuthenticationResult.ClientNotFound:
-                    Logger.StatusLog.Info("PUT Клиент не найден");
+                    Logger.StatusLog.Error("PUT Клиент не найден");
                     return MessageTemplate.ClientNotFound;
             }
 
@@ -165,17 +176,17 @@ namespace Web_Service.Controllers
 
             if(DBClient.IsLongStatus(NewStatusWorker))
             {
-                Logger.StatusLog.Warn("PUT Попытка установить длительный статус");
+                Logger.StatusLog.Error("PUT Попытка установить длительный статус");
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\""),
-                    StatusCode = HttpStatusCode.BadRequest              
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
 
             if(DBClient.State_Finished == DBClient.GetStatus(WorkerId, DateTime.Now).Code)
             {
-                Logger.StatusLog.Warn("PUT Попытка продолжтить рабочий день");
+                Logger.StatusLog.Error("PUT Попытка продолжтить рабочий день");
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Рабочий день закончен!\""),
@@ -189,7 +200,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Error("PUT Ошибка установки статуса", exc);
+                Logger.StatusLog.Fatal("PUT Ошибка установки статуса", exc);
                 return MessageTemplate.BadSetStatusMessage;
             }
 
