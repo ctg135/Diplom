@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Web_Service.DataBase;
 using System.Security.Cryptography;
 using System.Text;
+using Web_Service.DataBase;
+using Web_Service.Loggers;
 
 namespace Web_Service.Controllers
 {

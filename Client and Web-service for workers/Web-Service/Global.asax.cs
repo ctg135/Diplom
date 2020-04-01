@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Threading;
 using Web_Service.DataBase;
+using Web_Service.Loggers;
 
 namespace Web_Service
 {

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
-using System.Web.Http;
-using Newtonsoft.Json;
-using Web_Service.Models;
-using Web_Service.DataBase;
 using System.Threading.Tasks;
-
+using System.Web.Http;
+using Web_Service.DataBase;
+using Web_Service.Loggers;
+using Web_Service.Models;
 
 namespace Web_Service.Controllers
 {
@@ -76,13 +73,14 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error($"api/Autho POST Не удалось создать сессию: {exc.Message}");
+                Logger.AuthoLog.Error($"POST Не удалось создать сессию: {exc.Message}");
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"api/Autho POST создана сессия {sessionHash} для #{WorkerId}");
+            Logger.AuthoLog.Info($"POST создана сессия {sessionHash} для #{WorkerId}");
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
-            Logger.AuthoLog.Info($"api/Autho POST Отправка ответа {ClientInfo}");
+            Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");
+
             return response;
         }
     }
