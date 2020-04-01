@@ -110,7 +110,21 @@ namespace Web_Service.Controllers
                 };
             }
         }
-        
+        /// <summary>
+        /// Сообщение о ошибке установки статуса
+        /// </summary>
+        public static HttpResponseMessage BadSetStatusMessage
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Ошибка установки статуса\"}"),
+                    StatusCode = HttpStatusCode.Conflict
+                };
+            }
+        }
+
 
     }
 }

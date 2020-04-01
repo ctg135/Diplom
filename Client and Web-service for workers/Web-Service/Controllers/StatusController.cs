@@ -102,7 +102,6 @@ namespace Web_Service.Controllers
             try
             {
                 var status = DBClient.GetStatus(WorkerId, DateTime.Now);
-                DBClient.UpdateSession(Session, DateTime.Now);
                 response.Content = new StringContent(JsonConvert.SerializeObject(status));
             }
             catch(Exception exc)
@@ -167,6 +166,26 @@ namespace Web_Service.Controllers
 
             Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
 
+            if(DBClient.IsLongStatus(NewStatusWorker))
+            {
+                Logger.StatusLog.Warn("PUT Попытка установить длительный статус");
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\""),
+                    StatusCode = HttpStatusCode.BadRequest              
+                };
+            }
+
+            if(DBClient.State_Finished == DBClient.GetStatus(WorkerId, DateTime.Now).Code)
+            {
+                Logger.StatusLog.Warn("PUT Попытка продолжтить рабочий день");
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Рабочий день закончен!\""),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+
             try
             {
                 DBClient.LogStatus(WorkerId, NewStatusWorker, DateTime.Now);
@@ -174,6 +193,7 @@ namespace Web_Service.Controllers
             catch(Exception exc)
             {
                 Logger.StatusLog.Error("PUT Ошибка установки статуса", exc);
+                return MessageTemplate.BadSetStatusMessage;
             }
 
             Logger.StatusLog.Info($"PUT Отправка ответа {ClientInfo}");

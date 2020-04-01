@@ -79,6 +79,8 @@ namespace Web_Service.DataBase
                 id = data.Rows[0][0].ToString();
             }
 
+            UpdateSession(Session, DateTime.Now);
+
             return id;
         }
         /// <summary>
@@ -190,19 +192,7 @@ namespace Web_Service.DataBase
         /// </summary>
         /// <param name="StatusCode">Статус</param>
         /// <returns>Если да, то true</returns>
-        private static bool IsLongStatus(string StatusCode)
-        {
-            bool longstatus = false;
-            foreach (string longstate in LongStatuses)
-            {
-                if (StatusCode == longstate)
-                {
-                    longstatus = true;
-                    break;
-                }
-            }
-            return longstatus;
-        }
+        public static bool IsLongStatus(string StatusCode) => LongStatuses.Contains(StatusCode);
         /// <summary>
         /// Функция записи статуса в базу данных
         /// </summary>
@@ -282,7 +272,7 @@ namespace Web_Service.DataBase
 
                     if (lastConnect.Rows.Count == 0) continue;
 
-                    if (status != State_Finished || !IsLongStatus(status))
+                    if (status != State_Finished || status != State_NotState || !IsLongStatus(status))
                     {
                         try
                         {
