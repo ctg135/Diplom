@@ -30,14 +30,17 @@ namespace Web_Service
             // Настройка подключения к базе данных
 
             DBClient.DB = new DBWorkerMySql(ReaderConfig.ConnectionStringDB);
-
-            if(DBClient.DB.CheckConnection())
+            try
             {
-                Logger.Log.Info("Подключение к базе данных установлено");
+                if (DBClient.DB.CheckConnection())
+                {
+                    Logger.Log.Info("Подключение к базе данных установлено");
+                }
             }
-            else
+            catch(Exception exc)
             {
-                Logger.Log.Error("Подключение к базе данных отсутствует");
+                Logger.Log.Fatal("Подключение к базе данных отсутствует");
+                Logger.Log.Debug("Ошибка подключения к базе данных:", exc);
             }
 
             DBClient.LongStatuses = new List<string>(ReaderConfig.LongStatuses);

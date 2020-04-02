@@ -271,30 +271,29 @@ namespace Web_Service.DataBase
 
                 Logger.Log.Debug("Для #" + WorkerId + " - устаревшая сессия " + Session);
 
-                if (!IsLongStatus(status) && status != State_Finished)
+                DataTable lastConnect = DB.MakeQuery($"SELECT `LastUpdate` FROM `sessions` WHERE `Token` = '{Session}' ORDER BY `LastUpdate` DESC;");
+
+                if (lastConnect.Rows.Count == 0) continue;
+
+                Logger.Log.Debug($"Установленный статус #{WorkerId} - {status}");
+
+                if (status != State_Finished && status != State_NotState && !IsLongStatus(status))
                 {
-                    DataTable lastConnect = DB.MakeQuery($"SELECT `LastUpdate` FROM `sessions` WHERE `Token` = '{Session}' ORDER BY `LastUpdate` DESC;");
-
-                    if (lastConnect.Rows.Count == 0) continue;
-
-                    if (status != State_Finished || status != State_NotState || !IsLongStatus(status))
+                    try
                     {
-                        try
-                        {
-                            Logger.Log.Debug("Установка статуса завершенного дня для " + WorkerId);
-                            LogStatus(WorkerId, State_Finished, DateTime.Parse(lastConnect.Rows[0][0].ToString()));
-                        }
-                        catch(Exception exc)
-                        {
-                            Logger.Log.Error("Ошибка установки статуса", exc);
-                        }
+                        Logger.Log.Debug("Установка статуса завершенного дня для #" + WorkerId);
+                        LogStatus(WorkerId, State_Finished, DateTime.Parse(lastConnect.Rows[0][0].ToString()));
+                    }
+                    catch (Exception exc)
+                    {
+                        Logger.Log.Error("Ошибка установки статуса", exc);
                     }
                 }
 
                 Logger.Log.Debug("Удаление сессии...");
                 try
                 {
-                    DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `Token` = {Session}");
+                    DB.ExecuteQuery($"DELETE FROM `sessions` WHERE `Token` = '{Session}'");
                 }
                 catch(Exception exc)
                 {

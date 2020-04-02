@@ -13,6 +13,12 @@ namespace Web_Service.Controllers
 {
     public class PlanController : ApiController
     {
+        /// <summary>
+        /// КОнтроллер для получения планов на выбранное количество дней 
+        /// <code>POST: api/Plan</code>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -49,7 +55,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.PlanLog.Error("POST Работник не найден", exc);
+                Logger.PlanLog.Fatal("POST Работник не найден", exc);
                 return MessageTemplate.BadMessage;
             }
 
@@ -59,18 +65,20 @@ namespace Web_Service.Controllers
                     break;
 
                 case AuthenticationResult.SessionNotFound:
-                    Logger.PlanLog.Info("POST Сессия не найдена");
+                    Logger.PlanLog.Error("POST Сессия не найдена");
                     return MessageTemplate.SessionNotFound;
 
                 case AuthenticationResult.ClientNotFound:
-                    Logger.PlanLog.Info("POST Клиент не найден");
+                    Logger.PlanLog.Error("POST Клиент не найден");
                     return MessageTemplate.ClientNotFound;
             }
 
             try
             {
+                Logger.PlanLog.Debug($"Поиск планов для #{WorkerId} на {Days} дней");
                 List<Plan> plans = new List<Plan>(DBClient.GetPlans(WorkerId, DateTime.Now, Days));
                 response.Content = new StringContent(JsonConvert.SerializeObject(plans));
+                Logger.PlanLog.Debug($"Всего найдено {plans.Count.ToString()} планов для #{WorkerId}");
             }
             catch (Exception exc)
             {
