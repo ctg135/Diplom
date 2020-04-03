@@ -120,7 +120,17 @@ namespace Web_Service.Controllers
                 };
             }
         }
-
+        public static HttpResponseMessage BadDatesGived
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Неправильные значения даты\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
 
     }
 }

@@ -48,21 +48,35 @@ namespace Web_Service.Controllers
         /// <param name="Password">Пароль пользователя</param>
         /// <param name="ClientInfo">Информация о клиенте</param>
         /// <returns>Хэш новой созданной сессии</returns>
-        public static string CreateSessionHash(string Login, string Password, string ClientInfo, DateTime Date)
+        /// <exception cref="Exception">Ошибка аутентификации</exception>
+        public static string CreateSession(string Login, string Password, string ClientInfo, DateTime Date)
         {
-            var hash = Encoding.UTF8.GetBytes(Login + Password + ClientInfo + DateTime.Now.ToString());
+            var WorkerId = DBClient.GetWorkerId(Login, Password);
 
-            var bytes = SHA1.Create().ComputeHash(hash);
+            var PrevSession = DBClient.SearchSession(WorkerId, ClientInfo);
 
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
+            if(string.IsNullOrEmpty(PrevSession))
             {
-                builder.Append(bytes[i].ToString("x2"));
-            }            
+                var hash = Encoding.UTF8.GetBytes(Login + Password + ClientInfo + DateTime.Now.ToString());
 
-            string sessionHash = builder.ToString();
+                var bytes = SHA1.Create().ComputeHash(hash);
 
-            return sessionHash;
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+
+                string sessionHash = builder.ToString();
+
+                DBClient.CreateSession(WorkerId, sessionHash, ClientInfo, Date);
+
+                return sessionHash;
+            }
+            else
+            {
+                return PrevSession;
+            }
         }
     }
 }

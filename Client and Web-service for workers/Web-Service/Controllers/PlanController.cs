@@ -26,14 +26,20 @@ namespace Web_Service.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = string.Empty;
-            int Days = 0;
+            string WorkerId     = string.Empty;
+            string Session      = string.Empty;
+            string StartDateStr = string.Empty;
+            string EndDateStr   = string.Empty;
+
+            DateTime StartDate;
+            DateTime EndDate;
 
             try
             {
                 var json = JObject.Parse(await request.Content.ReadAsStringAsync());
-                Session = (string)json["Session"];
-                Days = (int)json["Query"]["Days"];
+                Session      = (string)json["Session"];
+                StartDateStr = (string)json["Query"]["StartDate"];
+                EndDateStr   = (string)json["Query"]["EndDate"];
             }
             catch (Exception exc)
             {
@@ -41,13 +47,29 @@ namespace Web_Service.Controllers
                 return MessageTemplate.BadMessage;
             }
 
-            if (string.IsNullOrEmpty(Session) || Days <= 0)
+            if (string.IsNullOrEmpty(Session))
             {
-                Logger.PlanLog.Error("POST Неверные значения запроса");
+                Logger.PlanLog.Warn("POST Пустая строка сессии");
                 return MessageTemplate.BadMessage;
             }
 
-            string WorkerId = string.Empty;
+            try
+            {
+                StartDate = DateTime.Parse(StartDateStr);
+                EndDate   = DateTime.Parse(EndDateStr);
+                
+            }
+            catch(Exception exc)
+            {
+                Logger.PlanLog.Error("POST Ошибка преобразования строки в дату");
+                return MessageTemplate.BadMessage;
+            }
+
+            if (StartDate > EndDate)
+            {
+                Logger.PlanLog.Error("POST Некорректный дипазон дат");
+                return MessageTemplate.BadDatesGived;
+            }
 
             try
             {
@@ -75,10 +97,12 @@ namespace Web_Service.Controllers
 
             try
             {
-                Logger.PlanLog.Debug($"Поиск планов для #{WorkerId} на {Days} дней");
-                List<Plan> plans = new List<Plan>(DBClient.GetPlans(WorkerId, DateTime.Now, Days));
+                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate.ToString()} и {EndDate.ToString()}");
+
+                List<Plan> plans = new List<Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
                 response.Content = new StringContent(JsonConvert.SerializeObject(plans));
-                Logger.PlanLog.Debug($"Всего найдено {plans.Count.ToString()} планов для #{WorkerId}");
+
+                Logger.PlanLog.Debug($"POST Всего найдено {plans.Count.ToString()} планов для #{WorkerId}");
             }
             catch (Exception exc)
             {

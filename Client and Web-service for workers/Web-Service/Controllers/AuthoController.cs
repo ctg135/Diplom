@@ -24,6 +24,10 @@ namespace Web_Service.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
             
             Autho data = new Autho();
+            DateTime dateOfCreation = DateTime.Now;
+            string sessionHash = string.Empty;
+            string WorkerId    = string.Empty;
+
             try
             {
                 data = JsonConvert.DeserializeObject<Autho>(await request.Content.ReadAsStringAsync());
@@ -38,8 +42,6 @@ namespace Web_Service.Controllers
             {
                 Logger.AuthoLog.Warn("POST Пустые данные авторизации");
             }
-
-            string WorkerId = string.Empty;
 
             try
             {
@@ -57,20 +59,14 @@ namespace Web_Service.Controllers
                 return MessageTemplate.UserNotFound;
             }
 
-            DateTime dateOfCreation = DateTime.Now;
-
-            string sessionHash = Authentication.CreateSessionHash(
-                data.Login,
-                data.Password,
-                ClientInfo,
-                dateOfCreation
-            );
-
-            Logger.AuthoLog.Info($"POST Сгенерирована сессия {sessionHash} для #{WorkerId}");
-
             try
             {
-                DBClient.CreateSession(WorkerId, sessionHash, ClientInfo, dateOfCreation);
+                sessionHash = Authentication.CreateSession(
+                    data.Login,
+                    data.Password,
+                    ClientInfo,
+                    dateOfCreation
+                );
             }
             catch (Exception exc)
             {
@@ -78,7 +74,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"POST Сессия {sessionHash} создана в базе данных");
+            Logger.AuthoLog.Info($"POST Сессия {sessionHash} базе данных");
             
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
             Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");

@@ -45,6 +45,18 @@ namespace Web_Service.DataBase
             { "LastUpdate", DateCreation.ToString("yyyy-MM-dd HH:mm:ss") }
         });
         /// <summary>
+        /// Фукнция поиска сессии по Id работника и его клиенту
+        /// </summary>
+        /// <param name="WorkerId"></param>
+        /// <param name="ClientInfo"></param>
+        /// <returns>Хэш сессии в результат или <c>string.Empty</c>, если не найдена</returns>
+        /// <exception cref="Exception">Ошибка запроса</exception>
+        public static string SearchSession(string WorkerId, string ClientInfo)
+        {
+            var table = DB.MakeQuery($"SELECT `Token` FROM `sessions` WHERE `WorkerId` = '{WorkerId}' AND `ClientInfo` = '{ClientInfo}';");
+            return table.Rows.Count == 0 ? string.Empty : table.Rows[0][0].ToString();
+        }
+        /// <summary>
         /// Возаращает Id работника по данным авторизации
         /// <br><c>string.Empty</c> - в случае ненахождения такого</br>
         /// </summary>
@@ -213,15 +225,15 @@ namespace Web_Service.DataBase
         /// </summary>
         /// <param name="WorkerId">Идентификатор работника</param>
         /// <param name="StartDay">Начальынй день</param>
-        /// <param name="DaysCount">Количество дней</param>
+        /// <param name="EndDay">Конечный день</param>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static IEnumerable<Plan> GetPlans(string WorkerId, DateTime StartDay, int DaysCount)
+        public static IEnumerable<Plan> GetPlans(string WorkerId, DateTime StartDay, DateTime EndDay)
         {
             List<Plan> plans = new List<Plan>();
 
             DataTable data = DB.MakeQuery($"SELECT * FROM `plans` WHERE `WorkerId` = '{WorkerId}' " +
-                $"AND `Date` >= '{DateTime.Now.ToString("yyyy-MM-dd")}' " +
-                $"AND `Date` <= '{DateTime.Now.AddDays(DaysCount).ToString("yyyy-MM-dd")}'");
+                $"AND `Date` >= '{StartDay.ToString("yyyy-MM-dd")}' " +
+                $"AND `Date` <= '{EndDay.ToString("yyyy-MM-dd")}'");
 
             foreach(DataRow row in data.Rows)
             {
