@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace Client
+namespace Client.Views
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
@@ -16,6 +16,7 @@ namespace Client
         public MainPage()
         {
             InitializeComponent();
+            this.BindingContext = new ViewModels.MainPageViewModel();
         }
     }
 }

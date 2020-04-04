@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Title="Авторизация"
+             x:Class="Client.Views.AuthoPage">
+    <ContentPage.Content>
+        <Grid>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Entry
+                Text="{Binding Login}"
+                Placeholder="Логин"
+                WidthRequest="200"
+                Grid.Row="1"
+                HorizontalTextAlignment="Center"
+                VerticalOptions="End" 
+                HorizontalOptions="Center" 
+                    />
+            <Entry
+                Text="{Binding Password}"
+                Placeholder="Пароль"
+                IsPassword="True"
+                WidthRequest="200"
+                Grid.Row="2"
+                HorizontalTextAlignment="Center"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" 
+                    />
+            <Button 
+                Text="Войти"
+                Grid.Row="3"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" 
+                Command="{Binding Authorize}"
+                    />
+            <Button 
+                Text="Настройки"
+                Grid.Row="5"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" 
+                Command="{Binding OpenSettings}"
+                    />
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

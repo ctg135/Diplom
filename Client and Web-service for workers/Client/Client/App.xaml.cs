@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using Client.Views;
+
 namespace Client
 {
     public partial class App : Application
@@ -10,7 +12,9 @@ namespace Client
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new AuthoPage());
+            
+            //(MainPage.BindingContext as ViewModels.AuthoPageViewModel).Authorized += App_Authorized;
         }
 
         protected override void OnStart()
