@@ -12,7 +12,8 @@ namespace Client
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new AuthoPage());
+            //MainPage = new NavigationPage(new AuthoPage());
+            MainPage = new MainMenuPage();
             
             //(MainPage.BindingContext as ViewModels.AuthoPageViewModel).Authorized += App_Authorized;
         }

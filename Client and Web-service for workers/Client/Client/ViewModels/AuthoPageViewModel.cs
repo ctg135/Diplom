@@ -49,7 +49,7 @@ namespace Client.ViewModels
             switch(result)
             {
                 case AuthorizationResult.Ok:
-                    Application.Current.MainPage = new NavigationPage(new MainPage());
+                    Application.Current.MainPage =new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "", "Ок");

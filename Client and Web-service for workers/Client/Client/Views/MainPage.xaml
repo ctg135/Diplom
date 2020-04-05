@@ -4,12 +4,66 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             Title="Главная"
              x:Class="Client.Views.MainPage">
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label Text="Работает!"></Label>
+        <Grid HeightRequest="100">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label 
+                Text="Установленный статус:" 
+                Grid.Row="0"
+                Grid.Column="0"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                />
+            <Label 
+                Text="{Binding Status}" 
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                />
+            <Label 
+                Text="Новый статус:"
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                />
+            <Picker
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                >
+                <Picker.Items>
+                    <x:String>One</x:String>
+                    <x:String>There</x:String>
+                    <x:String>Two</x:String>
+                </Picker.Items>
+            </Picker>
+
+        </Grid>
+
         
+
     </StackLayout>
 
 </ContentPage>
