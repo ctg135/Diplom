@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using Client.ViewModels;
+using Client.Models;
 namespace Client.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -16,7 +17,7 @@ namespace Client.Views
         public SettingsPage()
         {
             InitializeComponent();
-            BindingContext = new SettingsPageModel();
+            BindingContext = new SettingsPageViewModel();
         }
     }
 }

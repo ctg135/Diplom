@@ -33,7 +33,7 @@ namespace Client.ViewModels
         /// Пароль
         /// </summary>
         public string Password { get; set; }
-        
+
         public AuthoPageViewModel(IClientModel Client)
         {
             this.Client = Client;

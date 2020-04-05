@@ -8,9 +8,11 @@
              x:Class="Client.Views.SettingsPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Тут будут настройки!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <Label Text="Сервер для подключения" />
+                <Entry Text="{Binding Server}" />
+            </StackLayout>
         </StackLayout>
+          
     </ContentPage.Content>
 </ContentPage>
