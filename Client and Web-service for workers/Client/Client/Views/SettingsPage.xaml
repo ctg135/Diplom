@@ -7,12 +7,15 @@
              Title="Окно настроек"
              x:Class="Client.Views.SettingsPage">
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout>
-                <Label Text="Сервер для подключения" />
-                <Entry Text="{Binding Server}" />
-            </StackLayout>
-        </StackLayout>
-          
+
+        <TableView>
+            <TableRoot>
+                <TableSection Title="Подключение">
+                    <TextCell Text="Сервер для подключения:" TextColor="Black" />
+                    <EntryCell Text="{Binding Server}"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+
     </ContentPage.Content>
 </ContentPage>

@@ -49,7 +49,9 @@ namespace Client.ViewModels
             switch(result)
             {
                 case AuthorizationResult.Ok:
-                    Application.Current.MainPage =new MainMenuPage();
+                    Globals.Config.SetItem("Session", Client.Authorization.Session);
+                    Globals.Statuses = new List<DataModels.Status>(await Client.GetStatuses());
+                    Application.Current.MainPage = new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "", "Ок");

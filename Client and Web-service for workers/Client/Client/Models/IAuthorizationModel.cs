@@ -16,7 +16,7 @@ namespace Client.Models
     interface IAuthorizationModel
     {
         /// <summary>
-        /// Получение сессии по паролю и логину
+        /// Установка сессии по паролю и логину
         /// </summary>
         /// <param name="Login">Логин клиента</param>
         /// <param name="Password">Пароль клиента</param>
@@ -30,6 +30,6 @@ namespace Client.Models
         /// <summary>
         /// Сессия пользователя
         /// </summary>
-        Task<string> Session { get; set; }
+        string Session { get; }
     }
 }

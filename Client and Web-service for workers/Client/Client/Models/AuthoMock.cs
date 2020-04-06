@@ -9,6 +9,8 @@ namespace Client.Models
     {
         public Task<string> Session { get; set; }
 
+        string IAuthorizationModel.Session => throw new NotImplementedException();
+
         public Task<AuthorizationResult> Authorization(string Login, string Password)
         {
             if (Login == Password) return Task.FromResult(AuthorizationResult.Ok);

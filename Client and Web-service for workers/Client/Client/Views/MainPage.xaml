@@ -7,63 +7,144 @@
              Title="Главная"
              x:Class="Client.Views.MainPage">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Grid HeightRequest="100">
-            
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label 
-                Text="Установленный статус:" 
-                Grid.Row="0"
-                Grid.Column="0"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                />
-            <Label 
-                Text="{Binding Status}" 
-                Grid.Row="0"
-                Grid.Column="1"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                />
-            <Label 
-                Text="Новый статус:"
-                Grid.Row="1"
-                Grid.Column="0"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                />
-            <Picker
-                Grid.Row="1"
-                Grid.Column="1"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                >
-                <Picker.Items>
-                    <x:String>One</x:String>
-                    <x:String>There</x:String>
-                    <x:String>Two</x:String>
-                </Picker.Items>
-            </Picker>
-
-        </Grid>
-
-        
-
-    </StackLayout>
-
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Выйти" Command="{Binding Exit}" />
+    </ContentPage.ToolbarItems>
+    <!-- Place new controls here -->
+    <TableView Intent="Data" HorizontalOptions="Center">
+        <TableRoot>
+            <TableSection Title="Информация">
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Text="Статус" 
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                        <Label 
+                            Text="{Binding Status}" 
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                    </Grid>
+                </ViewCell>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Text="Обновлено"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                        />
+                        <Label 
+                            Text="{Binding LastUpdate}"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                        />
+                    </Grid>
+                </ViewCell>
+                <ViewCell>
+                    <Button 
+                        Text="Установить статус" 
+                        Command="{Binding SetNewStatus}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        />
+                </ViewCell>
+            </TableSection>
+            <TableSection Title="План на сегодня">
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Text="Начало дня"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                        <Label 
+                            Text="{Binding PlanToday.StartOfDay}"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                    </Grid>
+                </ViewCell>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Text="Конец дня"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                        <Label 
+                            Text="{Binding PlanToday.EndOfDay}"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                    </Grid>
+                </ViewCell>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            Text="Всего отработано"
+                            Grid.Column="0"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                        <Label 
+                            Text="{Binding PlanToday.Total}"
+                            Grid.Column="1"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            />
+                    </Grid>
+                </ViewCell>
+            </TableSection>
+        </TableRoot>
+    </TableView>
 </ContentPage>

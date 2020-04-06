@@ -6,11 +6,129 @@
              mc:Ignorable="d"
              Title="График"
              x:Class="Client.Views.GraphicPage">
+
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Тута буит график"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            
+            <Label 
+                Text="Отобразить по датам" 
+                TextColor="Black"
+                FontSize="Large"
+                VerticalOptions="Center"
+                VerticalTextAlignment="Center"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                />
+
+            <Grid HeightRequest="80">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Text="С"
+                    Grid.Column="0" 
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="End"
+                    HorizontalTextAlignment="End"
+                />
+                <DatePicker
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                />
+                <Label 
+                    Text="по"
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="End"
+                    HorizontalTextAlignment="End"
+                />
+                <DatePicker
+                    Grid.Column="3"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                />
+               
+            </Grid>
+
+            <Button 
+                Text="Посмотреть"
+            />
+
+            <ListView ItemsSource="{Binding Plans}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Text="{Binding Date}"
+                                    Grid.Column="0"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    />
+                                <Label
+                                    Text="{Binding StartOfDay}"
+                                    Grid.Column="1"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="End"
+                                    />
+                                <Label
+                                    Text="-"
+                                    Grid.Column="2"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="End"
+                                    />
+                                <Label
+                                    Text="{Binding EndOfDay}"
+                                    Grid.Column="3"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
+                                    />
+                                <Label
+                                    Text="Всего:"
+                                    Grid.Column="4"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="End"
+                                    />
+                                <Label
+                                    Text="{Binding Total}"
+                                    Grid.Column="5"
+                                    VerticalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Start"
+                                    />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
         </StackLayout>
+        
     </ContentPage.Content>
+    
 </ContentPage>
