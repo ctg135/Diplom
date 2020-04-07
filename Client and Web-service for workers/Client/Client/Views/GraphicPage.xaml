@@ -7,6 +7,10 @@
              Title="График"
              x:Class="Client.Views.GraphicPage">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Выйти" Command="{Binding Exit}" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <StackLayout>
             
@@ -40,6 +44,7 @@
                     HorizontalTextAlignment="End"
                 />
                 <DatePicker
+                    Date="{Binding StartDate}"
                     Grid.Column="1"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
@@ -53,6 +58,7 @@
                     HorizontalTextAlignment="End"
                 />
                 <DatePicker
+                    Date="{Binding EndDate}"
                     Grid.Column="3"
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
@@ -62,6 +68,7 @@
 
             <Button 
                 Text="Посмотреть"
+                Command="{Binding ShowPlans}"
             />
 
             <ListView ItemsSource="{Binding Plans}">

@@ -59,7 +59,7 @@ namespace Client.ViewModels
         private async void UnAutho()
         {
             Globals.Clear();
-            Application.Current.MainPage = new AuthoPage();
+            Application.Current.MainPage = new NavigationPage(new AuthoPage());
         }
         /// <summary>
         /// Команда установки статуса
@@ -75,6 +75,7 @@ namespace Client.ViewModels
             {
                 return;
             }
+
             try
             {
                 await Client.SetStatus(Globals.Statuses[res].Code);

@@ -81,17 +81,23 @@ namespace Client.Models
         }
         public async Task<List<Plan>> GetPlans(DateTime Start, DateTime End)
         {
-            int diff = (Start - End).Days;
-            if (diff < 0) return new List<Plan>();
+            var diff = End - Start;
+            
+            if (diff.TotalSeconds < 0) return new List<Plan>();
+
             List<Plan> plans = new List<Plan>();
-            for (int i = 0; i < diff; i++)
+            int j = 1;
+            for (DateTime i = Start; i <= End;  i = i.AddDays(1))
             {
                 var temp = STDPLAN;
-                temp.Date = Start.AddDays(i).ToString("d");
-                temp.Id = (1 + i).ToString();
+                temp.Date = i.ToString("d");
+                temp.Id = (1 + j).ToString();
                 plans.Add(temp);
             }
+            
             return plans;
+            
+            return new List<Plan>();
         }
         public async Task<Plan> GetTodayPlan()
         {
