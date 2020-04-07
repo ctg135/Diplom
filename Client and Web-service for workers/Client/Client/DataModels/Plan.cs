@@ -11,5 +11,9 @@ namespace Client.DataModels
         public string StartOfDay { get; set; }
         public string EndOfDay { get; set; }
         public string Total { get; set; }
+        public static Plan Empty()
+        {
+            return new Plan() { Date = "-", EndOfDay = "-", StartOfDay = "-", Total = "-", Id = "0" };
+        }
     }
 }

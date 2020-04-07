@@ -35,7 +35,7 @@
                 Grid.Column="1"
                 Grid.Row="2">
                     <Label Text="{Binding WorkerName}"/>
-                        <Label Text="{Binding Status}"/>
+                        <Label Text="{Binding WorkerPosition}"/>
                 </StackLayout>
                 </Grid>
       </ListView.Header>

@@ -7,18 +7,34 @@ using Client.DataModels;
 namespace Client.Models
 {
     /// <summary>
+    /// Результаты авторизации
+    /// </summary>
+    enum AuthorizationResult
+    {
+        Ok,
+        Error
+    }
+    /// <summary>
     /// Интерфейс для получения данных от сервера
     /// </summary>
     interface IClientModel
     {
         /// <summary>
-        /// Производит авторизацию
+        /// Установка сессии по паролю и логину
         /// </summary>
-        IAuthorizationModel Authorization { get; }
+        /// <param name="Login">Логин клиента</param>
+        /// <param name="Password">Пароль клиента</param>
+        /// <returns>Резуьтат аутентфикации</returns>
+        Task<AuthorizationResult> Authorization(string Login, string Password);
         /// <summary>
-        /// Производит выборку данных для планов
+        /// Авторизация по сессии
         /// </summary>
-        IPlansModel Plans { get; }
+        /// <returns>Резуьтат аутентфикации</returns>
+        Task<AuthorizationResult> Authorization();
+        /// <summary>
+        /// Сессия пользователя
+        /// </summary>
+        string Session { get; set; }
         /// <summary>
         /// Получение коллекции всех статусов
         /// </summary>
@@ -40,5 +56,17 @@ namespace Client.Models
         /// <param name="Code">Код статуса</param>
         /// <returns></returns>
         Task SetStatus(string Code);
+        /// <summary>
+        /// Получение планов сотрудника по датам
+        /// </summary>
+        /// <param name="Start">Начальная дата</param>
+        /// <param name="End">Конечная дата</param>
+        /// <returns></returns>
+        Task<List<Plan>> GetPlans(DateTime Start, DateTime End);
+        /// <summary>
+        /// Получение плана на сегодня
+        /// </summary>
+        /// <returns></returns>
+        Task<Plan> GetTodayPlan();
     }
 }

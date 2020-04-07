@@ -12,7 +12,13 @@ namespace Client
         /// Экхепляр для работы с конфигурацией приложения
         /// </summary>
         public static IConfigManager Config { get; set; } = new ConfigMock();
+        /// <summary>
+        /// Информация о работнике
+        /// </summary>
         public static Worker WorkerInfo { get; set; }
+        /// <summary>
+        /// Активный статус работника
+        /// </summary>
         public static StatusCode WorkerStatus { get; set; }
         /// <summary>
         /// {Название статуса - Статус}
@@ -22,6 +28,9 @@ namespace Client
         /// {Код статуса - Статус}
         /// </summary>
         public static Dictionary<string, Status> StatusCodes { get; set; }
+        /// <summary>
+        /// Очистка всех данных
+        /// </summary>
         public static void Clear()
         {
             StatusCodes = null;

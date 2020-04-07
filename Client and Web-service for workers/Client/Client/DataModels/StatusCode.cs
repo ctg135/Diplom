@@ -8,5 +8,9 @@ namespace Client.DataModels
     {
         public string Code { get; set; }
         public string LastUpdate { get; set; }
+        public static StatusCode Empty()
+        {
+            return new StatusCode() { Code = "0", LastUpdate = "-" };
+        }
     }
 }

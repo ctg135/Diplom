@@ -46,26 +46,11 @@ namespace Client.ViewModels
         /// </summary>
         private async void Autho()
         {
-            var result = await Client.Authorization.Authorization(Login, Password);
+            var result = await Client.Authorization(Login, Password);
             switch(result)
             {
                 case AuthorizationResult.Ok:
-                    Globals.Config.SetItem("Session", Client.Authorization.Session);
-
-
-                    Dictionary<string, Status> statuses = new Dictionary<string, Status>();
-                    Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
-
-
-                    foreach(var status in await Client.GetStatuses())
-                    {
-                        statuses.Add(status.Title, status);
-                        statusCodes.Add(status.Code, status);
-                    }
-
-                    Globals.Statuses = statuses;
-                    Globals.StatusCodes = statusCodes;
-
+                    await LoadGlobals();
                     Application.Current.MainPage = new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:
@@ -75,6 +60,26 @@ namespace Client.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
                     break;
             }
+        }
+        private async Task LoadGlobals()
+        {
+            Globals.Config.SetItem("Session", Client.Session);
+
+            Dictionary<string, Status> statuses = new Dictionary<string, Status>();
+            Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
+
+            foreach (var status in await Client.GetStatuses())
+            {
+                statuses.Add(status.Title, status);
+                statusCodes.Add(status.Code, status);
+            }
+
+            Globals.Statuses = statuses;
+            Globals.StatusCodes = statusCodes;
+
+            Globals.WorkerInfo = await Client.GetWorkerInfo();
+
+            Globals.WorkerStatus = await Client.GetLastStatusCode();
         }
         /// <summary>
         /// Команда открытия страницы настроек

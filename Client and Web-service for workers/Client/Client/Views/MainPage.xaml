@@ -5,7 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Title="Главная"
-             x:Class="Client.Views.MainPage">
+             x:Class="Client.Views.MainPage"
+             Appearing="ContentPage_Appearing"
+             >
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Выйти" Command="{Binding Exit}" />

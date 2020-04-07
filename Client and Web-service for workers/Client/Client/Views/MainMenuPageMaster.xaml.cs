@@ -31,14 +31,14 @@ namespace Client.Views
             {
                 get
                 {
-                    return "Фамилия Имя";
+                    return Globals.WorkerInfo.Name + " " + Globals.WorkerInfo.Surname;
                 }
             }
-            public string Status
+            public string WorkerPosition
             {
                 get
                 {
-                    return "Статус";
+                    return Globals.WorkerInfo.Position;
                 }
             }
 

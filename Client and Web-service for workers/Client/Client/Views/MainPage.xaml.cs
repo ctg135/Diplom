@@ -18,5 +18,10 @@ namespace Client.Views
             InitializeComponent();
             this.BindingContext = new ViewModels.MainPageViewModel();
         }
+
+        private void ContentPage_Appearing(object sender, EventArgs e)
+        {
+            ((ViewModels.MainPageViewModel)BindingContext).UpdateData.Execute(new object());
+        }
     }
 }
