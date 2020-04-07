@@ -10,12 +10,12 @@ namespace Client.Models
     {
         public ClientMock()
         {
+            // ТЯВА
             Authorization = new AuthoMock();
+            Plans = new PlansMock();
         }
         public IAuthorizationModel Authorization { get; set; }
-
-        
-
+        public IPlansModel Plans { get; set; }
         public async Task<List<Status>> GetStatuses()
         {
             List<Status> statuses = new List<Status>();
@@ -32,6 +32,9 @@ namespace Client.Models
         }
 
         private StatusCode LastStatus { get; set; } = new StatusCode() { Code = "1", LastUpdate = DateTime.Now.ToString("g") };
+
+        
+
         public async Task SetStatus(string Code)
         {
             LastStatus = new StatusCode() { Code = Code, LastUpdate = DateTime.Now.ToString("g") };

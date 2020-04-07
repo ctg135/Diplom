@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Client.DataModels;
 using Client.Models;
+using Client.Views;
 
 namespace Client.ViewModels
 {
@@ -28,18 +29,21 @@ namespace Client.ViewModels
                 return Globals.WorkerStatus.LastUpdate;
             }
         }
-        public Plan PlanToday { get; set; } = new Plan() { StartOfDay = "8:30" };
+        public Plan PlanToday { get; set; }
 
         public MainPageViewModel()
         {
             Exit = new Command(UnAutho);
             SetNewStatus = new Command(SetStatus);
             Client = new ClientMock(); // ТЯВА
+            PlanToday = Client.Plans.GetTodayPlan().Result;
+
             Globals.WorkerStatus = Client.GetLastStatusCode().Result;
         }
         private async void UnAutho()
         {
-
+            Globals.Clear();
+            Application.Current.MainPage = new AuthoPage();
         }
         private async void SetStatus()
         {

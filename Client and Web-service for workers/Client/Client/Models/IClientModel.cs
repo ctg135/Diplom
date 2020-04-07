@@ -16,6 +16,10 @@ namespace Client.Models
         /// </summary>
         IAuthorizationModel Authorization { get; }
         /// <summary>
+        /// Производит выборку данных для планов
+        /// </summary>
+        IPlansModel Plans { get; }
+        /// <summary>
         /// Получение коллекции всех статусов
         /// </summary>
         /// <returns>Колеекция статусов</returns>

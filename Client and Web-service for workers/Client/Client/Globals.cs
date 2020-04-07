@@ -22,5 +22,13 @@ namespace Client
         /// {Код статуса - Статус}
         /// </summary>
         public static Dictionary<string, Status> StatusCodes { get; set; }
+        public static void Clear()
+        {
+            StatusCodes = null;
+            Statuses = null;
+            WorkerInfo = null;
+            WorkerStatus = null;
+            Config.SetItem("Session", "");
+        }
     }
 }
