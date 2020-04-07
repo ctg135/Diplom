@@ -5,25 +5,53 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Client.DataModels;
+using Client.Models;
 
 namespace Client.ViewModels
 {
     class MainPageViewModel : BaseViewModel
     {
-        public ICommand Exit { get; set; } = new Command(Exitting);
-        public ICommand SetNewStatus { get; set; } = new Command(SetStatus);
-        public string Status { get; set; } = "На работе";
-        public string LastUpdate { get; set; } = "11.12.2002 12:30";
+        private IClientModel Client { get; set; }
+        public ICommand Exit { get; set; }
+        public ICommand SetNewStatus { get; set; }
+        public string Status
+        {
+            get
+            {
+                return Globals.StatusCodes[Globals.WorkerStatus.Code].Title;
+            }
+        }
+        public string LastUpdate
+        {
+            get
+            {
+                return Globals.WorkerStatus.LastUpdate;
+            }
+        }
         public Plan PlanToday { get; set; } = new Plan() { StartOfDay = "8:30" };
 
-        private static void Exitting()
+        public MainPageViewModel()
+        {
+            Exit = new Command(UnAutho);
+            SetNewStatus = new Command(SetStatus);
+            Client = new ClientMock(); // ТЯВА
+            Globals.WorkerStatus = Client.GetLastStatusCode().Result;
+        }
+        private async void UnAutho()
         {
 
         }
-        private static void SetStatus()
+        private async void SetStatus()
         {
-            string[] buts = { "One", "Two", "Threea" };
-            Application.Current.MainPage.DisplayActionSheet("Выбор статуса", "Отмена", null, buts);
+            List<string> buts = new List<string>(Globals.Statuses.Keys);
+            // ТЯВА - Добавить try catch - или потом реализовать ошибки в клиенте и читать их
+            var res = await Application.Current.MainPage.DisplayActionSheet("Выбор статуса", "Отмена", null, buts.ToArray());
+
+            await Client.SetStatus(Globals.Statuses[res].Code);
+            Globals.WorkerStatus = await Client.GetLastStatusCode();
+            
+            NotifyPropertyChanged(nameof(Status));
+            NotifyPropertyChanged(nameof(LastUpdate));
         }
     }
 }

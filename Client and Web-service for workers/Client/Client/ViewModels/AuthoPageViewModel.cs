@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using Client.Views;
 using Client.Models;
+using Client.DataModels;
 using Plugin.Settings;
 
 namespace Client.ViewModels
@@ -50,7 +51,21 @@ namespace Client.ViewModels
             {
                 case AuthorizationResult.Ok:
                     Globals.Config.SetItem("Session", Client.Authorization.Session);
-                    Globals.Statuses = new List<DataModels.Status>(await Client.GetStatuses());
+
+
+                    Dictionary<string, Status> statuses = new Dictionary<string, Status>();
+                    Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
+
+
+                    foreach(var status in await Client.GetStatuses())
+                    {
+                        statuses.Add(status.Title, status);
+                        statusCodes.Add(status.Code, status);
+                    }
+
+                    Globals.Statuses = statuses;
+                    Globals.StatusCodes = statusCodes;
+
                     Application.Current.MainPage = new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:

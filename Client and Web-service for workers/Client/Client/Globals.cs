@@ -14,6 +14,13 @@ namespace Client
         public static IConfigManager Config { get; set; } = new ConfigMock();
         public static Worker WorkerInfo { get; set; }
         public static StatusCode WorkerStatus { get; set; }
-        public static List<Status> Statuses { get; set; }
+        /// <summary>
+        /// {Название статуса - Статус}
+        /// </summary>
+        public static Dictionary<string, Status> Statuses { get; set; }
+        /// <summary>
+        /// {Код статуса - Статус}
+        /// </summary>
+        public static Dictionary<string, Status> StatusCodes { get; set; }
     }
 }

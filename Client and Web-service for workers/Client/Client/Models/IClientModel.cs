@@ -19,11 +19,22 @@ namespace Client.Models
         /// Получение коллекции всех статусов
         /// </summary>
         /// <returns>Колеекция статусов</returns>
-        Task<IEnumerable<Status>>  GetStatuses();
+        Task<List<Status>>  GetStatuses();
         /// <summary>
         /// Получает информацию о работнике
         /// </summary>
         /// <returns></returns>
         Task<Worker> GetWorkerInfo();
+        /// <summary>
+        /// Получение информации о последнем установленном статусе
+        /// </summary>
+        /// <returns></returns>
+        Task<StatusCode> GetLastStatusCode();
+        /// <summary>
+        /// Установка статуса работника
+        /// </summary>
+        /// <param name="Code">Код статуса</param>
+        /// <returns></returns>
+        Task SetStatus(string Code);
     }
 }

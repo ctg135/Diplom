@@ -13,7 +13,7 @@ namespace Client
             InitializeComponent();
 
             //MainPage = new NavigationPage(new AuthoPage());
-            MainPage = new MainMenuPage();
+            MainPage = new AuthoPage();
             
             //(MainPage.BindingContext as ViewModels.AuthoPageViewModel).Authorized += App_Authorized;
         }
