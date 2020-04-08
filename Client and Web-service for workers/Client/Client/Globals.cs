@@ -11,7 +11,7 @@ namespace Client
         /// <summary>
         /// Экхепляр для работы с конфигурацией приложения
         /// </summary>
-        public static IConfigManager Config { get; set; } = new ConfigMock();
+        public static IConfigManager Config { get; set; }
         /// <summary>
         /// Информация о работнике
         /// </summary>

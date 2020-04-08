@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace Client.Models
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+using Client.Models;
+
+namespace Client.Droid.Models
 {
-    class ConfigMock : IConfigManager
+    class AndroidConfigMock : IConfigManager
     {
         private Dictionary<string, string> values { get; set; } = new Dictionary<string, string>();
         public string GetItem(string Item)

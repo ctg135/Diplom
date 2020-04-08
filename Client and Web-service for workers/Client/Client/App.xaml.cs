@@ -18,10 +18,8 @@ namespace Client
             InitializeComponent();
             InitializeDependencies(PlatformModule);
 
+            Globals.Config = ServiceLocator.Current.GetService<Models.IConfigManager>();
             MainPage = new NavigationPage(new AuthoPage());
-            //MainPage = new AuthoPage();
-            
-            //(MainPage.BindingContext as ViewModels.AuthoPageViewModel).Authorized += App_Authorized;
         }
 
         private void InitializeDependencies(Module PlatformModule)
