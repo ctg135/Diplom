@@ -9,7 +9,7 @@ namespace Client.Models
     /// <summary>
     /// Результаты авторизации
     /// </summary>
-    enum AuthorizationResult
+    public enum AuthorizationResult
     {
         Ok,
         Error
@@ -17,7 +17,7 @@ namespace Client.Models
     /// <summary>
     /// Интерфейс для получения данных от сервера
     /// </summary>
-    interface IClientModel
+    public interface IClientModel
     {
         /// <summary>
         /// Установка сессии по паролю и логину

@@ -2,20 +2,37 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using Autofac;
+using Autofac.Extras.CommonServiceLocator;
+
+using Client.IoC;
 using Client.Views;
+using CommonServiceLocator;
 
 namespace Client
 {
     public partial class App : Application
     {
-        public App()
+        public App(Module PlatformModule)
         {
             InitializeComponent();
+            InitializeDependencies(PlatformModule);
 
             MainPage = new NavigationPage(new AuthoPage());
             //MainPage = new AuthoPage();
             
             //(MainPage.BindingContext as ViewModels.AuthoPageViewModel).Authorized += App_Authorized;
+        }
+
+        private void InitializeDependencies(Module PlatformModule)
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule(new CrossPlatformModule());
+            builder.RegisterModule(PlatformModule);
+
+            var locator = new AutofacServiceLocator(builder.Build());
+            ServiceLocator.SetLocatorProvider(() => locator);
         }
 
         protected override void OnStart()

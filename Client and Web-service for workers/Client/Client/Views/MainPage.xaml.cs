@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+using Client.ViewModels;
+
+using CommonServiceLocator;
+
 namespace Client.Views
 {
     // Learn more about making custom code visible in the Xamarin.Forms previewer
@@ -16,7 +20,7 @@ namespace Client.Views
         public MainPage()
         {
             InitializeComponent();
-            this.BindingContext = new ViewModels.MainPageViewModel();
+            this.BindingContext = ServiceLocator.Current.GetInstance<MainPageViewModel>();
         }
 
         private void ContentPage_Appearing(object sender, EventArgs e)

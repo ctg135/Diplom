@@ -9,6 +9,8 @@ using Xamarin.Forms.Xaml;
 
 using Client.ViewModels;
 
+using CommonServiceLocator;
+
 namespace Client.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -17,7 +19,7 @@ namespace Client.Views
         public AuthoPage()
         {
             InitializeComponent();
-            BindingContext = new AuthoPageViewModel(new Models.ClientMock());
+            BindingContext = ServiceLocator.Current.GetInstance<AuthoPageViewModel>();
         }
     }
 }

@@ -38,11 +38,14 @@ namespace Client.ViewModels
         /// </summary>
         public ICommand Exit { get; private set; }
 
-        public GraphicPageViewModel()
+        public GraphicPageViewModel(IClientModel Client)
         {
             ShowPlans = new Command(LoadPlans);
             Exit = new Command(UnAutho);
-            Client = new ClientMock();
+
+            this.Client = Client;
+            this.Client.Session = Globals.Config.GetItem("Session");
+
             Plans = new List<Plan>();
             StartDate = EndDate = DateTime.Parse( DateTime.Now.ToString("d") );
         }

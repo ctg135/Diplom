@@ -41,14 +41,14 @@ namespace Client.ViewModels
         /// График на сегодня
         /// </summary>
         public Plan PlanToday { get; set; }
-        public MainPageViewModel()
+        public MainPageViewModel(IClientModel Client)
         {
             Exit = new Command(UnAutho);
             SetNewStatus = new Command(SetStatus);
             UpdateData = new Command(UpdateProps);
-            
-            Client = new ClientMock(); // ТЯВА
-            Client.Session = Globals.Config.GetItem("Session");
+
+            this.Client = Client;
+            this.Client.Session = Globals.Config.GetItem("Session");
 
             PlanToday = Plan.Empty();
             Globals.WorkerStatus = StatusCode.Empty();

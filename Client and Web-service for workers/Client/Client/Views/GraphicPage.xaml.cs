@@ -9,6 +9,8 @@ using Client.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CommonServiceLocator;
+
 namespace Client.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -17,7 +19,7 @@ namespace Client.Views
         public GraphicPage()
         {
             InitializeComponent();
-            this.BindingContext = new GraphicPageViewModel();
+            this.BindingContext = ServiceLocator.Current.GetInstance<GraphicPageViewModel>();
         }
     }
 }

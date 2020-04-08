@@ -5,6 +5,8 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+using Autofac;
+
 namespace Client.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -23,7 +25,7 @@ namespace Client.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            LoadApplication(new App(new IoC.PlatformModule()));
 
             return base.FinishedLaunching(app, options);
         }
