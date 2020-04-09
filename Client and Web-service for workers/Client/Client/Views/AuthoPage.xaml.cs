@@ -21,5 +21,10 @@ namespace Client.Views
             InitializeComponent();
             BindingContext = ServiceLocator.Current.GetInstance<AuthoPageViewModel>();
         }
+
+        private void ContentPage_Appearing(object sender, EventArgs e)
+        {
+            ((AuthoPageViewModel)BindingContext).UpdateSettings.Execute(new object());
+        }
     }
 }

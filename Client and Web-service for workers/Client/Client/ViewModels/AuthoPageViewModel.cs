@@ -23,6 +23,10 @@ namespace Client.ViewModels
         /// </summary>
         public ICommand OpenSettings { get; set; }
         /// <summary>
+        /// Команда обноления настроек
+        /// </summary>
+        public ICommand UpdateSettings { get; set; }
+        /// <summary>
         /// Клиент для получения данных
         /// </summary>
         public IClientModel Client { get; set; }
@@ -40,6 +44,7 @@ namespace Client.ViewModels
             this.Client = Client;
             Authorize = new Command(Autho);
             OpenSettings = new Command(OpenSettingsPageAsync);
+            UpdateSettings = new Command(UpdateSets);
         }
         /// <summary>
         /// Команда авторизации
@@ -50,41 +55,16 @@ namespace Client.ViewModels
             switch(result)
             {
                 case AuthorizationResult.Ok:
-                    await LoadGlobals();
+                    await Globals.Load(Client.Session, Client.Server);
                     Application.Current.MainPage = new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:
-                    await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "", "Ок");
+                    await Application.Current.MainPage.DisplayAlert("", "Ошибка авторизации", "Ок");
                     break;
                 default:
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
                     break;
             }
-        }
-        private async Task LoadGlobals()
-        {
-            Globals.Config.SetItem("Session", Client.Session);
-
-            Dictionary<string, Status> statuses = new Dictionary<string, Status>();
-            Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
-
-            foreach (var status in await Client.GetStatuses())
-            {
-                statuses.Add(status.Title, status);
-                statusCodes.Add(status.Code, status);
-            }
-
-            Globals.Statuses = statuses;
-            Globals.StatusCodes = statusCodes;
-
-            Globals.WorkerInfo = await Client.GetWorkerInfo();
-
-            Globals.WorkerStatus = await Client.GetLastStatusCode();
-
-
-            var client = ServiceLocator.Current.GetInstance<IClientModel>();
-            client.Session = Client.Session;
-            Globals.SetUpConnectionChecker(2 * 60 * 1000, client);
         }
         /// <summary>
         /// Команда открытия страницы настроек
@@ -92,6 +72,13 @@ namespace Client.ViewModels
         private async void OpenSettingsPageAsync()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new SettingsPage());
+        }
+        /// <summary>
+        /// Команда для обновления настроек
+        /// </summary>
+        private void UpdateSets()
+        {
+            Client.Server = Globals.Config.GetItem("Server");
         }
     }
 }

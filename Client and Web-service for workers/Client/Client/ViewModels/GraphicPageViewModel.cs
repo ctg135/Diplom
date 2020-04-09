@@ -45,6 +45,7 @@ namespace Client.ViewModels
 
             this.Client = Client;
             this.Client.Session = Globals.Config.GetItem("Session");
+            this.Client.Server = Globals.Config.GetItem("Server");
 
             Plans = new List<Plan>();
             StartDate = EndDate = DateTime.Parse( DateTime.Now.ToString("d") );

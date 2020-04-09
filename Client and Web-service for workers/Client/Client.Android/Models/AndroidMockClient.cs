@@ -47,6 +47,7 @@ namespace Client.Droid.Models
 
         private StatusCode LastStatus { get; set; } = new StatusCode() { Code = "1", LastUpdate = DateTime.Now.ToString("g") };
         public string Session { get; set; }
+        public string Server { get; set; }
 
         public async Task SetStatus(string Code)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Client.Models;
 using Client.DataModels;
 
@@ -38,7 +39,7 @@ namespace Client
         /// </summary>
         private static IClientModel TimerClient { get; set; }
         /// <summary>
-        /// 
+        /// Функция таймера для проверки подключения
         /// </summary>
         /// <param name="parameter"></param>
         private static async void OnTimer(object parameter)
@@ -66,16 +67,58 @@ namespace Client
                     break;
             }
         }
+        /// <summary>
+        /// Установка процедуры проверки подключения
+        /// </summary>
+        /// <param name="Period">Период проверки</param>
+        /// <param name="Client">Клиент для подключения</param>
         public static void SetUpConnectionChecker(int Period, IClientModel Client)
         {
             TimerClient = Client;
             ConnectionCheckerTimer = new Timer(OnTimer, null, 60 * 1000, Period);
         }
+        /// <summary>
+        /// Освобождает ресурсы тпймера
+        /// </summary>
         public static void DestroyConnectionChecker()
         {
             ConnectionCheckerTimer.Dispose();
             ConnectionCheckerTimer = null;
             TimerClient = null;
+        }
+        /// <summary>
+        /// Функция загрузки данных в <c>Globals</c>
+        /// </summary>
+        /// <param name="Session">Сессия для загрузки в <c>Config</c></param>
+        /// <param name="Server">Сервер для загрузки в <c>Config</c></param>
+        public static async Task Load(string Session, string Server)
+        {
+            var Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
+
+            Client.Session = Session;
+            Client.Server = Server;
+
+            Config.SetItem("Session", Session);
+            Config.SetItem("Server", Server);
+
+            Dictionary<string, Status> statuses = new Dictionary<string, Status>();
+            Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
+
+            foreach (var status in await Client.GetStatuses())
+            {
+                statuses.Add(status.Title, status);
+                statusCodes.Add(status.Code, status);
+            }
+
+            Statuses = statuses;
+            StatusCodes = statusCodes;
+
+            WorkerInfo = await Client.GetWorkerInfo();
+
+            WorkerStatus = await Client.GetLastStatusCode();
+
+            SetUpConnectionChecker(2 * 60 * 1000, Client);
+
         }
         /// <summary>
         /// Очистка всех данных

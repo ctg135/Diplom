@@ -49,6 +49,7 @@ namespace Client.ViewModels
 
             this.Client = Client;
             this.Client.Session = Globals.Config.GetItem("Session");
+            this.Client.Server = Globals.Config.GetItem("Server");
 
             PlanToday = Plan.Empty();
             Globals.WorkerStatus = StatusCode.Empty();
@@ -71,7 +72,7 @@ namespace Client.ViewModels
             
             var res = await Application.Current.MainPage.DisplayActionSheet("Выбор статуса", butCancel, null, buts.ToArray());
 
-            if(res == butCancel)
+            if (res == butCancel || res == null)
             {
                 return;
             }

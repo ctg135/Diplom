@@ -36,6 +36,10 @@ namespace Client.Models
         /// </summary>
         string Session { get; set; }
         /// <summary>
+        /// Сервер с требуемым api
+        /// </summary>
+        string Server { get; set; }
+        /// <summary>
         /// Получение коллекции всех статусов
         /// </summary>
         /// <returns>Колеекция статусов</returns>
