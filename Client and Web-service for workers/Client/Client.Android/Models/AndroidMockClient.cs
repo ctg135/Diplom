@@ -111,5 +111,10 @@ namespace Client.Droid.Models
             plan.Date = DateTime.Now.ToString("d");
             return plan;
         }
+
+        public async Task<AuthorizationResult> CheckConnect()
+        {
+            return await Task.FromResult(AuthorizationResult.Ok);
+        }
     }
 }

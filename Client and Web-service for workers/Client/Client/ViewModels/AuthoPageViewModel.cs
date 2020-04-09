@@ -4,11 +4,11 @@ using System.Text;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using System.Diagnostics;
 using Client.Views;
 using Client.Models;
 using Client.DataModels;
 using Plugin.Settings;
+using CommonServiceLocator;
 
 namespace Client.ViewModels
 {
@@ -80,6 +80,11 @@ namespace Client.ViewModels
             Globals.WorkerInfo = await Client.GetWorkerInfo();
 
             Globals.WorkerStatus = await Client.GetLastStatusCode();
+
+
+            var client = ServiceLocator.Current.GetInstance<IClientModel>();
+            client.Session = Client.Session;
+            Globals.SetUpConnectionChecker(2 * 60 * 1000, client);
         }
         /// <summary>
         /// Команда открытия страницы настроек

@@ -68,5 +68,10 @@ namespace Client.Models
         /// </summary>
         /// <returns></returns>
         Task<Plan> GetTodayPlan();
+        /// <summary>
+        /// Функция для проверки подключения к серверу
+        /// </summary>
+        /// <returns></returns>
+        Task<AuthorizationResult> CheckConnect();
     }
 }
