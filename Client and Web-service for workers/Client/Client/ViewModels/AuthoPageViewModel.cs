@@ -76,9 +76,9 @@ namespace Client.ViewModels
         /// <summary>
         /// Команда для обновления настроек
         /// </summary>
-        private void UpdateSets()
+        private async void UpdateSets()
         {
-            Client.Server = Globals.Config.GetItem("Server");
+            Client.Server = await Globals.Config.GetItem("Server");
         }
     }
 }

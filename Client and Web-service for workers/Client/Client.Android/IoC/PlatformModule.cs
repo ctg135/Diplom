@@ -22,7 +22,7 @@ namespace Client.Droid.IoC
             base.Load(builder);
 
             builder.RegisterType<Models.AndroidMockClient>().As<IClientModel>();
-            builder.RegisterType<Models.AndroidConfigMock>().As<IConfigManager>();
+            builder.RegisterType<Models.XmlConfigManager>().As<IConfigManager>();
         }
     }
 }

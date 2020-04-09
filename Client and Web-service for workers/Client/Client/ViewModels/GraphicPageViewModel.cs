@@ -44,8 +44,8 @@ namespace Client.ViewModels
             Exit = new Command(UnAutho);
 
             this.Client = Client;
-            this.Client.Session = Globals.Config.GetItem("Session");
-            this.Client.Server = Globals.Config.GetItem("Server");
+            this.Client.Session = Globals.Config.GetItem("Session").Result;
+            this.Client.Server = Globals.Config.GetItem("Server").Result;
 
             Plans = new List<Plan>();
             StartDate = EndDate = DateTime.Parse( DateTime.Now.ToString("d") );

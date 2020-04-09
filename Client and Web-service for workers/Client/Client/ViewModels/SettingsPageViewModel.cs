@@ -11,7 +11,7 @@ namespace Client.ViewModels
         {
             get
             {
-                return Globals.Config.GetItem("Server");
+                return Globals.Config.GetItem("Server").Result;
             }
             set
             {

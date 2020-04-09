@@ -48,8 +48,8 @@ namespace Client.ViewModels
             UpdateData = new Command(UpdateProps);
 
             this.Client = Client;
-            this.Client.Session = Globals.Config.GetItem("Session");
-            this.Client.Server = Globals.Config.GetItem("Server");
+            this.Client.Session = Globals.Config.GetItem("Session").Result;
+            this.Client.Server = Globals.Config.GetItem("Server").Result;
 
             PlanToday = Plan.Empty();
             Globals.WorkerStatus = StatusCode.Empty();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 using Android.App;
 using Android.Content;
@@ -17,18 +18,18 @@ namespace Client.Droid.Models
     class AndroidConfigMock : IConfigManager
     {
         private Dictionary<string, string> values { get; set; } = new Dictionary<string, string>();
-        public string GetItem(string Item)
+        public async Task<string> GetItem(string Item)
         {
             if (values.ContainsKey(Item))
             {
-                return values[Item];
+                return await Task.FromResult(values[Item]);
             }
             else
             {
-                return "";
+                return await Task.FromResult("");
             }
         }
-        public void SetItem(string Item, string Value)
+        public async Task SetItem(string Item, string Value)
         {
             if (values.ContainsKey(Item))
             {
