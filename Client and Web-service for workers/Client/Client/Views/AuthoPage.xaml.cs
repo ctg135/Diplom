@@ -25,6 +25,7 @@ namespace Client.Views
         private void ContentPage_Appearing(object sender, EventArgs e)
         {
             ((AuthoPageViewModel)BindingContext).UpdateSettings.Execute(new object());
+            ((AuthoPageViewModel)BindingContext).AuthorizeWithSession.Execute(new object());
         }
     }
 }

@@ -17,19 +17,23 @@ namespace Client.ViewModels
         /// <summary>
         /// Команда авторизации
         /// </summary>
-        public ICommand Authorize { get; set; }
+        public ICommand Authorize { get; private set; }
+        /// <summary>
+        /// Команда авторизации при существующей сессии
+        /// </summary>
+        public ICommand AuthorizeWithSession { get; private set; }
         /// <summary>
         /// Команда открытия настроек
         /// </summary>
-        public ICommand OpenSettings { get; set; }
+        public ICommand OpenSettings { get; private set; }
         /// <summary>
         /// Команда обноления настроек
         /// </summary>
-        public ICommand UpdateSettings { get; set; }
+        public ICommand UpdateSettings { get; private set; }
         /// <summary>
         /// Клиент для получения данных
         /// </summary>
-        public IClientModel Client { get; set; }
+        public IClientModel Client { get; private set; }
         /// <summary>
         /// Логин
         /// </summary>
@@ -43,6 +47,7 @@ namespace Client.ViewModels
         {
             this.Client = Client;
             Authorize = new Command(Autho);
+            AuthorizeWithSession = new Command(AuthoSession);
             OpenSettings = new Command(OpenSettingsPageAsync);
             UpdateSettings = new Command(UpdateSets);
         }
@@ -66,6 +71,24 @@ namespace Client.ViewModels
                     break;
             }
         }
+        private async void AuthoSession()
+        {
+            if (string.IsNullOrEmpty(Client.Session))  return;
+            var result = await Client.Authorization();
+            switch (result)
+            {
+                case AuthorizationResult.Ok:
+                    await Globals.Load(Client.Session, Client.Server);
+                    Application.Current.MainPage = new MainMenuPage();
+                    break;
+                case AuthorizationResult.Error:
+                    
+                    break;
+                default:
+                    await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
+                    break;
+            }
+        }
         /// <summary>
         /// Команда открытия страницы настроек
         /// </summary>
@@ -78,7 +101,8 @@ namespace Client.ViewModels
         /// </summary>
         private async void UpdateSets()
         {
-            Client.Server = await Globals.Config.GetItem("Server");
+            Client.Server  = await Globals.Config.GetItem("Server");
+            Client.Session = await Globals.Config.GetItem("Session");
         }
     }
 }
