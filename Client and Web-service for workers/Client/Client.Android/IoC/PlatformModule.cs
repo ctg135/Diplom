@@ -21,7 +21,7 @@ namespace Client.Droid.IoC
         {
             base.Load(builder);
 
-            builder.RegisterType<Models.AndroidMockClient>().As<IClientModel>();
+            builder.RegisterType<Models.RestClient>().As<IClientModel>();
             builder.RegisterType<Models.XmlConfigManager>().As<IConfigManager>();
         }
     }
