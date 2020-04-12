@@ -43,7 +43,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.PlanLog.Error("POST Ошибка сериализации", exc);
+                Logger.PlanLog.Error($"POST Ошибка сериализации в {await request.Content.ReadAsStringAsync()}", exc);
                 return MessageTemplate.BadMessage;
             }
 
@@ -97,7 +97,7 @@ namespace Web_Service.Controllers
 
             try
             {
-                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate.ToString()} и {EndDate.ToString()}");
+                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate.ToString("dd:MM:yyyy")} и {EndDate.ToString("dd:MM:yyyy")}");
 
                 List<Plan> plans = new List<Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
                 response.Content = new StringContent(JsonConvert.SerializeObject(plans));

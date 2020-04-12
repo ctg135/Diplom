@@ -153,8 +153,7 @@ namespace Client.Droid.Models
         /// <returns>Результат авторизации</returns>
         public async Task<AuthorizationResult> Authorization()
         {
-            // Допилить контроллер
-            return await Task.FromResult(AuthorizationResult.Error);
+            return await CheckConnect();
         }
         /// <summary>
         /// Фукнция для проверки подключения к серверу
@@ -191,10 +190,16 @@ namespace Client.Droid.Models
 
                 default:
                     var contentjson = JObject.Parse(content);
-                    throw new Exception(res.StatusCode.ToString() + " " + (string)contentjson["Message"]);
+                    throw new Exception((string)contentjson["Message"]);
             }
 
-            return await Task.FromResult(JsonConvert.DeserializeObject<ClientData.StatusCode>(content));
+            ServerData.StatusCode status = JsonConvert.DeserializeObject<ServerData.StatusCode>(content);
+
+            return await Task.FromResult(new ClientData.StatusCode()
+            {
+                Code = status.Code ?? "",
+                LastUpdate = status.LastUpdate ?? ""
+            }) ;
         }
         /// <summary>
         /// Функция получения планов
@@ -204,7 +209,7 @@ namespace Client.Droid.Models
         /// <returns>Список планов</returns>
         public async Task<List<ClientData.Plan>> GetPlans(DateTime Start, DateTime End)
         {
-            string query = JsonConvert.SerializeObject(new ServerData.DateQuery() { StartDate = Start.ToString("dd.MM.yyyy"), EndDate = End.ToString("dd.MM.yyyy") });
+            var query = new ServerData.DateQuery() { StartDate = Start.ToString("dd.MM.yyyy"), EndDate = End.ToString("dd.MM.yyyy") };
             string json = JsonConvert.SerializeObject(new ServerData.Request() { Session = Session, Query = query });
 
             var res = await SendMessageAsync(json, HttpMethod.Post, ControllerPlan);
@@ -217,7 +222,7 @@ namespace Client.Droid.Models
 
                 default:
                     var contentjson = JObject.Parse(content);
-                    throw new Exception(res.StatusCode.ToString() + " " + (string)contentjson["Message"]);
+                    throw new Exception((string)contentjson["Message"]);
             }
 
             var listContent = JsonConvert.DeserializeObject<List<ServerData.Plan>>(content);
@@ -228,10 +233,11 @@ namespace Client.Droid.Models
             {
                 listClient.Add(new ClientData.Plan()
                 {
-                    Id = clientPlan.Id,
-                    Date = clientPlan.Date,
-                    StartOfDay = clientPlan.StartOfDay,
-                    EndOfDay = clientPlan.EndOfDay
+                    Id = clientPlan.Id ?? "",
+                    Date = clientPlan.Date ?? "",
+                    StartOfDay = clientPlan.StartOfDay ?? "",
+                    EndOfDay = clientPlan.EndOfDay ?? "",
+                    Total = clientPlan.Total ?? ""
                 });
             }
 
@@ -253,10 +259,23 @@ namespace Client.Droid.Models
 
                 default:
                     var contentjson = JObject.Parse(content);
-                    throw new Exception(res.StatusCode.ToString() + " " + (string)contentjson["Message"]);
+                    throw new Exception((string)contentjson["Message"]);
             }
 
-            return await Task.FromResult(JsonConvert.DeserializeObject<List<ClientData.Status>>(content));
+            List<ServerData.Status> serverStatuses = JsonConvert.DeserializeObject<List<ServerData.Status>>(content);
+            var statuses = new List<ClientData.Status>();
+
+            foreach(var status in serverStatuses)
+            {
+                statuses.Add(new ClientData.Status()
+                {
+                    Code = status.Code ?? "",
+                    Description = status.Description ?? "",
+                    Title = status.Title ?? ""
+                });
+            }
+
+            return await Task.FromResult(statuses);
         }
         /// <summary>
         /// Функция получения нового плана
@@ -265,8 +284,8 @@ namespace Client.Droid.Models
         public async Task<ClientData.Plan> GetTodayPlan()
         {
             var plans = await GetPlans(DateTime.Now, DateTime.Now);
-            if (plans == null) 
-                return await Task.FromResult(new ClientData.Plan());
+            if (plans.Count == 0) 
+                return await Task.FromResult(ClientData.Plan.Empty());
             return await Task.FromResult (plans[0]);
         }
         /// <summary>
@@ -277,7 +296,7 @@ namespace Client.Droid.Models
         {
             string json = JsonConvert.SerializeObject(new ServerData.Request() { Session = Session });
 
-            var res = await SendMessageAsync(json, HttpMethod.Post, ControllerConnection);
+            var res = await SendMessageAsync(json, HttpMethod.Post, ControllerWorker);
             var content = await res.Content.ReadAsStringAsync();
             
             switch (res.StatusCode)
@@ -287,10 +306,22 @@ namespace Client.Droid.Models
                     break;
                 default:
                     var contentjson = JObject.Parse(content);
-                    throw new Exception(res.StatusCode.ToString() + " " + (string)contentjson["Message"]);
+                    throw new Exception((string)contentjson["Message"]);
             }
 
-            return await Task.FromResult(JsonConvert.DeserializeObject<ClientData.Worker>(content));
+            var serverWorker = JsonConvert.DeserializeObject<ServerData.Worker>(content);
+
+            return await Task.FromResult(new ClientData.Worker()
+            {
+                AccessLevel = serverWorker.AccessLevel ?? "",
+                BirthDate   = serverWorker.BirthDate ?? "",
+                Mail        = serverWorker.Mail ?? "",
+                Name        = serverWorker.Name ?? "",
+                Patronymic  = serverWorker.Patronymic ?? "",
+                Position    = serverWorker.Position ?? "",
+                Rate        = serverWorker.Rate ?? "",
+                Surname     = serverWorker.Surname ?? ""
+            });
         }
         /// <summary>
         /// Функция установки статуса
@@ -299,7 +330,7 @@ namespace Client.Droid.Models
         /// <returns></returns>
         public async Task SetStatus(string Code)
         {
-            string query = JsonConvert.SerializeObject(new ServerData.StatusCodeQuery() { StatusCode = Code });
+            var query = new ServerData.StatusCodeQuery() { StatusCode = Code };
             string json = JsonConvert.SerializeObject(new ServerData.Request() { Session = Session, Query =  query});
 
             var res = await SendMessageAsync(json, HttpMethod.Put, ControllerStatus);
@@ -312,7 +343,7 @@ namespace Client.Droid.Models
                 default:
                     var content = await res.Content.ReadAsStringAsync();
                     var contentjson = JObject.Parse(content);
-                    throw new Exception(res.StatusCode.ToString() + " " + (string)contentjson["Message"]);
+                    throw new Exception((string)contentjson["Message"]);
             }
         }
         #endregion

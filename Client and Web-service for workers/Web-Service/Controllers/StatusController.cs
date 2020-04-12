@@ -179,7 +179,7 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Error("PUT Попытка установить длительный статус");
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\""),
+                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\"}"),
                     StatusCode = HttpStatusCode.BadRequest
                 };
             }
@@ -189,7 +189,7 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Error("PUT Попытка продолжтить рабочий день");
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Рабочий день закончен!\""),
+                    Content = new StringContent("{\"Message\":\"Рабочий день закончен!\"}"),
                     StatusCode = HttpStatusCode.BadRequest
                 };
             }

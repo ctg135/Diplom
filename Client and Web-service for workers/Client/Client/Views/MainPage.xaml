@@ -10,7 +10,7 @@
              >
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Выйти" Command="{Binding Exit}" />
+        <ToolbarItem Text="Выйти" Command="{Binding ExitAcc}" />
     </ContentPage.ToolbarItems>
     <!-- Place new controls here -->
     <TableView Intent="Data" HorizontalOptions="Center">

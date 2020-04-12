@@ -82,7 +82,6 @@ namespace Client
         /// </summary>
         public static void DestroyConnectionChecker()
         {
-            ConnectionCheckerTimer.Dispose();
             ConnectionCheckerTimer = null;
             TimerClient = null;
         }
@@ -98,8 +97,8 @@ namespace Client
             Client.Session = Session;
             Client.Server = Server;
 
-            Config.SetItem("Session", Session);
-            Config.SetItem("Server", Server);
+            await Config.SetItem("Session", Session);
+            await Config.SetItem("Server", Server);
 
             Dictionary<string, Status> statuses = new Dictionary<string, Status>();
             Dictionary<string, Status> statusCodes = new Dictionary<string, Status>();
@@ -118,7 +117,6 @@ namespace Client
             WorkerStatus = await Client.GetLastStatusCode();
 
             SetUpConnectionChecker(2 * 60 * 1000, Client);
-
         }
         /// <summary>
         /// Очистка всех данных

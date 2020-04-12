@@ -13,7 +13,7 @@ namespace Client.ViewModels
     class MainPageViewModel : BaseViewModel
     {
         private IClientModel Client { get; set; }
-        public ICommand Exit { get; private set; }
+        public ICommand ExitAcc { get; private set; }
         public ICommand SetNewStatus { get; private set; }
         public ICommand UpdateData { get; private set; }
         /// <summary>
@@ -43,7 +43,7 @@ namespace Client.ViewModels
         public Plan PlanToday { get; set; }
         public MainPageViewModel(IClientModel Client)
         {
-            Exit = new Command(UnAutho);
+            ExitAcc = new Command(UnAutho);
             SetNewStatus = new Command(SetStatus);
             UpdateData = new Command(UpdateProps);
 
@@ -84,7 +84,14 @@ namespace Client.ViewModels
             }
             catch (Exception exc)
             {
-                await FatalError(exc.Message);
+                if(exc.Message == "Недостаточно прав для установки статуса" || exc.Message == "Рабочий день закончен!")
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ошибка установки статуса", exc.Message, "Ок");
+                }
+                else
+                {
+                    await FatalError(exc.Message);
+                }
                 return;
             }
             
@@ -98,8 +105,8 @@ namespace Client.ViewModels
         {
             try
             {
-                PlanToday = await Client.GetTodayPlan();
                 Globals.WorkerStatus = await Client.GetLastStatusCode();
+                PlanToday = await Client.GetTodayPlan();
             }
             catch (Exception exc)
             {
@@ -109,7 +116,9 @@ namespace Client.ViewModels
 
             NotifyPropertyChanged(nameof(Status));
             NotifyPropertyChanged(nameof(LastUpdate));
-            NotifyPropertyChanged(nameof(PlanToday));
+            NotifyPropertyChanged(nameof(PlanToday.StartOfDay));
+            NotifyPropertyChanged(nameof(PlanToday.EndOfDay));
+            NotifyPropertyChanged(nameof(PlanToday.Total));
         }
     }
 }

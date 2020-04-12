@@ -238,12 +238,12 @@ namespace Web_Service.DataBase
             foreach(DataRow row in data.Rows)
             {
                 plans.Add(new Plan() 
-                { 
+                {
                     Id         = row["Id"].ToString(),
                     WorkerId   = row["WorkerId"].ToString(),
-                    Date       = row["Date"].ToString(),
-                    StartOfDay = row["StartOfDay"].ToString(),
-                    EndOfDay   = row["EndOfDay"].ToString(),
+                    Date       = DateTime.Parse(row["Date"].ToString()).ToString("dd.MM.yyyy"),
+                    StartOfDay = DateTime.Parse(row["StartOfDay"].ToString()).ToString("HH:mm"),
+                    EndOfDay   = DateTime.Parse(row["EndOfDay"].ToString()).ToString("HH:mm"),
                     Total      = row["Total"].ToString()
                 });
             }
