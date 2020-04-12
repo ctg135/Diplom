@@ -74,7 +74,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"POST Сессия {sessionHash} базе данных");
+            Logger.AuthoLog.Info($"POST Сессия {sessionHash} в базе данных");
             
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
             Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");

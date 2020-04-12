@@ -258,7 +258,16 @@ namespace Web_Service.DataBase
         /// <exception cref="Exception">Ошибка запроса</exception>
         public static void UpdateSession(string Session, DateTime Time)
         {
-            DB.ExecuteQuery($"UPDATE `sessions` SET `LastUpdate` = '{Time.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE `Token` = '{Session}'");
+            var table = DB.MakeQuery($"SELECT * FROM `sessions` WHERE `Token` = '{Session}'");
+
+            if (table.Rows.Count == 1)
+            {
+                DB.ExecuteQuery($"UPDATE `sessions` SET `LastUpdate` = '{Time.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE `Token` = '{Session}'");
+            }
+            else
+            {
+                throw new Exception("Ошибка обновления");
+            }
         }
         /// <summary>
         /// Функция проверки активных подключений
