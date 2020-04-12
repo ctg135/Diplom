@@ -12,6 +12,7 @@ namespace Client.IoC
         {
             base.Load(builder);
 
+            builder.RegisterType<LoadingPageViewModel>();
             builder.RegisterType<AuthoPageViewModel>();
             builder.RegisterType<MainPageViewModel>();
             builder.RegisterType<GraphicPageViewModel>();

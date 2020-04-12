@@ -20,7 +20,7 @@ namespace Client
 
             Globals.Config = ServiceLocator.Current.GetService<Models.IConfigManager>();
 
-            MainPage = new NavigationPage(new AuthoPage());
+            Current.MainPage = new LoadingPage();
         }
 
         private void InitializeDependencies(Module PlatformModule)

@@ -19,10 +19,6 @@ namespace Client.ViewModels
         /// </summary>
         public ICommand Authorize { get; private set; }
         /// <summary>
-        /// Команда авторизации при существующей сессии
-        /// </summary>
-        public ICommand AuthorizeWithSession { get; private set; }
-        /// <summary>
         /// Команда открытия настроек
         /// </summary>
         public ICommand OpenSettings { get; private set; }
@@ -47,16 +43,25 @@ namespace Client.ViewModels
         {
             this.Client = Client;
             Authorize = new Command(Autho);
-            AuthorizeWithSession = new Command(AuthoSession);
             OpenSettings = new Command(OpenSettingsPageAsync);
             UpdateSettings = new Command(UpdateSets);
+
+            UpdateSettings.Execute(new object());
         }
         /// <summary>
         /// Команда авторизации
         /// </summary>
         private async void Autho()
         {
-            var result = await Client.Authorization(Login, Password);
+            var result = new AuthorizationResult();
+            try
+            {
+                result = await Client.Authorization(Login, Password);
+            }
+            catch(Exception)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Ошибка подключения", "Ок");
+            }
             switch(result)
             {
                 case AuthorizationResult.Ok:
@@ -64,25 +69,7 @@ namespace Client.ViewModels
                     Application.Current.MainPage = new MainMenuPage();
                     break;
                 case AuthorizationResult.Error:
-                    await Application.Current.MainPage.DisplayAlert("", "Ошибка авторизации", "Ок");
-                    break;
-                default:
-                    await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
-                    break;
-            }
-        }
-        private async void AuthoSession()
-        {
-            if (string.IsNullOrEmpty(Client.Session))  return;
-            var result = await Client.Authorization();
-            switch (result)
-            {
-                case AuthorizationResult.Ok:
-                    await Globals.Load(Client.Session, Client.Server);
-                    Application.Current.MainPage = new MainMenuPage();
-                    break;
-                case AuthorizationResult.Error:
-                    
+                    await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Неверное имя пользователя или пароль", "Ок");
                     break;
                 default:
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
