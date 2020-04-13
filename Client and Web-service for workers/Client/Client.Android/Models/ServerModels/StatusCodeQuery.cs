@@ -14,6 +14,6 @@ namespace Client.Droid.Models.ServerModels
 {
     public class StatusCodeQuery
     {
-        public string StatusCode { get; set; }
+        public string Code { get; set; }
     }
 }

@@ -61,6 +61,7 @@ namespace Client.ViewModels
             catch(Exception)
             {
                 await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Ошибка подключения", "Ок");
+                return;
             }
             switch(result)
             {

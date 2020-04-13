@@ -132,8 +132,7 @@ namespace Client.Droid.Models
         public async Task<AuthorizationResult> Authorization(string Login, string Password)
         {
             // Пока тестим
-            //string json = JsonConvert.SerializeObject(new ServerData.Autho() { Login = Login, Password = GetHashString(Password)});
-            string json = JsonConvert.SerializeObject(new ServerData.Autho() { Login = Login, Password = Password});
+            string json = JsonConvert.SerializeObject(new ServerData.Autho() { Login = Login, Password = GetHashString(Password)});
 
             var res = await SendMessageAsync(json, HttpMethod.Post, ControllerAuthorization);
             switch(res.StatusCode)
@@ -330,7 +329,7 @@ namespace Client.Droid.Models
         /// <returns></returns>
         public async Task SetStatus(string Code)
         {
-            var query = new ServerData.StatusCodeQuery() { StatusCode = Code };
+            var query = new ServerData.StatusCodeQuery() { Code = Code };
             string json = JsonConvert.SerializeObject(new ServerData.Request() { Session = Session, Query =  query});
 
             var res = await SendMessageAsync(json, HttpMethod.Put, ControllerStatus);

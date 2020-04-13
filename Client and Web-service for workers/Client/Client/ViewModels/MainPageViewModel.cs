@@ -116,9 +116,7 @@ namespace Client.ViewModels
 
             NotifyPropertyChanged(nameof(Status));
             NotifyPropertyChanged(nameof(LastUpdate));
-            NotifyPropertyChanged(nameof(PlanToday.StartOfDay));
-            NotifyPropertyChanged(nameof(PlanToday.EndOfDay));
-            NotifyPropertyChanged(nameof(PlanToday.Total));
+            NotifyPropertyChanged(nameof(PlanToday));
         }
     }
 }

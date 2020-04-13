@@ -54,6 +54,7 @@ namespace Client
             {
                 await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Ошибка подключения", exc.Message, "Ок");
                 Xamarin.Forms.Application.Current.MainPage = new Xamarin.Forms.NavigationPage(new Views.AuthoPage());
+                return;
             }
 
             switch(result)
@@ -82,7 +83,7 @@ namespace Client
         /// </summary>
         public static void DestroyConnectionChecker()
         {
-            ConnectionCheckerTimer = null;
+            ConnectionCheckerTimer.Dispose();
             TimerClient = null;
         }
         /// <summary>

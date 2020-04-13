@@ -174,7 +174,7 @@ namespace Web_Service.Controllers
 
             Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
 
-            if(DBClient.IsLongStatus(NewStatusWorker))
+            if(DBClient.IsLongStatus(NewStatusWorker) || DBClient.State_NotState == NewStatusWorker)
             {
                 Logger.StatusLog.Error("PUT Попытка установить длительный статус");
                 return new HttpResponseMessage()
