@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -174,22 +175,48 @@ namespace Web_Service.Controllers
 
             Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
 
-            if(DBClient.IsLongStatus(NewStatusWorker) || DBClient.State_NotState == NewStatusWorker)
+            var oldStatus = DBClient.GetStatus(WorkerId, DateTime.Now).Code;
+
+            if (oldStatus == NewStatusWorker)
             {
-                Logger.StatusLog.Error("PUT Попытка установить длительный статус");
+                Logger.StatusLog.Error($"PUT Такой статус {NewStatusWorker} уже установлен");
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\"}"),
+                    Content = new StringContent("{\"Message\":\"Статус уже установлен\"}"),
                     StatusCode = HttpStatusCode.BadRequest
                 };
             }
 
-            if(DBClient.State_Finished == DBClient.GetStatus(WorkerId, DateTime.Now).Code)
+            if (oldStatus == DBClient.State_Finished)
             {
                 Logger.StatusLog.Error("PUT Попытка продолжтить рабочий день");
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Рабочий день закончен!\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+
+            if (oldStatus == DBClient.State_NotState)
+            {
+                var plans = new List<Models.Plan>(DBClient.GetPlans(WorkerId, DateTime.Now, DateTime.Now));
+                if (plans.Count < 1)
+                {
+                    Logger.StatusLog.Error("PUT Попытка выйти на работу в выходной");
+                    return new HttpResponseMessage()
+                    {
+                        Content = new StringContent("{\"Message\":\"На сегодня нету графика\"}"),
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
+                }
+            }
+
+            if (DBClient.IsLongStatus(NewStatusWorker) || DBClient.State_NotState == NewStatusWorker)
+            {
+                Logger.StatusLog.Error("PUT Попытка установить длительный статус");
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\"}"),
                     StatusCode = HttpStatusCode.BadRequest
                 };
             }

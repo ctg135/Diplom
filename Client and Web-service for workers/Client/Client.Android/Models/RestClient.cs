@@ -56,10 +56,17 @@ namespace Client.Droid.Models
         /// Строка с информацией о клиенте
         /// </summary>
         private string ClientInfo { get; set; }
+        private List<string> SetStatusClientErrors { get; set; }
 
         public RestClient()
         {
             ClientInfo = $"{DeviceInfo.Manufacturer} {DeviceInfo.Model} {DeviceInfo.Platform} {DeviceInfo.VersionString}";
+
+            SetStatusClientErrors = new List<string>();
+            SetStatusClientErrors.Add("Статус уже установлен");
+            SetStatusClientErrors.Add("Недостаточно прав для установки статуса");
+            SetStatusClientErrors.Add("Рабочий день закончен!");
+            SetStatusClientErrors.Add("На сегодня нету графика");
         }
 
         /// <summary>
@@ -345,6 +352,8 @@ namespace Client.Droid.Models
                     throw new Exception((string)contentjson["Message"]);
             }
         }
+
+        public Task<bool> IsSetStatusClientError(string ErrorMessage) => Task.FromResult(SetStatusClientErrors.Contains(ErrorMessage));
         #endregion
     }
 }

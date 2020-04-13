@@ -117,5 +117,10 @@ namespace Client.Droid.Models
         {
             return await Task.FromResult(AuthorizationResult.Ok);
         }
+
+        public Task<bool> IsSetStatusClientError(string ErrorMessage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -233,7 +233,7 @@ namespace Web_Service.DataBase
 
             DataTable data = DB.MakeQuery($"SELECT * FROM `plans` WHERE `WorkerId` = '{WorkerId}' " +
                 $"AND `Date` >= '{StartDay.ToString("yyyy-MM-dd")}' " +
-                $"AND `Date` <= '{EndDay.ToString("yyyy-MM-dd")}'");
+                $"AND `Date` <= '{EndDay.ToString("yyyy-MM-dd")}' ORDER BY `Date` ASC");
 
             foreach(DataRow row in data.Rows)
             {

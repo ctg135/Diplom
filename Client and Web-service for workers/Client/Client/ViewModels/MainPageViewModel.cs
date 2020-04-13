@@ -84,7 +84,7 @@ namespace Client.ViewModels
             }
             catch (Exception exc)
             {
-                if(exc.Message == "Недостаточно прав для установки статуса" || exc.Message == "Рабочий день закончен!")
+                if(await Client.IsSetStatusClientError(exc.Message))
                 {
                     await Application.Current.MainPage.DisplayAlert("Ошибка установки статуса", exc.Message, "Ок");
                 }

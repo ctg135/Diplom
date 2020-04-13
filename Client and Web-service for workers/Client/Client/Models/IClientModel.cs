@@ -61,6 +61,12 @@ namespace Client.Models
         /// <returns></returns>
         Task SetStatus(string Code);
         /// <summary>
+        /// Проверяет, ошибка является ошибкой клиента для устанвоки статуса
+        /// </summary>
+        /// <param name="ErrorMessage">Сообщение об ошибке</param>
+        /// <returns>true, если является ошибкой клиента</returns>
+        Task<bool> IsSetStatusClientError(string ErrorMessage);
+        /// <summary>
         /// Получение планов сотрудника по датам
         /// </summary>
         /// <param name="Start">Начальная дата</param>

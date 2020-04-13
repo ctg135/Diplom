@@ -45,8 +45,6 @@ namespace Client.ViewModels
             Authorize = new Command(Autho);
             OpenSettings = new Command(OpenSettingsPageAsync);
             UpdateSettings = new Command(UpdateSets);
-
-            UpdateSettings.Execute(new object());
         }
         /// <summary>
         /// Команда авторизации
