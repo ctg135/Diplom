@@ -203,7 +203,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Web-Service.Data\Web-Service.Data.csproj">
+      <Project>{444e97e9-23a4-4a8a-b52d-e5bc17cc6490}</Project>
+      <Name>Web-Service.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />

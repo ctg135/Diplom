@@ -200,3 +200,6 @@ C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\W
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csproj.CopyComplete
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.pdb
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csproj.CoreCompileInputs.cache
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Web-Service.Data.dll
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Web-Service.Data.pdb
