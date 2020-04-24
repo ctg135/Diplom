@@ -108,7 +108,7 @@
 ```json
 {
 	"StatusCode": "value",
-    "Updated": "value"
+	"Updated": "value"
 }
 ```
 
