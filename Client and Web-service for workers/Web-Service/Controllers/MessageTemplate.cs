@@ -101,7 +101,7 @@ namespace Web_Service.Controllers
             {
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Такой клиент не блы найден\"}"),
+                    Content = new StringContent("{\"Message\":\"Клиент не был найден\"}"),
                     StatusCode = HttpStatusCode.Unauthorized
                 };
             }

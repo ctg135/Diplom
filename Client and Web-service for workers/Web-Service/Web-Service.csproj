@@ -150,7 +150,6 @@
     <Compile Include="Controllers\Authentication\Authentication.cs" />
     <Compile Include="Controllers\Authentication\AuthenticationResult.cs" />
     <Compile Include="Controllers\AuthoController.cs" />
-    <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessageTemplate.cs" />
     <Compile Include="Controllers\PlanController.cs" />

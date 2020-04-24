@@ -41,27 +41,37 @@ namespace Web_Service.Controllers
         /// <returns>Результат авторизации</returns>
         public static AuthenticationResult Authenticate(string Session, string ClientInfo)
         {
-            string WorkerId = string.Empty;
-            string Client   = string.Empty;
+            string Client     = string.Empty;
+            string OldSession = string.Empty;
 
             try
             {
-                WorkerId = DBClient.GetWorkerId(Session);
-                Client   = DBClient.GetClientInfo(Session);
+                string WorkerId    = DBClient.GetWorkerId(Session);
+                Client             = DBClient.GetClientInfo(Session);
+                OldSession         = DBClient.SearchSession(WorkerId, Client);
             }
             catch(Exception exc)
             {
-                Logger.AuthoLog.Error("Ошибка поиска сессии", exc);
+                Logger.AuthoLog.Fatal("Ошибка поиска сессии", exc);
                 return AuthenticationResult.SessionNotFound;
             }
-
-            if (string.IsNullOrEmpty(WorkerId) || string.IsNullOrEmpty(Client))
+            // Если сессия найдена и совпадают клиенты
+            if (!string.IsNullOrEmpty(Session))
+            {
+                if (ClientInfo == Client)
+                {
+                    DBClient.UpdateSession(Session, DateTime.Now);
+                    return AuthenticationResult.Ok;
+                }
+                else
+                {
+                    return AuthenticationResult.ClientNotFound;
+                }
+            }
+            else
+            {
                 return AuthenticationResult.SessionNotFound;
-
-            if (ClientInfo != Client)
-                return AuthenticationResult.ClientNotFound;
-
-            return AuthenticationResult.Ok;
+            }
         }
         /// <summary>
         /// Создание новой сессии
@@ -84,8 +94,6 @@ namespace Web_Service.Controllers
 
             if(string.IsNullOrEmpty(PrevSession))
             {
-                DBClient.UpdateSession(PrevSession, DateTime.Now);
-
                 var hash = Encoding.UTF8.GetBytes(Login + Password + ClientInfo + DateTime.Now.ToString());
 
                 var bytes = SHA1.Create().ComputeHash(hash);
