@@ -107,7 +107,7 @@ namespace Web_Service.Controllers
             catch (Exception exc)
             {
                 Logger.PlanLog.Error("Ошибка получения планов", exc);
-                return MessageTemplate.BadProcessingMessage;
+                return MessageTemplate.InternalError;
             }
 
             Logger.PlanLog.Info($"POST Отправка ответа {ClientInfo}");

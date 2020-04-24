@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using Web_Service.DataBase;
@@ -6,6 +7,27 @@ using Web_Service.Loggers;
 
 namespace Web_Service.Controllers
 {
+    /// <summary>
+    /// Исключение во время авторизации
+    /// </summary>
+    public class AuthenticationExcecption : Exception
+    {
+        public AuthenticationExcecption()
+        {
+        }
+
+        public AuthenticationExcecption(string message) : base(message)
+        {
+        }
+
+        public AuthenticationExcecption(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected AuthenticationExcecption(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
     /// <summary>
     /// Класс для проведения авторизации
     /// </summary>
@@ -53,10 +75,17 @@ namespace Web_Service.Controllers
         {
             var WorkerId = DBClient.GetWorkerId(Login, Password);
 
+            if (string.IsNullOrEmpty(WorkerId))
+            {
+                throw new AuthenticationExcecption("Неверный логин или пароль");
+            }
+
             var PrevSession = DBClient.SearchSession(WorkerId, ClientInfo);
 
             if(string.IsNullOrEmpty(PrevSession))
             {
+                DBClient.UpdateSession(PrevSession, DateTime.Now);
+
                 var hash = Encoding.UTF8.GetBytes(Login + Password + ClientInfo + DateTime.Now.ToString());
 
                 var bytes = SHA1.Create().ComputeHash(hash);

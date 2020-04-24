@@ -23,16 +23,30 @@ namespace Web_Service.Controllers
             }
         }
         /// <summary>
+        /// Сообщение об ошибке сериализации
+        /// </summary>
+        public static HttpResponseMessage SerializationError
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Ошибка сериализации запроса\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
+        /// <summary>
         /// Сообщение о ошибке обработки сообщения
         /// </summary>
-        public static HttpResponseMessage BadProcessingMessage
+        public static HttpResponseMessage InternalError
         {
             get
             {
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Ошибка обработки сообщения\"}"),
-                    StatusCode = HttpStatusCode.Conflict
+                    StatusCode = HttpStatusCode.InternalServerError
                 };
             }
         }
@@ -46,7 +60,7 @@ namespace Web_Service.Controllers
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Пользователь не найден\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.Unauthorized
                 };
             }
         }
@@ -60,7 +74,7 @@ namespace Web_Service.Controllers
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Сессия не была создана\"}"),
-                    StatusCode = HttpStatusCode.Conflict
+                    StatusCode = HttpStatusCode.InternalServerError
                 };
             }
         }

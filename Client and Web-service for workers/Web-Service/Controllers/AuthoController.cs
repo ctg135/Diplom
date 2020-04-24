@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Web_Service.DataBase;
 using Web_Service.Loggers;
 using Web_Service.Models;
+using Web_Service.Data;
 
 namespace Web_Service.Controllers
 {
@@ -22,41 +23,26 @@ namespace Web_Service.Controllers
             string ClientInfo = request.Headers.UserAgent.ToString();
             Logger.AuthoLog.Info($"POST Получено сообщение от {ClientInfo}");
             HttpResponseMessage response = new HttpResponseMessage();
-            
-            Autho data = new Autho();
+
+            var data = new Data.Request.AuthoLogin();
+
             DateTime dateOfCreation = DateTime.Now;
             string sessionHash = string.Empty;
             string WorkerId    = string.Empty;
 
             try
             {
-                data = JsonConvert.DeserializeObject<Autho>(await request.Content.ReadAsStringAsync());
+                data = JsonConvert.DeserializeObject<Data.Request.AuthoLogin>(await request.Content.ReadAsStringAsync());
             }
             catch(Exception exc)
             {
                 Logger.AuthoLog.Error($"POST Ошибка сериализации полученного сообщения: {exc.Message} в \"{await request.Content.ReadAsStringAsync()}\"");
-                return MessageTemplate.BadProcessingMessage;
+                return MessageTemplate.SerializationError;
             }
 
             if(string.IsNullOrEmpty(data.Login) || string.IsNullOrEmpty(data.Password))
             {
                 Logger.AuthoLog.Warn("POST Пустые данные авторизации");
-            }
-
-            try
-            {
-                WorkerId = DBClient.GetWorkerId(data.Login, data.Password);
-            }
-            catch (Exception exc)
-            {
-                Logger.AuthoLog.Fatal($"POST Ошибка поиска сотрудника #{WorkerId}", exc);
-                return MessageTemplate.UserNotFound;
-            }
-
-            if(string.IsNullOrEmpty(WorkerId))
-            {
-                Logger.AuthoLog.Error($"POST Работник #{WorkerId} не найден");
-                return MessageTemplate.UserNotFound;
             }
 
             try
@@ -68,6 +54,11 @@ namespace Web_Service.Controllers
                     dateOfCreation
                 );
             }
+            catch (AuthenticationExcecption exc)
+            {
+                Logger.AuthoLog.Error($"Ошибка авторизации");
+                return MessageTemplate.ClientNotFound;
+            }
             catch (Exception exc)
             {
                 Logger.AuthoLog.Fatal($"POST Не удалось создать сессию для #{WorkerId}", exc);
@@ -77,6 +68,8 @@ namespace Web_Service.Controllers
             Logger.AuthoLog.Info($"POST Сессия {sessionHash} в базе данных");
             
             response.Content = new StringContent("{\"Session\":\"" + sessionHash + "\"}");
+            response.StatusCode = System.Net.HttpStatusCode.OK;
+
             Logger.AuthoLog.Info($"POST Отправка ответа {ClientInfo}");
 
             return response;

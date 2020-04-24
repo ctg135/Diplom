@@ -47,7 +47,7 @@ namespace Web_Service.Controllers
             catch(Exception exc)
             {
                 Logger.ConnectionLog.Fatal("POST Ошибка обновления сессии", exc);
-                return MessageTemplate.BadProcessingMessage;
+                return MessageTemplate.InternalError;
             }
 
             Logger.ConnectionLog.Info($"POST Сессия {Session} обновлена");

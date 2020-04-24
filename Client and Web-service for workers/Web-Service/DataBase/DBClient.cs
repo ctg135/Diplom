@@ -62,7 +62,7 @@ namespace Web_Service.DataBase
         /// </summary>
         /// <param name="Login">Логин работника</param>
         /// <param name="Password">Пароль работника</param>
-        /// <returns>Id работника</returns>
+        /// <returns>Id работника или string.Empty, если не найден</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
         public static string GetWorkerId(string Login, string Password)
         {

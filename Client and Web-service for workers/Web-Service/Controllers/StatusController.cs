@@ -33,7 +33,7 @@ namespace Web_Service.Controllers
             catch (Exception exc)
             {
                 Logger.StatusLog.Fatal("GET Ошибка получения статусов", exc);
-                return MessageTemplate.BadProcessingMessage;
+                return MessageTemplate.InternalError;
             }
 
             Logger.StatusLog.Info($"GET Отправка ответа {ClientInfo}");
@@ -107,7 +107,7 @@ namespace Web_Service.Controllers
             catch(Exception exc)
             {
                 Logger.StatusLog.Fatal("Ошибка получения статуса", exc);
-                return MessageTemplate.BadProcessingMessage;
+                return MessageTemplate.InternalError;
             }
 
             Logger.StatusLog.Info($"POST Отправка ответа {ClientInfo}");
