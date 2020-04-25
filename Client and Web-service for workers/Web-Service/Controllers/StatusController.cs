@@ -18,7 +18,7 @@ namespace Web_Service.Controllers
         /// <code>GET: api/Status</code>
         /// </summary>
         /// <param name="request">Запрос</param>
-        /// <returns>Сообщение-ответ</returns>
+        /// <returns>Сообщение-ответ со списком всех возможных статусов</returns>
         public async Task<HttpResponseMessage> Get(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -37,7 +37,7 @@ namespace Web_Service.Controllers
             }
 
             Logger.StatusLog.Info($"GET Отправка ответа {ClientInfo}");
-            return response;
+            return await Task.FromResult(response);
         }
 
         /// <summary>

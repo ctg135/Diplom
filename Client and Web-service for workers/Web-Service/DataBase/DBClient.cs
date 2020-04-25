@@ -150,17 +150,17 @@ namespace Web_Service.DataBase
         /// </summary>
         /// <returns>Все статусы</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static IEnumerable<Status> GetStatuses()
+        public static IEnumerable<Data.Response.StatusType> GetStatuses()
         {
-            List<Status> statuses = new List<Status>();
+            List<Data.Response.StatusType> statuses = new List<Data.Response.StatusType>();
 
             DataTable data = DB.SelectTable("statuses");
 
             foreach(DataRow row in data.Rows)
             {
-                statuses.Add(new Status()
+                statuses.Add(new Data.Response.StatusType()
                 {
-                    Code        = row["Code"].ToString(),
+                    StatusCode  = row["Code"].ToString(),
                     Title       = row["Title"].ToString(),
                     Description = row["Description"].ToString()
                 });
