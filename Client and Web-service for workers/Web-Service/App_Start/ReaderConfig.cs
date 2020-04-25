@@ -83,5 +83,35 @@ namespace Web_Service
                 return Properties.Settings.Default.Status_Finished;
             }
         }
+        /// <summary>
+        /// Словарь для пар { Код графика - код статуса этого графика }
+        /// </summary>
+        public static Dictionary<string, string> GraphicCode_StatusCode
+        {
+            get
+            { 
+                return JsonConvert.DeserializeObject<Dictionary<string, string>>(Properties.Settings.Default.GraphicCode_StatusCode);
+            }
+        }
+        /// <summary>
+        /// Возвращает код рабочего дня в графиках
+        /// </summary>
+        public static string Day_Working
+        {
+            get
+            {
+                return Properties.Settings.Default.Day_Working;
+            }
+        }
+        /// <summary>
+        /// Возвращает код выходного дня в графиках
+        /// </summary>
+        public static string Day_DayOff
+        {
+            get
+            {
+                return Properties.Settings.Default.Day_DayOff;
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace Web_Service.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
 
             var req = new Data.Request.WorkerInfoRequest();
+            string WorkerId = string.Empty;
 
             try
             {
@@ -39,17 +40,7 @@ namespace Web_Service.Controllers
                 Logger.WorkerLog.Warn("POST Пустой номер сессии");
             }
 
-            string WorkerId = string.Empty;
-
-            try
-            {
-                WorkerId = DBClient.GetWorkerId(req.Session);
-            }
-            catch (Exception exc)
-            {
-                Logger.WorkerLog.Fatal("POST Ошибка поиска сотрудника", exc);
-                return MessageTemplate.UserNotFound;
-            }
+            Logger.StatusLog.Debug($"POST Авторизация сессии {req.Session}");
 
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
@@ -65,6 +56,18 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
+            Logger.WorkerLog.Debug($"POST Поиск работника по сессии {req.Session}");
+
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(req.Session);
+            }
+            catch (Exception exc)
+            {
+                Logger.WorkerLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                return MessageTemplate.InternalError;
+            }
+
             var worker = new Data.Response.WorkerInfo();
 
             try
@@ -73,7 +76,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.WorkerLog.Fatal("POST Ошибка поиска работника", exc);
+                Logger.WorkerLog.Fatal($"POST Ошибка поиска информации о работнике #{WorkerId}", exc);
                 return MessageTemplate.WorkerNotFound;
             }
 

@@ -106,7 +106,7 @@ namespace Web_Service.Controllers
 
                 string sessionHash = builder.ToString();
 
-                DBClient.CreateSession(WorkerId, sessionHash, ClientInfo, Date);
+                DBClient.InsertSession(WorkerId, sessionHash, ClientInfo, Date);
 
                 return sessionHash;
             }

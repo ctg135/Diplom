@@ -47,6 +47,9 @@ namespace Web_Service
             DBClient.State_NotState = ReaderConfig.Status_NotStated;
             DBClient.State_Finished = ReaderConfig.Status_Finished;
             DBClient.DisconnectTime = ReaderConfig.DisconnectTime;
+            DBClient.LongStatusGraphics = ReaderConfig.GraphicCode_StatusCode;
+            DBClient.DayType_Working = ReaderConfig.Day_Working;
+            DBClient.DayType_DayOff = ReaderConfig.Day_DayOff;
 
             // Настройка процедуры проверки подключений
 

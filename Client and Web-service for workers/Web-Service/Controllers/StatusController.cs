@@ -45,7 +45,7 @@ namespace Web_Service.Controllers
         /// <code>POST: api/Status</code>
         /// </summary>
         /// <param name="request">Запрос</param>
-        /// <returns>Сообщение-ответ</returns>
+        /// <returns>Сообщение-ответ со статусом пользвателя</returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
@@ -53,51 +53,53 @@ namespace Web_Service.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = string.Empty;
+            string WorkerId = string.Empty;
+            var req = new Data.Request.StatusUserRequest();
 
             try
             {
-                var json = JObject.Parse(await request.Content.ReadAsStringAsync());
-                Session = (string)json["Session"];
+                req = JsonConvert.DeserializeObject<Data.Request.StatusUserRequest>(await request.Content.ReadAsStringAsync());                
             }
             catch (Exception exc)
             {
                 Logger.StatusLog.Error("POST Ошибка сериализации", exc);
-                return MessageTemplate.BadMessage;
+                return MessageTemplate.SerializationError;
             }
 
-            if (string.IsNullOrEmpty(Session))
+            if (string.IsNullOrEmpty(req.Session))
             {
                 Logger.StatusLog.Warn("POST Пустой номер сессии");
             }
 
-            string WorkerId = string.Empty;
+            Logger.StatusLog.Debug($"POST Авторизация сессии {req.Session}");
 
-            try
-            {
-                WorkerId = DBClient.GetWorkerId(Session);
-            }
-            catch(Exception exc)
-            {
-                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
-                return MessageTemplate.UserNotFound;
-            }
-            
-            Logger.StatusLog.Debug("POST Просмотр статуса для #" + WorkerId);
-
-            switch (Authentication.Authenticate(Session, ClientInfo))
+            switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
                     break;
 
                 case AuthenticationResult.SessionNotFound:
-                    Logger.StatusLog.Error($"POST Сессия {Session} не найдена");
+                    Logger.StatusLog.Info($"POST Сессия {req.Session} не найдена");
                     return MessageTemplate.SessionNotFound;
 
                 case AuthenticationResult.ClientNotFound:
-                    Logger.StatusLog.Error($"POST Клиент #{WorkerId} не найден");
+                    Logger.StatusLog.Info($"POST Клиент не найден");
                     return MessageTemplate.ClientNotFound;
             }
+
+            Logger.StatusLog.Debug($"POST Поиск работника по сессии {req.Session}");
+
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(req.Session);
+            }
+            catch(Exception exc)
+            {
+                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                return MessageTemplate.InternalError;
+            }
+
+            Logger.StatusLog.Debug("POST Просмотр статуса для #" + WorkerId);
 
             try
             {
@@ -175,7 +177,7 @@ namespace Web_Service.Controllers
 
             Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
 
-            var oldStatus = DBClient.GetStatus(WorkerId, DateTime.Now).Code;
+            var oldStatus = DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode;
 
             if (oldStatus == NewStatusWorker)
             {

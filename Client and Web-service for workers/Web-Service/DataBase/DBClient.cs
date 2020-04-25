@@ -20,6 +20,18 @@ namespace Web_Service.DataBase
         /// </summary>
         public static List<string> LongStatuses { get; set; }
         /// <summary>
+        /// Коды длинных статусов { Тип графика - Код статуса }
+        /// </summary>
+        public static Dictionary<string, string> LongStatusGraphics { get; set; }
+        /// <summary>
+        /// Номер рабочего дня
+        /// </summary>
+        public static string DayType_Working { get; set; }
+        /// <summary>
+        /// Номер выходного дня
+        /// </summary>
+        public static string DayType_DayOff { get; set; }
+        /// <summary>
         /// Код неустановленного статуса
         /// </summary>
         public static string State_NotState { get; set; }
@@ -35,7 +47,7 @@ namespace Web_Service.DataBase
         /// Функция записи сессии в базу данных
         /// </summary>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static void CreateSession(string WorkerId, string SessionHash, string ClientInfo, DateTime DateCreation) 
+        public static void InsertSession(string WorkerId, string SessionHash, string ClientInfo, DateTime DateCreation) 
         => DB.Insert("sessions", new Dictionary<string, string>() 
         {
             { "WorkerId",   WorkerId },
@@ -172,35 +184,53 @@ namespace Web_Service.DataBase
         /// Функция получения статуса работника по id
         /// </summary>
         /// <param name="WorkerId">Идентификатор работника</param>
+        /// <param name="CheckDate">Дата проверки</param>
         /// <returns>Статус работника</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static StatusCode GetStatus(string WorkerId, DateTime CheckDate)
+        public static Data.Response.Status GetStatus(string WorkerId, DateTime CheckDate)
         {
-            DataTable data = DB.MakeQuery("SELECT `StatusCode`, `SetDate`, `SetTime` " +
+            DataTable data = DB.MakeQuery(
+                "SELECT `StatusCode`, `SetDate`, `SetTime` " +
                 "FROM `statuslogs` " +
-                $"WHERE `WorkerId` = '{WorkerId}' " +
+                $"WHERE `WorkerId` = '{WorkerId}' AND `SetDate` = '{CheckDate:yyyy-MM-dd}' " +
                 "ORDER BY `SetDate` DESC, `SetTime` DESC " +
                 "LIMIT 1;"
-                );
+            );
 
-            if(data.Rows.Count == 0)
+            if (data.Rows.Count == 1) // Если были логи за сегодня, то возвращаем последний
             {
-                return new StatusCode() { Code = State_NotState, LastUpdate = CheckDate.ToString() };
+                DateTime setted = DateTime.Parse(data.Rows[0]["SetDate"].ToString());
+                setted.Add(TimeSpan.Parse(DateTime.Parse(data.Rows[0]["SetDate"].ToString()).ToString("HH:mm:ss")));
+                return new Data.Response.Status() { StatusCode = data.Rows[0]["StatusCode"].ToString(), Updated = setted.ToString()};
             }
-            else if(((DateTime)data.Rows[0]["SetDate"]).ToString("yyyy-MM-dd") != CheckDate.ToString("yyyy-MM-dd"))
-            {
-                if (!IsLongStatus(data.Rows[0]["StatusCode"].ToString()))
+            else
+            {   
+                data = DB.MakeQuery($"SELECT `DayType` FROM `plans` WHERE `WorkerId` = '{WorkerId}' AND `Date` = '{CheckDate:yyyy-MM-dd}'");
+
+                if (data.Rows.Count == 1) // Если есть график, значит день ( рабочий | отпуск | болька )
                 {
-                    return new StatusCode() { Code = State_NotState, LastUpdate = CheckDate.ToString() };
+                    var dayType = data.Rows[0]["DayType"].ToString();
+                    if (dayType == DayType_Working) // Если рабочий день
+                    {
+                        return new Data.Response.Status() { StatusCode = State_NotState, Updated = CheckDate.ToString() };
+                    }
+                    else if (LongStatusGraphics.ContainsKey(dayType)) // Если длительный статус
+                    {
+                        return new Data.Response.Status() { StatusCode = LongStatusGraphics[dayType], Updated = CheckDate.ToString() };
+                    }
+                    else // В ином случае
+                    {
+                        throw new Exception("Несуществующий тип статуса в базе данных");
+                    }
+                }
+                else if (data.Rows.Count == 0) // Графика нету
+                {
+                    return new Data.Response.Status() { StatusCode = LongStatusGraphics[DayType_DayOff], Updated = CheckDate.ToString() };
                 }
                 else
                 {
-                    return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("dd:MM:yyyy") + " " + data.Rows[0]["SetTime"].ToString() };
+                    throw new Exception($"Наложение '{data.Rows.Count}' графиков у работника {WorkerId} на {CheckDate} число");
                 }
-            }
-            else
-            {
-                return new StatusCode() { Code = data.Rows[0]["StatusCode"].ToString(), LastUpdate = ((DateTime)data.Rows[0]["SetDate"]).ToString("dd:MM:yyyy") + " " + data.Rows[0]["SetTime"].ToString() };
             }
         }
         /// <summary>
@@ -293,7 +323,7 @@ namespace Web_Service.DataBase
             {
                 string WorkerId = row[0].ToString();
                 string Session  = row[1].ToString();
-                string status   = GetStatus(WorkerId, TimeOfCheck).Code;
+                string status   = GetStatus(WorkerId, TimeOfCheck).StatusCode;
 
                 Logger.Log.Debug("Для #" + WorkerId + " - устаревшая сессия " + Session);
 

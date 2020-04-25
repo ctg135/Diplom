@@ -12,7 +12,7 @@ namespace Web_Service.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -70,7 +70,7 @@ namespace Web_Service.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("[\"4\",\"6\",\"7\"]")]
+        [global::System.Configuration.DefaultSettingValueAttribute("[\"4\",\"6\"]")]
         public string LongStatuses {
             get {
                 return ((string)(this["LongStatuses"]));
@@ -110,6 +110,33 @@ namespace Web_Service.Properties {
         public string Status_Finished {
             get {
                 return ((string)(this["Status_Finished"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("{\"3\":\"6\", \"4\":\"4\", \"2\":\"7\"}")]
+        public string GraphicCode_StatusCode {
+            get {
+                return ((string)(this["GraphicCode_StatusCode"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Day_Working {
+            get {
+                return ((string)(this["Day_Working"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public string Day_DayOff {
+            get {
+                return ((string)(this["Day_DayOff"]));
             }
         }
     }
