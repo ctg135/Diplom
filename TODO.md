@@ -7,7 +7,7 @@
     - [x] Отдельная библиотека классов для json-запросов
 
 - [ ] - Перестройка API под новую базу данных
-    - [ ] Таблица workers (	+ Department + автовыбор; - Mail, BirthDate, Rate, AccessLevel не нужен)
+    - [x] Таблица workers (	+ Department + автовыбор; - Mail, BirthDate, Rate, AccessLevel не нужен)
     - [ ] Таблица Plans (переделать Total на тип Плана)	
     	
 - [ ] Фичи:
@@ -35,7 +35,7 @@
 |:black_square_button:|Task      |GET        | Получение стадий заданий                             ||
 |:black_square_button:|          |POST       | Получение заданий по параметрам                      ||
 |:black_square_button:|          |PUT        | Установка новых значений                             ||
-|:black_square_button:|Worker    |POST       | Получение информации о работнике                     ||
+|:heavy_check_mark:   |Worker    |POST       | Получение информации о работнике                     ||
 
 *:heavy_check_mark: - готов, :black_square_button: - не готов*
 

@@ -118,26 +118,31 @@ namespace Web_Service.DataBase
         /// <param name="WorkerId">Идентификатор сотрудника</param>
         /// <returns>Информация о сотруднике</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static Worker GetWorker(string WorkerId)
+        public static Data.Response.WorkerInfo GetWorker(string WorkerId)
         {
-            var data = DB.MakeQuery($"SELECT * FROM `workers` WHERE `Id` = '{WorkerId}'");
+            var data = DB.MakeQuery($"SELECT `Name`, `Surname`, `Patronymic`, `Position`, `Department` FROM `workers` WHERE `Id` = '{WorkerId}'");
 
             if(data.Rows.Count != 1)
             {
                 throw new Exception("Работник не найден");
             }
 
-            Worker worker = new Worker()
+            var worker = new Data.Response.WorkerInfo()
             {
                 Name        = data.Rows[0]["Name"].ToString(),
                 Surname     = data.Rows[0]["Surname"].ToString(),
                 Patronymic  = data.Rows[0]["Patronymic"].ToString(),
-                BirthDate   = data.Rows[0]["BirthDate"].ToString(),
-                Mail        = data.Rows[0]["Mail"].ToString(),
                 Position    = data.Rows[0]["Position"].ToString(),
-                Rate        = data.Rows[0]["Rate"].ToString(),
-                AccessLevel = data.Rows[0]["AccessLevel"].ToString()
+                Department  = data.Rows[0]["Department"].ToString()
             };
+
+            data = DB.MakeQuery($"SELECT `Name` FROM `department` WHERE `Id` = '{worker.Department}'");
+
+            if (data.Rows.Count == 1)
+            {
+                worker.Department = data.Rows[0][0].ToString();
+            }
+
             return worker;
         }
         /// <summary>

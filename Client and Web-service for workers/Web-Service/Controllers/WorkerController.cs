@@ -1,44 +1,40 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Web_Service.DataBase;
 using Web_Service.Loggers;
-using Web_Service.Models;
 
 namespace Web_Service.Controllers
 {
     public class WorkerController : ApiController
     {
-        // 
         /// <summary>
         /// Контроллер получения информации о сотруднике
         /// <br>POST: api/Worker</br>
         /// </summary>
         /// <param name="request">Соообщение-запрос</param>
-        /// <returns></returns>
+        /// <returns>Информация о сотруднике</returns>
         public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();
             Logger.WorkerLog.Info($"POST Получено сообщение от {ClientInfo}");
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session = string.Empty;
+            var req = new Data.Request.WorkerInfoRequest();
 
             try
             {
-                var json = JObject.Parse(await request.Content.ReadAsStringAsync());
-                Session = (string)json["Session"];
+                req = JsonConvert.DeserializeObject<Data.Request.WorkerInfoRequest>(await request.Content.ReadAsStringAsync());
             }
             catch (Exception exc)
             {
                 Logger.WorkerLog.Error("POST Ошибка сериализации", exc);
-                return MessageTemplate.BadMessage;
+                return MessageTemplate.SerializationError;
             }
 
-            if(string.IsNullOrEmpty(Session))
+            if(string.IsNullOrEmpty(req.Session))
             {
                 Logger.WorkerLog.Warn("POST Пустой номер сессии");
             }
@@ -47,15 +43,15 @@ namespace Web_Service.Controllers
 
             try
             {
-                WorkerId = DBClient.GetWorkerId(Session);
+                WorkerId = DBClient.GetWorkerId(req.Session);
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                Logger.WorkerLog.Fatal("POST Ошибка поиска сотрудника", exc);
                 return MessageTemplate.UserNotFound;
             }
 
-            switch (Authentication.Authenticate(Session, ClientInfo))
+            switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
                     break;
@@ -69,7 +65,7 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Worker worker = new Worker();
+            var worker = new Data.Response.WorkerInfo();
 
             try
             {

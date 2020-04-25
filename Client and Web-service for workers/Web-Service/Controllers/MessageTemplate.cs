@@ -116,7 +116,7 @@ namespace Web_Service.Controllers
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent("{\"Message\":\"Работник с таким номером не был найден\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.InternalServerError
                 };
             }
         }
