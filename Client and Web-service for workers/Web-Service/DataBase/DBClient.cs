@@ -162,7 +162,7 @@ namespace Web_Service.DataBase
         /// </summary>
         /// <returns>Все статусы</returns>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static IEnumerable<Data.Response.StatusType> GetStatuses()
+        public static IEnumerable<Data.Response.StatusType> GetStatusTypes()
         {
             List<Data.Response.StatusType> statuses = new List<Data.Response.StatusType>();
 
@@ -254,6 +254,26 @@ namespace Web_Service.DataBase
                 { "SetTime", Setted.ToString("HH:mm:ss") },
                 { "StatusCode", CodeStatus }
             });
+        }
+        public static IEnumerable<Data.Response.PlanType> GetPlanTypes()
+        {
+            var types = new List<Data.Response.PlanType>();
+
+            var data = DB.SelectTable("daytypes");
+
+            foreach (DataRow row in data.Rows)
+            {
+                types.Add
+                (
+                    new Data.Response.PlanType()
+                    {
+                        PlanCode = row["Id"].ToString(),
+                        Title = row["Description"].ToString()
+                    }
+                );
+            }
+
+            return types;
         }
         /// <summary>
         /// Функция для получения планов на количсество дней от указанной даты

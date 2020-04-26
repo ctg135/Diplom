@@ -27,7 +27,7 @@ namespace Web_Service.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
-                string statuses = JsonConvert.SerializeObject(DBClient.GetStatuses());
+                string statuses = JsonConvert.SerializeObject(DBClient.GetStatusTypes());
                 response.Content = new StringContent(statuses);
             }
             catch (Exception exc)
@@ -37,6 +37,7 @@ namespace Web_Service.Controllers
             }
 
             Logger.StatusLog.Info($"GET Отправка ответа {ClientInfo}");
+            response.StatusCode = HttpStatusCode.OK;
             return await Task.FromResult(response);
         }
 

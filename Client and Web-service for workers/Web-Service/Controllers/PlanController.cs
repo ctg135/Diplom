@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -13,6 +14,33 @@ namespace Web_Service.Controllers
 {
     public class PlanController : ApiController
     {
+        /// <summary>
+        /// <code>api/Post GET</code>
+        /// Контроллер получения типов планов
+        /// </summary>
+        /// <param name="request">Сообщение-запрос</param>
+        /// <returns>Список типов планов</returns>
+        public async Task<HttpResponseMessage> Get(HttpRequestMessage request)
+        {
+            string ClientInfo = request.Headers.UserAgent.ToString();
+            Logger.PlanLog.Info($"GET Получено сообщение от {ClientInfo}");
+
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            try
+            {
+                string plans = JsonConvert.SerializeObject(DBClient.GetPlanTypes());
+                response.Content = new StringContent(plans);
+            }
+            catch (Exception exc)
+            {
+                Logger.PlanLog.Fatal("GET Ошибка получения статусов", exc);
+                return MessageTemplate.InternalError;
+            }
+
+            response.StatusCode = HttpStatusCode.OK;
+            return await Task.FromResult(response);
+        }
         /// <summary>
         /// КОнтроллер для получения планов на выбранное количество дней 
         /// <code>POST: api/Plan</code>

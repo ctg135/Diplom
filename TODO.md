@@ -11,9 +11,9 @@
     - [ ] Таблица Plans (переделать Total на тип Плана)	
     	
 - [ ] Фичи:
-    - [ ] Выгрузка видов плана api/Plans GET ++
+    - [x] Выгрузка видов плана api/Plans GET ++
     - [x] Объеденить api/Autho и api/Connection --
-    - [ ] Получение типов планов api/Plans GET ++
+    - [x] Получение типов планов api/Plans GET ++
     - [ ] Получение стадии задач api/Task GET ++
     - [ ] Получение задач по параметрам: сессия, [стадии задач], дата получения, (дата завершения - ?) api/Task POST
     - [ ] Установка выполненных задач по параметрам: сессия, номер задачи, новая стадия api/Task PUT
@@ -33,7 +33,7 @@
 |:heavy_check_mark:   |Status    |GET        | Получение всех видов статуса                         ||
 |:heavy_check_mark:   |          |POST       | Получение статуса работника                          ||
 |:black_square_button:|          |PUT        | Установка нового статуса                             ||
-|:black_square_button:|Plan      |GET        | Получение видов графиков                             ||
+|:heavy_check_mark:   |Plan      |GET        | Получение видов графиков                             ||
 |:black_square_button:|          |POST       | Получение всех графиков                              ||
 |:black_square_button:|Task      |GET        | Получение стадий заданий                             ||
 |:black_square_button:|          |POST       | Получение заданий по параметрам                      ||
