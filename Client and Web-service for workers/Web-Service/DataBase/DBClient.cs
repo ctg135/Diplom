@@ -362,7 +362,7 @@ namespace Web_Service.DataBase
                     }
                     catch (Exception exc)
                     {
-                        Logger.Log.Error("Ошибка установки статуса", exc);
+                        Logger.Log.Error(exc, "Ошибка установки статуса");
                     }
                 }
 
@@ -373,7 +373,7 @@ namespace Web_Service.DataBase
                 }
                 catch(Exception exc)
                 {
-                    Logger.Log.Error("Ошибка удаления сессии", exc);
+                    Logger.Log.Error(exc, "Ошибка удаления сессии");
                 }
             }
         }

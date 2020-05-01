@@ -52,7 +52,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.AuthoLog.Fatal("Ошибка поиска сессии", exc);
+                Logger.AuthoLog.Fatal(exc, "Ошибка поиска сессии");
                 return AuthenticationResult.SessionNotFound;
             }
             // Если сессия найдена и совпадают клиенты

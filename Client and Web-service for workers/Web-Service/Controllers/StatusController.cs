@@ -32,7 +32,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Fatal("GET Ошибка получения статусов", exc);
+                Logger.StatusLog.Fatal(exc, "GET Ошибка получения статусов");
                 return MessageTemplate.InternalError;
             }
 
@@ -63,7 +63,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Error("POST Ошибка сериализации", exc);
+                Logger.StatusLog.Error(exc, "POST Ошибка сериализации");
                 return MessageTemplate.SerializationError;
             }
 
@@ -96,7 +96,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                Logger.StatusLog.Fatal(exc, "POST Ошибка поиска сотрудника");
                 return MessageTemplate.InternalError;
             }
 
@@ -109,7 +109,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Fatal("Ошибка получения статуса", exc);
+                Logger.StatusLog.Fatal(exc, "Ошибка получения статуса");
                 return MessageTemplate.InternalError;
             }
 
@@ -141,7 +141,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Error("PUT Ошибка сериализации", exc);
+                Logger.StatusLog.Error(exc, "PUT Ошибка сериализации");
                 return MessageTemplate.BadMessage;
             }
 
@@ -158,7 +158,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.StatusLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                Logger.StatusLog.Fatal(exc, "POST Ошибка поиска сотрудника");
                 return MessageTemplate.UserNotFound;
             }
 
@@ -230,7 +230,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.StatusLog.Fatal("PUT Ошибка установки статуса", exc);
+                Logger.StatusLog.Fatal(exc, "PUT Ошибка установки статуса");
                 return MessageTemplate.BadSetStatusMessage;
             }
 

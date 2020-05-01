@@ -34,7 +34,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.PlanLog.Fatal("GET Ошибка получения статусов", exc);
+                Logger.PlanLog.Fatal(exc, "GET Ошибка получения статусов");
                 return MessageTemplate.InternalError;
             }
 
@@ -71,7 +71,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.PlanLog.Error($"POST Ошибка сериализации в {await request.Content.ReadAsStringAsync()}", exc);
+                Logger.PlanLog.Error(exc, $"POST Ошибка сериализации в {await request.Content.ReadAsStringAsync()}");
                 return MessageTemplate.BadMessage;
             }
 
@@ -87,7 +87,7 @@ namespace Web_Service.Controllers
                 EndDate   = DateTime.Parse(EndDateStr);
                 
             }
-            catch(Exception exc)
+            catch(Exception)
             {
                 Logger.PlanLog.Error("POST Ошибка преобразования строки в дату");
                 return MessageTemplate.BadMessage;
@@ -105,7 +105,7 @@ namespace Web_Service.Controllers
             }
             catch(Exception exc)
             {
-                Logger.PlanLog.Fatal("POST Работник не найден", exc);
+                Logger.PlanLog.Fatal(exc, "POST Работник не найден");
                 return MessageTemplate.BadMessage;
             }
 
@@ -134,7 +134,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.PlanLog.Error("Ошибка получения планов", exc);
+                Logger.PlanLog.Error(exc, "Ошибка получения планов");
                 return MessageTemplate.InternalError;
             }
 

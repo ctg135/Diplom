@@ -31,7 +31,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.WorkerLog.Error("POST Ошибка сериализации", exc);
+                Logger.WorkerLog.Error(exc, "POST Ошибка сериализации");
                 return MessageTemplate.SerializationError;
             }
 
@@ -64,7 +64,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.WorkerLog.Fatal("POST Ошибка поиска сотрудника", exc);
+                Logger.WorkerLog.Fatal(exc, "POST Ошибка поиска сотрудника");
                 return MessageTemplate.InternalError;
             }
 
@@ -76,7 +76,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.WorkerLog.Fatal($"POST Ошибка поиска информации о работнике #{WorkerId}", exc);
+                Logger.WorkerLog.Fatal(exc, $"POST Ошибка поиска информации о работнике #{WorkerId}");
                 return MessageTemplate.WorkerNotFound;
             }
 

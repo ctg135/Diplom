@@ -186,6 +186,8 @@ namespace Client.Droid.Models
             }
 
             doc.Save(configFile);
+
+            await Task.CompletedTask;
         }
         #endregion
     }

@@ -37,7 +37,7 @@ namespace Web_Service
             catch(Exception exc)
             {
                 Logger.Log.Fatal("Подключение к базе данных отсутствует");
-                Logger.Log.Debug("Ошибка подключения к базе данных:", exc);
+                Logger.Log.Debug(exc, "Ошибка подключения к базе данных:");
             }
 
             DBClient.LongStatuses = new List<string>(ReaderConfig.LongStatuses);

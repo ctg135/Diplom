@@ -60,7 +60,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Fatal($"POST Не удалось создать сессию для #{WorkerId}", exc);
+                Logger.AuthoLog.Fatal(exc, $"POST Не удалось создать сессию для #{WorkerId}");
                 return MessageTemplate.SessionNotCreated;
             }
 
@@ -93,7 +93,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Error("PUT Ошибка сериализации", exc);
+                Logger.AuthoLog.Error(exc, "PUT Ошибка сериализации");
                 return MessageTemplate.SerializationError;
             }
 
@@ -108,7 +108,7 @@ namespace Web_Service.Controllers
             }
             catch (Exception exc)
             {
-                Logger.AuthoLog.Fatal("PUT Ошибка обновления сессии", exc);
+                Logger.AuthoLog.Fatal(exc, "PUT Ошибка обновления сессии");
                 return MessageTemplate.InternalError;
             }
 

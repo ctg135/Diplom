@@ -77,8 +77,6 @@
   <ItemGroup>
     <Compile Include="IoC\PlatformModule.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Models\AndroidConfigMock.cs" />
-    <Compile Include="Models\AndroidMockClient.cs" />
     <Compile Include="Models\RestClient.cs" />
     <Compile Include="Models\ServerModels\Autho.cs" />
     <Compile Include="Models\ServerModels\DateQuery.cs" />
