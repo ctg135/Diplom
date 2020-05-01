@@ -151,7 +151,6 @@ C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\roslyn\
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Antlr3.Runtime.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\BouncyCastle.Crypto.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Google.Protobuf.dll
-C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\log4net.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Microsoft.Web.Infrastructure.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\MySql.Data.dll
@@ -169,7 +168,6 @@ C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\System.
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\System.Web.WebPages.Razor.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\WebGrease.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Google.Protobuf.xml
-C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\log4net.xml
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Renci.SshNet.xml
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Newtonsoft.Json.xml
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\System.Net.Http.Formatting.xml
@@ -203,3 +201,6 @@ C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\W
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\obj\Debug\Web-Service.csproj.CoreCompileInputs.cache
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Web-Service.Data.dll
 C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\Web-Service.Data.pdb
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\NLog.config
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\NLog.dll
+C:\Projects\C#\DIPLOM\Client and Web-service for workers\Web-Service\bin\NLog.xml

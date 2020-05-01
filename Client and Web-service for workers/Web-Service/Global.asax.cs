@@ -22,9 +22,6 @@ namespace Web_Service
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            // Настройка логгера
-
-            Logger.InitLogger();
             Logger.Log.Info("Сервер запущен!");
 
             // Настройка подключения к базе данных

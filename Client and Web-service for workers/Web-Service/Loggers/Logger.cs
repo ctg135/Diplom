@@ -1,5 +1,4 @@
-﻿using log4net;
-using log4net.Config;
+﻿using NLog;
 
 namespace Web_Service.Loggers
 {
@@ -11,49 +10,22 @@ namespace Web_Service.Loggers
         /// <summary>
         /// Общий логгер
         /// </summary>
-        public static ILog Log { get; } = LogManager.GetLogger("LOGGER");
+        public static ILogger Log { get; } = LogManager.GetLogger("common");
         /// <summary>
         /// Логгер для контроллера api/Autho
         /// </summary>
-        public static ILog AuthoLog { get; } = new FatalLogger(
-            BaseLogger:   LogManager.GetLogger("LOGGER_AUTHO"),
-            CommonLogger: Log,
-            Controller:   "api/Autho");
+        public static ILogger AuthoLog { get; } = LogManager.GetLogger("api/Autho");
         /// <summary>
         /// Логгер для контроллера api/Worker
         /// </summary>
-        public static ILog WorkerLog { get; } = new FatalLogger(
-            BaseLogger:   LogManager.GetLogger("LOGGER_WORKER"),
-            CommonLogger: Log,
-            Controller:   "api/Worker");
+        public static ILogger WorkerLog { get; } = LogManager.GetLogger("api/Worker");
         /// <summary>
         /// Логгер для контроллера api/Status
         /// </summary>
-        public static ILog StatusLog { get; } = new FatalLogger(
-            BaseLogger:   LogManager.GetLogger("LOGGER_STATUS"),
-            CommonLogger: Log,
-            Controller:   "api/Status");
+        public static ILogger StatusLog { get; } = LogManager.GetLogger("api/Status");
         /// <summary>
         /// Логгер для контроллера api/Plan
         /// </summary>
-        public static ILog PlanLog { get; } = new FatalLogger(
-            BaseLogger:   LogManager.GetLogger("LOGGER_PLAN"),
-            CommonLogger: Log,
-            Controller:   "api/Plan");
-        /// <summary>
-        /// Логгер для контроллера api/Connection
-        /// </summary>
-        public static ILog ConnectionLog { get; } = new FatalLogger(
-            BaseLogger:   LogManager.GetLogger("LOGGER_CONNECTION"),
-            CommonLogger: Log,
-            Controller:   "api/Connection");
-        /// <summary>
-        /// Инициализация логгеров
-        /// </summary>
-        public static void InitLogger()
-        {
-            // Выгрузка информации из Web.config
-            XmlConfigurator.Configure();
-        }
+        public static ILogger PlanLog { get; } = LogManager.GetLogger("api/Plan");
     }
 }
