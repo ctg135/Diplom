@@ -130,39 +130,24 @@ namespace Web_Service.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string Session         = string.Empty;
-            string NewStatusWorker = string.Empty;
+            var req = new Data.Request.NewStatusCode();
 
             try
             {
-                var json = JObject.Parse(await request.Content.ReadAsStringAsync());
-                Session         = (string)json["Session"];
-                NewStatusWorker = (string)json["Query"]["Code"];
+                req = JsonConvert.DeserializeObject<Data.Request.NewStatusCode>(await request.Content.ReadAsStringAsync());
             }
             catch (Exception exc)
             {
                 Logger.StatusLog.Error(exc, "PUT Ошибка сериализации");
-                return MessageTemplate.BadMessage;
+                return MessageTemplate.SerializationError;
             }
 
-            if (string.IsNullOrEmpty(Session))
+            if (string.IsNullOrEmpty(req.Session))
             {
                 Logger.StatusLog.Warn("PUT Пустой номер сессии");
             }
 
-            string WorkerId = string.Empty;
-
-            try
-            {
-                WorkerId = DBClient.GetWorkerId(Session);
-            }
-            catch (Exception exc)
-            {
-                Logger.StatusLog.Fatal(exc, "POST Ошибка поиска сотрудника");
-                return MessageTemplate.UserNotFound;
-            }
-
-            switch (Authentication.Authenticate(Session, ClientInfo))
+            switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
                     break;
@@ -176,65 +161,61 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.StatusLog.Debug($"PUT установка статуса '{NewStatusWorker}' для #{WorkerId}");
+            string WorkerId = string.Empty;
 
-            var oldStatus = DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode;
-
-            if (oldStatus == NewStatusWorker)
+            try
             {
-                Logger.StatusLog.Error($"PUT Такой статус {NewStatusWorker} уже установлен");
+                WorkerId = DBClient.GetWorkerId(req.Session);
+            }
+            catch (Exception exc)
+            {
+                Logger.StatusLog.Fatal(exc, "POST Ошибка поиска сотрудника");
+                return MessageTemplate.InternalError;
+            }
+
+            Logger.StatusLog.Debug($"PUT установка статуса '{req.StatusCode}' для #{WorkerId}");
+
+            var currentStatus = DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode;
+
+            if (currentStatus == req.StatusCode)
+            {
+                Logger.StatusLog.Info($"PUT Такой статус {req.StatusCode} уже установлен");
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Статус уже установлен\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.OK
                 };
             }
 
-            if (oldStatus == DBClient.State_Finished)
+            if (!DBClient.IsStatusCanBeUpdated(currentStatus))
             {
-                Logger.StatusLog.Error("PUT Попытка продолжтить рабочий день");
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent("{\"Message\":\"Рабочий день закончен!\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                Logger.StatusLog.Info("PUT Статус не может быть обновлён");
+                return MessageTemplate.StatusSet_StatusNotUpdateble;
             }
 
-            if (oldStatus == DBClient.State_NotState)
+            if (!DBClient.IsStatusCanBeSetted(req.StatusCode))
             {
-                var plans = new List<Models.Plan>(DBClient.GetPlans(WorkerId, DateTime.Now, DateTime.Now));
-                if (plans.Count < 1)
-                {
-                    Logger.StatusLog.Error("PUT Попытка выйти на работу в выходной");
-                    return new HttpResponseMessage()
-                    {
-                        Content = new StringContent("{\"Message\":\"На сегодня нету графика\"}"),
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
-                }
+                Logger.StatusLog.Info("PUT Статус не может быть установлен");
+                return MessageTemplate.StatusSet_BadStatusCodeGiven;
             }
 
-            if (DBClient.IsLongStatus(NewStatusWorker) || DBClient.State_NotState == NewStatusWorker)
+            if (currentStatus == DBClient.State_NotState && req.StatusCode == DBClient.State_Finished)
             {
-                Logger.StatusLog.Error("PUT Попытка установить длительный статус");
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent("{\"Message\":\"Недостаточно прав для установки статуса\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                Logger.StatusLog.Info("PUT Рабочий день не начался");
+                return MessageTemplate.StatusSet_BadStatusCodeGiven;
             }
 
             try
             {
-                DBClient.LogStatus(WorkerId, NewStatusWorker, DateTime.Now);
+                DBClient.LogStatus(WorkerId, req.StatusCode, DateTime.Now);
             }
             catch(Exception exc)
             {
                 Logger.StatusLog.Fatal(exc, "PUT Ошибка установки статуса");
-                return MessageTemplate.BadSetStatusMessage;
+                return MessageTemplate.InternalError;
             }
 
             Logger.StatusLog.Info($"PUT Отправка ответа {ClientInfo}");
+            response.StatusCode = HttpStatusCode.OK;
             return response;
         }
     }

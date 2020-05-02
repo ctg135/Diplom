@@ -113,5 +113,15 @@ namespace Web_Service
                 return Properties.Settings.Default.Day_DayOff;
             }
         }
+        /// <summary>
+        /// Значение статуса выходного
+        /// </summary>
+        public static string State_DayOff
+        {
+            get
+            {
+                return Properties.Settings.Default.State_DayOff;
+            }
+        }
     }
 }

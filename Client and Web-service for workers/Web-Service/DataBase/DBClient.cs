@@ -39,6 +39,7 @@ namespace Web_Service.DataBase
         /// Код статуса завершённой работы
         /// </summary>
         public static string State_Finished { get; set; }
+        public static string State_DayOff { get; set; } 
         /// <summary>
         /// Время отключения неработающей сессии
         /// </summary>
@@ -231,6 +232,62 @@ namespace Web_Service.DataBase
                 {
                     throw new Exception($"Наложение '{data.Rows.Count}' графиков у работника {WorkerId} на {CheckDate} число");
                 }
+            }
+        }
+        /// <summary>
+        /// Функция, которая определяет, может ли статус быть обновлён
+        /// </summary>
+        /// <param name="StatusCode">Статус для проверки</param>
+        /// <returns>true, если статус можно обновить</returns>
+        public static bool IsStatusCanBeUpdated(string StatusCode)
+        {
+            if (IsLongStatus(StatusCode))
+            {
+                Logger.StatusLog.Trace("Длинный статус не может быть изменён");
+                return false;
+            }
+            else if (StatusCode == State_Finished)
+            {
+                Logger.StatusLog.Trace("Статус завершенного дня не может быть изменён");
+                return false;
+            }
+            else if (StatusCode == State_DayOff)
+            {
+                Logger.StatusLog.Trace("Статус выходного не может быть изменён");
+                return false;
+            }
+            else
+            {
+                Logger.StatusLog.Trace("Статус может быть изменён");
+                return true;
+            }
+        }
+        /// <summary>
+        /// Функция, определяющая может ли статус быть установленным
+        /// </summary>
+        /// <param name="StatusCode">Стату для проверки</param>
+        /// <returns>true, если возможно установить</returns>
+        public static bool IsStatusCanBeSetted (string StatusCode)
+        {
+            if (IsLongStatus(StatusCode))
+            {
+                Logger.StatusLog.Trace("Длинный статус был получен");
+                return false;
+            }
+            else if (StatusCode == State_DayOff)
+            {
+                Logger.StatusLog.Trace("Статус выходного дня получен");
+                return false;
+            }
+            else if (StatusCode == State_NotState)
+            {
+                Logger.StatusLog.Trace("Статус неустаноленного статуса получен");
+                return false;
+            }
+            else
+            {
+                Logger.StatusLog.Trace("Статус может быть установлен");
+                return true;
             }
         }
         /// <summary>

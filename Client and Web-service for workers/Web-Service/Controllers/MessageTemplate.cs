@@ -51,19 +51,34 @@ namespace Web_Service.Controllers
             }
         }
         /// <summary>
-        /// Сообщение об ошибке нахождения пользователя во время авторизации
+        /// Сообщение об ошибке обновления статуса
         /// </summary>
-        public static HttpResponseMessage UserNotFound
+        public static HttpResponseMessage StatusSet_StatusNotUpdateble
         {
             get
             {
                 return new HttpResponseMessage()
                 {
-                    Content = new StringContent("{\"Message\":\"Пользователь не найден\"}"),
-                    StatusCode = HttpStatusCode.Unauthorized
+                    Content = new StringContent("{\"Message\":\"Статус не может быть обновлён\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
         }
+        /// <summary>
+        /// Сообщение об ошибке установки статуса
+        /// </summary>
+        public static HttpResponseMessage StatusSet_BadStatusCodeGiven
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Статус не может быть установлен\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
+
         /// <summary>
         /// Сообщение об ошибке во время создания сессии
         /// </summary>
@@ -117,20 +132,6 @@ namespace Web_Service.Controllers
                 {
                     Content = new StringContent("{\"Message\":\"Работник с таким номером не был найден\"}"),
                     StatusCode = HttpStatusCode.InternalServerError
-                };
-            }
-        }
-        /// <summary>
-        /// Сообщение о ошибке установки статуса
-        /// </summary>
-        public static HttpResponseMessage BadSetStatusMessage
-        {
-            get
-            {
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent("{\"Message\":\"Ошибка установки статуса\"}"),
-                    StatusCode = HttpStatusCode.Conflict
                 };
             }
         }
