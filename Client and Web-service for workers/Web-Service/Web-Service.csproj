@@ -156,6 +156,7 @@
     <Compile Include="Controllers\MessageTemplate.cs" />
     <Compile Include="Controllers\PlanController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\WorkerController.cs" />
     <Compile Include="DataBase\DBClient.cs" />
     <Compile Include="DataBase\DBWorkerMySql.cs" />

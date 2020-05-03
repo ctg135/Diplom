@@ -475,5 +475,30 @@ namespace Web_Service.DataBase
                 }
             }
         }
+        /// <summary>
+        /// Возвращает список стадий задач
+        /// </summary>
+        /// <returns>Список стадий задач</returns>
+        public static IEnumerable<Data.Response.TaskStage> GetTaskStages()
+        {
+            var stages = new List<Data.Response.TaskStage>();
+
+            var data = new DataTable();
+
+            data = DB.SelectTable("taskstage");
+
+            foreach (DataRow row in data.Rows)
+            {
+                stages.Add(new Data.Response.TaskStage() 
+                {
+                    Stage = row["Id"].ToString(),
+                    Title = row["Description"].ToString()
+                });
+            }
+
+            return stages;
+        }
+
+
     }
 }

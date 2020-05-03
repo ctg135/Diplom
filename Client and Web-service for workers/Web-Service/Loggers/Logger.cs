@@ -24,6 +24,10 @@ namespace Web_Service.Loggers
         /// </summary>
         public static ILogger StatusLog { get; } = LogManager.GetLogger("api/Status");
         /// <summary>
+        /// Логгер для контроллера api/Task
+        /// </summary>
+        public static ILogger TaskLog { get; } = LogManager.GetLogger("api/Task");
+        /// <summary>
         /// Логгер для контроллера api/Plan
         /// </summary>
         public static ILogger PlanLog { get; } = LogManager.GetLogger("api/Plan");
