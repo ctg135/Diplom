@@ -312,6 +312,10 @@ namespace Web_Service.DataBase
                 { "StatusCode", CodeStatus }
             });
         }
+        /// <summary>
+        /// Возвращает типы планов
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<Data.Response.PlanType> GetPlanTypes()
         {
             var types = new List<Data.Response.PlanType>();
@@ -339,24 +343,61 @@ namespace Web_Service.DataBase
         /// <param name="StartDay">Начальынй день</param>
         /// <param name="EndDay">Конечный день</param>
         /// <exception cref="Exception">Ошибка запроса</exception>
-        public static IEnumerable<Plan> GetPlans(string WorkerId, DateTime StartDay, DateTime EndDay)
+        public static IEnumerable<Data.Response.Plan> GetPlans(string WorkerId, DateTime StartDay, DateTime EndDay)
         {
-            List<Plan> plans = new List<Plan>();
+            var plans = new List<Data.Response.Plan>();
 
             DataTable data = DB.MakeQuery($"SELECT * FROM `plans` WHERE `WorkerId` = '{WorkerId}' " +
-                $"AND `Date` >= '{StartDay.ToString("yyyy-MM-dd")}' " +
-                $"AND `Date` <= '{EndDay.ToString("yyyy-MM-dd")}' ORDER BY `Date` ASC");
+                $"AND `Date` >= '{StartDay:yyyy-MM-dd}' " +
+                $"AND `Date` <= '{EndDay:yyyy-MM-dd}' ORDER BY `Date` ASC");
 
             foreach(DataRow row in data.Rows)
             {
-                plans.Add(new Plan() 
+                plans.Add(new Data.Response.Plan() 
                 {
-                    Id         = row["Id"].ToString(),
-                    WorkerId   = row["WorkerId"].ToString(),
-                    Date       = DateTime.Parse(row["Date"].ToString()).ToString("dd.MM.yyyy"),
-                    StartOfDay = DateTime.Parse(row["StartOfDay"].ToString()).ToString("HH:mm"),
-                    EndOfDay   = DateTime.Parse(row["EndOfDay"].ToString()).ToString("HH:mm"),
-                    Total      = row["Total"].ToString()
+                    Date     = DateTime.Parse(row["Date"].ToString()).ToString("dd.MM.yyyy"),
+                    PlanCode = row["DayType"].ToString(),
+                    DayStart = row["StartOfDay"].ToString(),
+                    DayEnd   = row["EndOfDay"].ToString()
+                });
+            }
+            return plans;
+        }
+        /// <summary>
+        /// Функция для получения планов на количсество дней от указанной даты
+        /// </summary>
+        /// <param name="WorkerId">Идентификатор работника</param>
+        /// <param name="StartDay">Начальынй день</param>
+        /// <param name="EndDay">Конечный день</param>
+        /// <param name="DayTypes">Список дней для отбора</param>
+        /// <returns></returns>
+        public static IEnumerable<Data.Response.Plan> GetPlans(string WorkerId, DateTime StartDay, DateTime EndDay, List<string> DayTypes)
+        {
+            string PlanList = "(";
+
+            foreach (string daytype in DayTypes)
+            {
+                PlanList += $"'{daytype}',";
+            }
+            PlanList = PlanList.Remove(PlanList.Length - 1, 1);
+            PlanList += ")";
+
+            var plans = new List<Data.Response.Plan>();
+
+            DataTable data = DB.MakeQuery($"SELECT * FROM `plans` WHERE `WorkerId` = '{WorkerId}' " +
+                $"AND `Date` >= '{StartDay:yyyy-MM-dd}' " +
+                $"AND `Date` <= '{EndDay:yyyy-MM-dd}' " +
+                $"AND `DayType` IN {PlanList}" + 
+                $"ORDER BY `Date` ASC");
+
+            foreach (DataRow row in data.Rows)
+            {
+                plans.Add(new Data.Response.Plan()
+                {
+                    Date = DateTime.Parse(row["Date"].ToString()).ToString("dd.MM.yyyy"),
+                    PlanCode = row["DayType"].ToString(),
+                    DayStart = row["StartOfDay"].ToString(),
+                    DayEnd = row["EndOfDay"].ToString()
                 });
             }
 

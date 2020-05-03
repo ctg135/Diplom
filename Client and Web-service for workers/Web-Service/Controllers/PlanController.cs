@@ -54,43 +54,26 @@ namespace Web_Service.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
 
-            string WorkerId     = string.Empty;
-            string Session      = string.Empty;
-            string StartDateStr = string.Empty;
-            string EndDateStr   = string.Empty;
-
+            var req = new Data.Request.PlansRequest();
+            string WorkerId = string.Empty;
             DateTime StartDate;
             DateTime EndDate;
 
             try
             {
-                var json = JObject.Parse(await request.Content.ReadAsStringAsync());
-                Session      = (string)json["Session"];
-                StartDateStr = (string)json["Query"]["StartDate"];
-                EndDateStr   = (string)json["Query"]["EndDate"];
+                req = JsonConvert.DeserializeObject<Data.Request.PlansRequest>(await request.Content.ReadAsStringAsync());
+                StartDate = DateTime.Parse(req.StartDate);
+                EndDate = DateTime.Parse(req.EndDate);
             }
             catch (Exception exc)
             {
                 Logger.PlanLog.Error(exc, $"POST Ошибка сериализации в {await request.Content.ReadAsStringAsync()}");
-                return MessageTemplate.BadMessage;
+                return MessageTemplate.SerializationError;
             }
 
-            if (string.IsNullOrEmpty(Session))
+            if (string.IsNullOrEmpty(req.Session))
             {
                 Logger.PlanLog.Warn("POST Пустая строка сессии");
-                return MessageTemplate.BadMessage;
-            }
-
-            try
-            {
-                StartDate = DateTime.Parse(StartDateStr);
-                EndDate   = DateTime.Parse(EndDateStr);
-                
-            }
-            catch(Exception)
-            {
-                Logger.PlanLog.Error("POST Ошибка преобразования строки в дату");
-                return MessageTemplate.BadMessage;
             }
 
             if (StartDate > EndDate)
@@ -99,17 +82,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.BadDatesGived;
             }
 
-            try
-            {
-                WorkerId = DBClient.GetWorkerId(Session);
-            }
-            catch(Exception exc)
-            {
-                Logger.PlanLog.Fatal(exc, "POST Работник не найден");
-                return MessageTemplate.BadMessage;
-            }
-
-            switch (Authentication.Authenticate(Session, ClientInfo))
+            switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
                     break;
@@ -125,12 +98,31 @@ namespace Web_Service.Controllers
 
             try
             {
-                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate.ToString("dd:MM:yyyy")} и {EndDate.ToString("dd:MM:yyyy")}");
+                WorkerId = DBClient.GetWorkerId(req.Session);
+            }
+            catch(Exception exc)
+            {
+                Logger.PlanLog.Fatal(exc, "POST Работник не найден");
+                return MessageTemplate.InternalError;
+            }
 
-                List<Plan> plans = new List<Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
+            try
+            {
+                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate:dd.MM.yyyy} и {EndDate:dd.MM.yyyy} типов {req.PlanCodes}30");
+
+                var plans = new List<Data.Response.Plan>();
+                if (req.PlanCodes == null)
+                {
+                    plans = new List<Data.Response.Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
+                }
+                else
+                {
+                    plans = new List<Data.Response.Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate, new List<string>(req.PlanCodes)));
+                }
+                
                 response.Content = new StringContent(JsonConvert.SerializeObject(plans));
 
-                Logger.PlanLog.Debug($"POST Всего найдено {plans.Count.ToString()} планов для #{WorkerId}");
+                Logger.PlanLog.Debug($"POST Всего найдено {plans.Count} планов для #{WorkerId}");
             }
             catch (Exception exc)
             {
@@ -139,6 +131,7 @@ namespace Web_Service.Controllers
             }
 
             Logger.PlanLog.Info($"POST Отправка ответа {ClientInfo}");
+            response.StatusCode = HttpStatusCode.OK;
             return response;
         }
     }
