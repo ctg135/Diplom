@@ -123,5 +123,35 @@ namespace Web_Service
                 return Properties.Settings.Default.State_DayOff;
             }
         }
+        /// <summary>
+        /// Значение стадии принятой к исполнению задачи
+        /// </summary>
+        public static string Task_Accepted
+        {
+            get
+            {
+                return Properties.Settings.Default.Task_Accepted;
+            }
+        }
+        /// <summary>
+        /// Значение стадии не принятой к исполнению задачи
+        /// </summary>
+        public static string Task_NotAccepted
+        {
+            get
+            {
+                return Properties.Settings.Default.Task_NotAccepted;
+            }
+        }
+        /// <summary>
+        /// Значение стадии завершенной задачи
+        /// </summary>
+        public static string Task_Completed
+        {
+            get
+            {
+                return Properties.Settings.Default.Task_Completed;
+            }
+        }
     }
 }

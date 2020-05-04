@@ -15,6 +15,11 @@ namespace Web_Service.DataBase
         /// Экземпляр для работы с базой данных
         /// </summary>
         public static IDBWorker DB { get; set; }
+
+
+        #region Constatnts        
+
+
         /// <summary>
         /// Список длительных статусов
         /// </summary>
@@ -39,11 +44,31 @@ namespace Web_Service.DataBase
         /// Код статуса завершённой работы
         /// </summary>
         public static string State_Finished { get; set; }
+        /// <summary>
+        /// Статус выходного дня
+        /// </summary>
         public static string State_DayOff { get; set; } 
+        /// <summary>
+        /// Значение стадии завершенной задачи
+        /// </summary>
+        public static string TaskStage_Accepted { get; set; }
+        /// <summary>
+        /// Значение стадии непринятой к выполнению задачи
+        /// </summary>
+        public static string TaskStage_NotAccepted { get; set; }
+        /// <summary>
+        /// Значение завершенной стадии задачи
+        /// </summary>
+        public static string TaskStage_Completed { get; set; }
         /// <summary>
         /// Время отключения неработающей сессии
         /// </summary>
         public static string DisconnectTime { get; set; }
+
+
+        #endregion
+
+
         /// <summary>
         /// Функция записи сессии в базу данных
         /// </summary>
@@ -106,6 +131,23 @@ namespace Web_Service.DataBase
             UpdateSession(Session, DateTime.Now);
 
             return id;
+        }
+        /// <summary>
+        /// Возвращает номер работника, выполняющий <c>TaskId</c>
+        /// </summary>
+        /// <param name="TaskId">Номер задачи, на которую назанчен работник</param>
+        /// <returns>Номер работника</returns>
+        public static string GetWorkerIdFromTask(string TaskId)
+        {
+            string WorkerId = string.Empty;
+
+            DataTable data = DB.MakeQuery($"SELECT `SetWorker` FROM `tasks` WHERE `Id` = '{TaskId}'");
+            if (data.Rows.Count == 1)
+            {
+                WorkerId = data.Rows[0][0].ToString();
+            }
+
+            return WorkerId;
         }
         /// <summary>
         /// Получение клиента работника по сессии
@@ -498,7 +540,36 @@ namespace Web_Service.DataBase
 
             return stages;
         }
+        /// <summary>
+        /// Функция завершения задачи
+        /// </summary>
+        /// <param name="TaskId">Номер задачи</param>
+        /// <param name="NewStage">Новая стадия</param>
+        public static void UpdateTaskStage(string TaskId, string NewStage)
+        {
+            DB.ExecuteQuery($"UPDATE `tasks` SET `Stage` = '{NewStage}' WHERE `Id` = '{TaskId}'");
+            if (NewStage == TaskStage_Completed)
+            {
+                DB.ExecuteQuery($"UPDATE `tasks` SET `Finished` = '{DateTime.Now:yyyy-MM-dd HH:mm:ss}' WHERE `Id` = '{TaskId}'");
+            }
+        }
+        /// <summary>
+        /// Функция, которая аолучает значение стадии задачи
+        /// </summary>
+        /// <param name="TaskId">Номер задачи</param>
+        /// <returns></returns>
+        public static string GetTaskStage(string TaskId)
+        {
+            var data = DB.MakeQuery($"SELECT `Stage` FROM `tasks` WHERE `Id` = '{TaskId}'");
+            string stage = string.Empty;
 
+            if (data.Rows.Count == 1)
+            {
+                stage = data.Rows[0][0].ToString();
+            }
 
+            return stage;
+
+        }
     }
 }

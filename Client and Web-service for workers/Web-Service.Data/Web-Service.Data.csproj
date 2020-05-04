@@ -47,7 +47,7 @@
     <Compile Include="Request\NewStatusCode.cs" />
     <Compile Include="Request\PlansRequest.cs" />
     <Compile Include="Request\StatusUserRequest.cs" />
-    <Compile Include="Request\TaskFinish.cs" />
+    <Compile Include="Request\TaskNewStage.cs" />
     <Compile Include="Request\TaskRequest.cs" />
     <Compile Include="Request\WorkerInfoRequest.cs" />
     <Compile Include="Response\AuthoResult.cs" />

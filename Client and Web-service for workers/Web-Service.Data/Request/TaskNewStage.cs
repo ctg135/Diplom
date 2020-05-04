@@ -3,7 +3,7 @@
     /// <summary>
     /// Класс с данными для заверешения задачи
     /// </summary>
-    public class TaskFinish
+    public class TaskNewStage
     {
         /// <summary>
         /// Сессия пользователя
@@ -13,5 +13,9 @@
         /// Номер выполняемой задачи
         /// </summary>
         public string TaskId { get; set; }
+        /// <summary>
+        /// Новая стадия задачи
+        /// </summary>
+        public string Stage { get; set; }
     }
 }

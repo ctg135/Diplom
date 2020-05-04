@@ -37,7 +37,7 @@
 |:heavy_check_mark:   |          |POST       | Получение всех графиков                              ||
 |:heavy_check_mark:   |Task      |GET        | Получение стадий заданий                             ||
 |:black_square_button:|          |POST       | Получение заданий по параметрам                      ||
-|:black_square_button:|          |PUT        | Установка новых значений                             ||
+|:heavy_check_mark:   |          |PUT        | Установка новых значений                             |Устанваливает новую стадию несколько раз и можно ее менять|
 |:heavy_check_mark:   |Worker    |POST       | Получение информации о работнике                     ||
 
 *:heavy_check_mark: - готов, :black_square_button: - не готов*
@@ -92,3 +92,4 @@ public string GetMyHash(string Input)
 
 ? - хрень в проверке сессий
 
+? - api/Status PUT проглатывает любой статус для установки

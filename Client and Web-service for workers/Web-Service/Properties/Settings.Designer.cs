@@ -148,5 +148,32 @@ namespace Web_Service.Properties {
                 return ((string)(this["State_DayOff"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public string Task_Accepted {
+            get {
+                return ((string)(this["Task_Accepted"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public string Task_Completed {
+            get {
+                return ((string)(this["Task_Completed"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public string Task_NotAccepted {
+            get {
+                return ((string)(this["Task_NotAccepted"]));
+            }
+        }
     }
 }

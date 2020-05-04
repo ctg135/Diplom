@@ -135,6 +135,9 @@ namespace Web_Service.Controllers
                 };
             }
         }
+        /// <summary>
+        /// Сообщение о полученных неправильных датах
+        /// </summary>
         public static HttpResponseMessage BadDatesGived
         {
             get
@@ -146,6 +149,19 @@ namespace Web_Service.Controllers
                 };
             }
         }
-
+        /// <summary>
+        /// Сообщение о некорректной стадии задачи
+        /// </summary>
+        public static HttpResponseMessage BadTaskStage
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Такая стадия не может быть установлена\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
     }
 }

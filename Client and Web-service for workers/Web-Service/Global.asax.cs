@@ -48,6 +48,9 @@ namespace Web_Service
             DBClient.LongStatusGraphics = ReaderConfig.GraphicCode_StatusCode;
             DBClient.DayType_Working = ReaderConfig.Day_Working;
             DBClient.DayType_DayOff = ReaderConfig.Day_DayOff;
+            DBClient.TaskStage_Accepted = ReaderConfig.Task_Accepted;
+            DBClient.TaskStage_NotAccepted = ReaderConfig.Task_NotAccepted;
+            DBClient.TaskStage_Completed = ReaderConfig.Task_Completed;
 
             // Настройка процедуры проверки подключений
 
