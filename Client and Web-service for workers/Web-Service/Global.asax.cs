@@ -52,6 +52,8 @@ namespace Web_Service
             DBClient.TaskStage_Accepted = ReaderConfig.Task_Accepted;
             DBClient.TaskStage_NotAccepted = ReaderConfig.Task_NotAccepted;
             DBClient.TaskStage_Completed = ReaderConfig.Task_Completed;
+            DBClient.TaskStages = new List<string>();
+            DBClient.TaskStages.AddRange(new string[3] { DBClient.TaskStage_Accepted, DBClient.TaskStage_NotAccepted, DBClient.TaskStage_Completed } );
 
             // Настройка процедуры проверки подключений
 

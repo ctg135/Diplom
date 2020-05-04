@@ -41,12 +41,96 @@ namespace Web_Service.Controllers
             response.StatusCode = HttpStatusCode.OK;
             return await Task.FromResult(response);
         }
-        // POST: api/Task
-        public void Post([FromBody]string value)
+        /// <summary>
+        /// <code>POST: api/Task</code>
+        /// Контроллер для просмотра задач
+        /// </summary>
+        public async Task<HttpResponseMessage> Post(HttpRequestMessage request)
         {
+            string ClientInfo = request.Headers.UserAgent.ToString();
+            Logger.TaskLog.Info($"POST Получено сообщение от {ClientInfo}");
+
+            HttpResponseMessage response = new HttpResponseMessage();
+            response.StatusCode = HttpStatusCode.OK;
+
+            var req = new Data.Request.TaskRequest();
+
+            try
+            {
+                req = JsonConvert.DeserializeObject<Data.Request.TaskRequest>(await request.Content.ReadAsStringAsync());
+            }
+            catch (Exception exc)
+            {
+                Logger.TaskLog.Error(exc, $"POST Ошибка сериализации в {await request.Content.ReadAsStringAsync()}");
+                return MessageTemplate.SerializationError;
+            }
+
+            Logger.TaskLog.Debug($"POST Авторизация сессии {req.Session}");
+
+            switch (Authentication.Authenticate(req.Session, ClientInfo))
+            {
+                case AuthenticationResult.Ok:
+                    break;
+
+                case AuthenticationResult.SessionNotFound:
+                    Logger.PlanLog.Error("POST Сессия не найдена");
+                    return MessageTemplate.SessionNotFound;
+
+                case AuthenticationResult.ClientNotFound:
+                    Logger.PlanLog.Error("POST Клиент не найден");
+                    return MessageTemplate.ClientNotFound;
+            }
+
+            Logger.TaskLog.Debug("POST Определение работника по сессии");
+
+            string WorkerId = string.Empty;
+
+            try
+            {
+                WorkerId = DBClient.GetWorkerId(req.Session);
+            }
+            catch (Exception exc)
+            {
+                Logger.TaskLog.Fatal(exc, "POST Работник не найден");
+                return MessageTemplate.InternalError;
+            }
+            Logger.TaskLog.Trace($"POST Определен работник #{WorkerId}");
+            // Проверка на адекватный массив
+
+            if (req.TaskStages != null)
+            {
+                foreach(string stage in req.TaskStages)
+                {
+                    if (!DBClient.TaskStages.Contains(stage))
+                    {
+                        Logger.TaskLog.Info($"POST Стадия '{stage}' не сущетствует");
+                        return MessageTemplate.BadStagesGiven;
+                    }
+                }
+            }
+
+            // Выполнение выборки
+
+            try
+            {
+                Logger.TaskLog.Debug($"POST Поиск задач по дате {req.DateCreation} и стадиям {req.TaskStages}");
+                var tasks = DBClient.GetTasks(WorkerId, req.DateCreation, req.TaskStages);
+                Logger.TaskLog.Trace($"POST найдено {tasks.ToList().Count} задач");
+                response.Content = new StringContent(JsonConvert.SerializeObject(tasks));
+            }
+            catch (Exception exc)
+            {
+                Logger.TaskLog.Fatal(exc, $"POST Ошибка выборки задач по [{req.TaskStages}] и {req.DateCreation}");
+                return MessageTemplate.InternalError;
+            }
+
+            return response;
         }
 
-        // PUT: api/Task/5
+        /// <summary>
+        /// <code>PUT: api/Task</code>
+        /// Контроллер для установки стадий задачам
+        /// </summary>
         public async Task<HttpResponseMessage> Put(HttpRequestMessage request)
         {
             string ClientInfo = request.Headers.UserAgent.ToString();

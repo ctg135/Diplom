@@ -25,5 +25,9 @@
         /// Дата и время завершения
         /// </summary>
         public string Finished { get; set; }
+        /// <summary>
+        /// Стадия задачи
+        /// </summary>
+        public string Stage { get; set; }
     }
 }

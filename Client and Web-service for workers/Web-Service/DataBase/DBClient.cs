@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using Web_Service.Loggers;
-using Web_Service.Models;
 
 namespace Web_Service.DataBase
 {
@@ -64,6 +63,10 @@ namespace Web_Service.DataBase
         /// Значение завершенной стадии задачи
         /// </summary>
         public static string TaskStage_Completed { get; set; }
+        /// <summary>
+        /// Список всех стадий
+        /// </summary>
+        public static List<string> TaskStages { get; set; }
         /// <summary>
         /// Время отключения неработающей сессии
         /// </summary>
@@ -135,6 +138,26 @@ namespace Web_Service.DataBase
             UpdateSession(Session, DateTime.Now);
 
             return id;
+        }
+        /// <summary>
+        /// Возвращает имя сотрудника по номеру работника
+        /// </summary>
+        /// <param name="WorkerId">Номер работника</param>
+        /// <returns></returns>
+        public static string GetWorkerName(string WorkerId)
+        {
+            string res = string.Empty;
+
+            var data = DB.MakeQuery($"SELECT `Name`, `Surname` FROM `workers` WHERE `Id` = '{WorkerId}'");
+            
+            if (data.Rows.Count != 1)
+            {
+                throw new Exception($"Нету одного работника с номером '{WorkerId}'");
+            }
+
+            res = data.Rows[0][0].ToString() + " " + data.Rows[0][1].ToString();
+
+            return res;
         }
         /// <summary>
         /// Возвращает номер работника, выполняющий <c>TaskId</c>
@@ -573,7 +596,54 @@ namespace Web_Service.DataBase
             }
 
             return stage;
+        }
+        /// <summary>
+        /// Функция получения списка задач по параметрам
+        /// </summary>
+        /// <param name="WorkerId">Номер работника</param>
+        /// <param name="Created">Дата создания</param>
+        /// <param name="Stages">Список стадий</param>
+        /// <returns></returns>
+        public static IEnumerable<Data.Response.Task> GetTasks(string WorkerId, string Created, IEnumerable<string> Stages)
+        {
+            var tasks = new List<Data.Response.Task>();
+            string query = $"SELECT * FROM `tasks` WHERE `SetWorker` = '{WorkerId}'";
+            
+            if (!string.IsNullOrEmpty(Created))
+            {
+                var date = DateTime.Parse(Created);
+                query += $" AND `Created` > DATE('{date:yyyy-MM-dd}')";
+            }
 
+            if (Stages != null)
+            {
+                query += " AND `Stage` IN (";
+                foreach (string stage in Stages)
+                {
+                    query += $"{stage},";
+                }
+                query = query.Remove(query.Length - 1, 1);
+                query += ")";
+            }
+
+            DataTable table = DB.MakeQuery(query);
+
+            Logger.TaskLog.Trace($"ВЫполнение запроса {query}");
+
+            foreach(DataRow row in table.Rows)
+            {
+                tasks.Add(
+                    new Data.Response.Task()
+                    {
+                        TaskId = row["Id"].ToString(),
+                        Description = row["Description"].ToString(),
+                        Created = DateTime.Parse(row["Created"].ToString()).ToString("dd.MM.yyyy"),
+                        Finished = DateTime.Parse(row["Finished"].ToString()).ToString("dd.MM.yyyy"),
+                        SetterWorkerName = GetWorkerName(row["SetterWorker"].ToString()),
+                        Stage = row["Stage"].ToString()
+                    });
+            }
+            return tasks;
         }
     }
 }

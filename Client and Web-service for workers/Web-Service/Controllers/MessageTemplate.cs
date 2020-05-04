@@ -163,6 +163,9 @@ namespace Web_Service.Controllers
                 };
             }
         }
+        /// <summary>
+        /// Сообщение о некорректном статусе работника
+        /// </summary>
         public static HttpResponseMessage BadStatusWorker
         {
             get
@@ -172,6 +175,21 @@ namespace Web_Service.Controllers
                     Content = new StringContent("{\"Message\":\"Работник не на рабочем месте\"}"),
                     StatusCode = HttpStatusCode.BadRequest
                 };
+            }
+        }
+        /// <summary>
+        /// Сообщение о некорректном списке стадий
+        /// </summary>
+        public static HttpResponseMessage BadStagesGiven
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Некорректный спсиок стадий\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+
             }
         }
     }
