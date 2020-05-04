@@ -114,6 +114,12 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
 
+            if (DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode != DBClient.State_Working)
+            {
+                Logger.TaskLog.Info("Сотрудник не на рабочем месте");
+                return MessageTemplate.BadStatusWorker;
+            }
+
             // Проверка стадии
 
             if (req.Stage == DBClient.TaskStage_NotAccepted)
@@ -129,7 +135,7 @@ namespace Web_Service.Controllers
 
             string PreviousStage;
 
-            Logger.TaskLog.Debug($"PUT Проверка задачи '{req.TaskId}' на корректность установки статуса");
+            Logger.TaskLog.Debug($"PUT Проверка задачи '{req.TaskId}' на корректность установки стадии");
 
             try
             {

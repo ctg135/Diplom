@@ -49,6 +49,10 @@ namespace Web_Service.DataBase
         /// </summary>
         public static string State_DayOff { get; set; } 
         /// <summary>
+        /// Статус процесса работы
+        /// </summary>
+        public static string State_Working { get; set; }
+        /// <summary>
         /// Значение стадии завершенной задачи
         /// </summary>
         public static string TaskStage_Accepted { get; set; }

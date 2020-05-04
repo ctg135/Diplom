@@ -175,5 +175,14 @@ namespace Web_Service.Properties {
                 return ((string)(this["Task_NotAccepted"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public string State_Working {
+            get {
+                return ((string)(this["State_Working"]));
+            }
+        }
     }
 }

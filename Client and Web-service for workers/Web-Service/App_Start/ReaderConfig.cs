@@ -153,5 +153,12 @@ namespace Web_Service
                 return Properties.Settings.Default.Task_Completed;
             }
         }
+        public static string State_Working
+        {
+            get
+            {
+                return Properties.Settings.Default.State_Working;
+            }
+        }
     }
 }

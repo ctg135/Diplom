@@ -163,5 +163,16 @@ namespace Web_Service.Controllers
                 };
             }
         }
+        public static HttpResponseMessage BadStatusWorker
+        {
+            get
+            {
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent("{\"Message\":\"Работник не на рабочем месте\"}"),
+                    StatusCode = HttpStatusCode.BadRequest
+                };
+            }
+        }
     }
 }
