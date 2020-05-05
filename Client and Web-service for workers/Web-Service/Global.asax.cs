@@ -45,6 +45,7 @@ namespace Web_Service
             DBClient.State_Finished = ReaderConfig.Status_Finished;
             DBClient.State_DayOff = ReaderConfig.State_DayOff;
             DBClient.State_Working = ReaderConfig.State_Working;
+            DBClient.State_Paused = ReaderConfig.State_Paused;
             DBClient.DisconnectTime = ReaderConfig.DisconnectTime;
             DBClient.LongStatusGraphics = ReaderConfig.GraphicCode_StatusCode;
             DBClient.DayType_Working = ReaderConfig.Day_Working;

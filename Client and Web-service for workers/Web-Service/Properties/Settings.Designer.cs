@@ -184,5 +184,14 @@ namespace Web_Service.Properties {
                 return ((string)(this["State_Working"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public string State_Paused {
+            get {
+                return ((string)(this["State_Paused"]));
+            }
+        }
     }
 }

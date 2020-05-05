@@ -153,11 +153,24 @@ namespace Web_Service
                 return Properties.Settings.Default.Task_Completed;
             }
         }
+        /// <summary>
+        /// Возвращает рабочее состояние работника
+        /// </summary>
         public static string State_Working
         {
             get
             {
                 return Properties.Settings.Default.State_Working;
+            }
+        }
+        /// <summary>
+        /// Состояние "На перерыве"
+        /// </summary>
+        public static string State_Paused
+        {
+            get
+            {
+                return Properties.Settings.Default.State_Paused;
             }
         }
     }

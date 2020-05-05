@@ -52,6 +52,10 @@ namespace Web_Service.DataBase
         /// </summary>
         public static string State_Working { get; set; }
         /// <summary>
+        /// Статус "На перерыве"
+        /// </summary>
+        public static string State_Paused { get; set; }
+        /// <summary>
         /// Значение стадии завершенной задачи
         /// </summary>
         public static string TaskStage_Accepted { get; set; }
@@ -269,9 +273,10 @@ namespace Web_Service.DataBase
 
             if (data.Rows.Count == 1) // Если были логи за сегодня, то возвращаем последний
             {
-                DateTime setted = DateTime.Parse(data.Rows[0]["SetDate"].ToString());
-                setted.Add(TimeSpan.Parse(DateTime.Parse(data.Rows[0]["SetDate"].ToString()).ToString("HH:mm:ss")));
-                return new Data.Response.Status() { StatusCode = data.Rows[0]["StatusCode"].ToString(), Updated = setted.ToString()};
+                string upd = DateTime.Parse(data.Rows[0]["SetDate"].ToString()).ToString("dd.MM.yyyy");
+                upd += " ";
+                upd += DateTime.Parse(data.Rows[0]["SetTime"].ToString()).ToString("HH:mm:ss");
+                return new Data.Response.Status() { StatusCode = data.Rows[0]["StatusCode"].ToString(), Updated = upd};
             }
             else
             {   
@@ -282,7 +287,7 @@ namespace Web_Service.DataBase
                     var dayType = data.Rows[0]["DayType"].ToString();
                     if (dayType == DayType_Working) // Если рабочий день
                     {
-                        return new Data.Response.Status() { StatusCode = State_NotState, Updated = CheckDate.ToString() };
+                        return new Data.Response.Status() { StatusCode = State_NotState, Updated = CheckDate.ToString()};
                     }
                     else if (LongStatusGraphics.ContainsKey(dayType)) // Если длительный статус
                     {
@@ -353,10 +358,25 @@ namespace Web_Service.DataBase
                 Logger.StatusLog.Trace("Статус неустаноленного статуса получен");
                 return false;
             }
+            else if (StatusCode == State_Working)
+            {
+                Logger.StatusLog.Trace("Статус работы получен");
+                return true;
+            }
+            else if (StatusCode == State_Paused)
+            {
+                Logger.StatusLog.Trace("Статус \"На перервыве\" получен");
+                return true;
+            }
+            else if (StatusCode == State_Finished)
+            {
+                Logger.StatusLog.Trace("Статус завершенного дня получен");
+                return true;
+            }
             else
             {
-                Logger.StatusLog.Trace("Статус может быть установлен");
-                return true;
+                Logger.StatusLog.Trace($"Статус '{StatusCode}'неизвестен");
+                return false;
             }
         }
         /// <summary>
@@ -518,9 +538,9 @@ namespace Web_Service.DataBase
 
                 if (lastConnect.Rows.Count == 0) continue;
 
-                Logger.Log.Debug($"Установленный статус #{WorkerId} - {status}");
+                Logger.Log.Trace($"Установленный статус #{WorkerId} - {status}");
 
-                if (status != State_Finished && status != State_NotState && !IsLongStatus(status))
+                if (status == State_Working || status == State_Paused)
                 {
                     try
                     {
