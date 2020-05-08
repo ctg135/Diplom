@@ -48,7 +48,7 @@ namespace Client
 
             try
             {
-                result = await TimerClient.CheckConnect();
+                result = await TimerClient.Authorization();
             }
             catch(Exception exc)
             {

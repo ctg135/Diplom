@@ -77,15 +77,8 @@
   <ItemGroup>
     <Compile Include="IoC\PlatformModule.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Models\RestClient.cs" />
-    <Compile Include="Models\ServerModels\Autho.cs" />
-    <Compile Include="Models\ServerModels\DateQuery.cs" />
-    <Compile Include="Models\ServerModels\Plan.cs" />
-    <Compile Include="Models\ServerModels\Request.cs" />
-    <Compile Include="Models\ServerModels\Status.cs" />
-    <Compile Include="Models\ServerModels\StatusCode.cs" />
-    <Compile Include="Models\ServerModels\StatusCodeQuery.cs" />
-    <Compile Include="Models\ServerModels\Worker.cs" />
+    <Compile Include="Models\MockClient.cs" />
+    <Compile Include="Models\MockPlanLoader.cs" />
     <Compile Include="Models\XmlConfigManager.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

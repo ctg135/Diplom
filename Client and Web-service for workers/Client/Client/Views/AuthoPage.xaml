@@ -7,54 +7,49 @@
              Title="Авторизация"
              Appearing="ContentPage_Appearing"
              x:Class="Client.Views.AuthoPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Настройки" Order="Primary" Command="{Binding OpenSettings}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
-            
             <Grid.RowDefinitions>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            
-            <Entry
-                Text="{Binding Login}"
-                Placeholder="Логин"
-                WidthRequest="200"
-                Grid.Row="1"
-                HorizontalTextAlignment="Center"
-                VerticalOptions="End" 
-                HorizontalOptions="Center" 
+
+            <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
+                <Entry
+                    Text="{Binding Login}"
+                    Placeholder="Логин"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    VerticalOptions="End" 
+                    HorizontalOptions="Center"
                     />
-            <Entry
-                Text="{Binding Password}"
-                Placeholder="Пароль"
-                IsPassword="True"
-                WidthRequest="200"
+                <Entry
+                    Text="{Binding Password}"
+                    Placeholder="Пароль"
+                    IsPassword="True"
+                    WidthRequest="200"
+                    HorizontalTextAlignment="Center"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" 
+                    />
+                <Button 
+                    Text="Войти"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" 
+                    Command="{Binding Authorize}"
+                    />
+            </StackLayout>
+            <Button 
+                Text="Сохраненный график"
                 Grid.Row="2"
-                HorizontalTextAlignment="Center"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" 
-                    />
-            <Button 
-                Text="Войти"
-                Grid.Row="3"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" 
-                Command="{Binding Authorize}"
-                    />
-            <Button 
-                Text="Настройки"
-                Grid.Row="5"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" 
-                Command="{Binding OpenSettings}"
-                    />
-            
+                Command="{Binding OpenSavedPlans}"
+                />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

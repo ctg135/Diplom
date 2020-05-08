@@ -23,6 +23,10 @@ namespace Client.ViewModels
         /// </summary>
         public ICommand OpenSettings { get; private set; }
         /// <summary>
+        /// Команда открытия списка сохраненных планов
+        /// </summary>
+        public ICommand OpenSavedPlans { get; private set; }
+        /// <summary>
         /// Команда обноления настроек
         /// </summary>
         public ICommand UpdateSettings { get; private set; }
@@ -33,7 +37,7 @@ namespace Client.ViewModels
         /// <summary>
         /// Логин
         /// </summary>
-        public string Login    { get; set; }
+        public string Login { get; set; }
         /// <summary>
         /// Пароль
         /// </summary>
@@ -43,6 +47,7 @@ namespace Client.ViewModels
         {
             this.Client = Client;
             Authorize = new Command(Autho);
+            OpenSavedPlans = new Command(OpenSaved);
             OpenSettings = new Command(OpenSettingsPageAsync);
             UpdateSettings = new Command(UpdateSets);
         }
@@ -74,6 +79,12 @@ namespace Client.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Ошибка авторизации", "Непридвиденная ошибка", "Ок");
                     break;
             }
+        }
+        private async void OpenSaved()
+        {
+            IPlanLoader planLoader = ServiceLocator.Current.GetInstance<IPlanLoader>();
+
+            await Application.Current.MainPage.Navigation.PushAsync(new ViewPlansPage(await planLoader.GetPlans()));
         }
         /// <summary>
         /// Команда открытия страницы настроек

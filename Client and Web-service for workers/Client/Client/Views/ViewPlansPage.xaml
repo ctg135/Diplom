@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Client.Views.ViewPlansPage"
+             Padding="5"
+             Title="{Binding Plans.Count, StringFormat='Всего: {0:#}'}">
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView ItemsSource="{Binding Plans}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Span="1" Orientation="Vertical" VerticalItemSpacing="5" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame CornerRadius="0" Margin="3">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label 
+                                        Grid.Column="0" 
+                                        Text="{Binding DateSet}" 
+                                        HorizontalOptions="CenterAndExpand" 
+                                        VerticalOptions="CenterAndExpand" 
+                                        FontSize="18"
+                                        TextColor="Black"
+                                    />
+                                    <StackLayout Grid.Column="1" Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
+                                        <Label  
+                                            TextColor="DarkBlue"
+                                            Text="{Binding TypePlan}"
+                                            HorizontalOptions="CenterAndExpand" 
+                                            FontSize="20" 
+                                        />
+                                        <Label 
+                                            FontAttributes="Italic" 
+                                            HorizontalOptions="CenterAndExpand"
+                                            Text="{Binding Range}"
+                                        />
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
