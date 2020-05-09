@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Client.DataModels;
 using Client.Models;
 using Client.Views;
+using System.Globalization;
 
 namespace Client.ViewModels
 {
@@ -28,19 +29,13 @@ namespace Client.ViewModels
             }
         }
         /// <summary>
-        /// Обновление даты статуса
-        /// </summary>
-        public string LastUpdate
-        {
-            get
-            {
-                return Globals.WorkerStatus.LastUpdate;
-            }
-        }
-        /// <summary>
         /// График на сегодня
         /// </summary>
-        public Plan PlanToday { get; set; }
+        public Plan1 PlanToday { get; set; }
+        /// <summary>
+        /// Список задач
+        /// </summary>
+        public Tasks Tasks { get; set; }
         public MainPageViewModel(IClientModel Client)
         {
             ExitAcc = new Command(UnAutho);
@@ -50,14 +45,14 @@ namespace Client.ViewModels
             this.Client = Client;
             this.Client.Session = Globals.Config.GetItem("Session").Result;
             this.Client.Server = Globals.Config.GetItem("Server").Result;
-
-            PlanToday = Plan.Empty();
+            Tasks = new Tasks();
+            PlanToday = Plan1.Empty();
             Globals.WorkerStatus = StatusCode.Empty();
         }
         /// <summary>
         /// Комманда выхода
         /// </summary>
-        private async void UnAutho()
+        private void UnAutho()
         {
             Globals.Clear();
             Application.Current.MainPage = new NavigationPage(new AuthoPage());
@@ -67,10 +62,15 @@ namespace Client.ViewModels
         /// </summary>
         private async void SetStatus()
         {
-            List<string> buts = new List<string>(Globals.Statuses.Keys);
+            string[] buts = new string[3]
+            {
+                Globals.StatusCodes["2"].Title,
+                Globals.StatusCodes["3"].Title,
+                Globals.StatusCodes["5"].Title
+            };
             string butCancel = "Отмена";
             
-            var res = await Application.Current.MainPage.DisplayActionSheet("Выбор статуса", butCancel, null, buts.ToArray());
+            var res = await Application.Current.MainPage.DisplayActionSheet("Выбор статуса", butCancel, null, buts);
 
             if (res == butCancel || res == null)
             {
@@ -84,19 +84,11 @@ namespace Client.ViewModels
             }
             catch (Exception exc)
             {
-                if(await Client.IsSetStatusClientError(exc.Message))
-                {
-                    await Application.Current.MainPage.DisplayAlert("Ошибка установки статуса", exc.Message, "Ок");
-                }
-                else
-                {
-                    await FatalError(exc.Message);
-                }
+                await Application.Current.MainPage.DisplayAlert("Ошибка установки статуса", exc.Message, "Ок");
                 return;
             }
-            
+
             NotifyPropertyChanged(nameof(Status));
-            NotifyPropertyChanged(nameof(LastUpdate));
         }
         /// <summary>
         /// Команда обноления планов и статуса на форме
@@ -107,6 +99,13 @@ namespace Client.ViewModels
             {
                 Globals.WorkerStatus = await Client.GetLastStatusCode();
                 PlanToday = await Client.GetTodayPlan();
+                string type = PlanToday.TypePlan;
+                PlanToday.TypePlan = Globals.PlanTypes[type].ToLower();
+                if (type == "1")
+                {
+                    PlanToday.TypePlan += $" с {PlanToday.StartDay} до {PlanToday.EndDay}";
+                }
+                Tasks = new Tasks( await Client.GetTasks(new TaskStages[] { TaskStages.NotAccepted, TaskStages.Processing }));
             }
             catch (Exception exc)
             {
@@ -115,8 +114,28 @@ namespace Client.ViewModels
             }
 
             NotifyPropertyChanged(nameof(Status));
-            NotifyPropertyChanged(nameof(LastUpdate));
             NotifyPropertyChanged(nameof(PlanToday));
+            NotifyPropertyChanged(nameof(Tasks));
+        }
+    }
+    /// <summary>
+    /// Конвертер строки в строку с 15 символами и "..." на конце
+    /// </summary>
+    public class ToString1518 : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string res = value as string;
+            if (res.Length > 15)
+            {
+                res = res.Remove(15);
+                res += "...";
+            }
+            return res;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
         }
     }
 }

@@ -13,6 +13,7 @@ using Android.Widget;
 using Client.Models;
 using Client.DataModels;
 using System.Threading.Tasks;
+using Client.ViewModels;
 
 namespace Client.Droid.Models
 {
@@ -58,17 +59,90 @@ namespace Client.Droid.Models
 
         public Task<List<Status>> GetStatuses()
         {
-            throw new NotImplementedException();
+            List<Status> statuses = new List<Status>() 
+            {
+                new Status()
+                {
+                    Code = "1",
+                    Title = "Не установлен"
+                },
+                new Status()
+                {
+                    Code = "2",
+                    Title = "На работе"
+                },
+                new Status()
+                {
+                    Code = "3",
+                    Title = "На перерыве"
+                },
+                new Status()
+                {
+                    Code = "4",
+                    Title = "В отпуске"
+                },
+                new Status()
+                {
+                    Code = "5",
+                    Title = "Рабочий день закончен"
+                },
+                new Status()
+                {
+                    Code = "6",
+                    Title = "На больничном"
+                },
+                new Status()
+                {
+                    Code = "7",
+                    Title = "На выходном"
+                },
+            };
+
+            return Task.FromResult(statuses);
         }
 
-        public Task<Plan> GetTodayPlan()
+        public Task<Plan1> GetTodayPlan()
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new Plan1() { DateSet = DateTime.Now.ToString("dd.MM.yyyy"), StartDay = "8:00", EndDay = "16:00", TypePlan = "1" });
         }
 
-        public Task<Worker> GetWorkerInfo()
+        public Task<List<PlanType>> GetPlanTypes()
         {
-            throw new NotImplementedException();
+            List<PlanType> planTypes = new List<PlanType>() 
+            {
+                new PlanType()
+                {
+                    Code = "1",
+                    Title = "Рабочий день"
+                },
+                new PlanType()
+                {
+                    Code = "2",
+                    Title = "Выходной"
+                },
+                new PlanType()
+                {
+                    Code = "3",
+                    Title = "Больничный"
+                },
+                new PlanType()
+                {
+                    Code = "4",
+                    Title = "Отпускной"
+                },
+                new PlanType()
+                {
+                    Code = "0",
+                    Title = "-"
+                }
+            };
+
+            return Task.FromResult(planTypes);
+        }
+
+        public Task<Worker1> GetWorkerInfo()
+        {
+            return Task.FromResult(new Worker1() { Name = "Имя", Patronymic = "Фамилия", Surname = "Отчество",  Department ="Программистический", Position = "Программист" });
         }
 
         public Task<bool> IsSetStatusClientError(string ErrorMessage)
@@ -79,6 +153,72 @@ namespace Client.Droid.Models
         public Task SetStatus(string Code)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter)
+        {
+            var tasks = new List<Tasks.Task>();
+
+            foreach (var stage in Filter )
+            {
+                if (stage == TaskStages.NotAccepted)
+                {
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "0",
+                        Stage = "Ожидает принятия",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Копать картоху"
+                    });
+                }
+                if (stage == TaskStages.Processing)
+                {
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "1",
+                        Stage = "Выполняется",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Деплом"
+                    });
+                }
+                if (stage == TaskStages.Completed)
+                {
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "2",
+                        Stage = "Завершено",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Курсач"
+                    });
+                }
+            }
+
+            return Task.FromResult(tasks);
+        }
+
+        public Task<List<TaskStage>> GetTaskStages()
+        {
+            return Task.FromResult(new List<TaskStage>() 
+            {  
+                new TaskStage()
+                {
+                    Code = "1",
+                    Title = "Ожидает принятия"
+                },
+                new TaskStage()
+                {
+                    Code = "2",
+                    Title = "Принят к выполнению"
+                },
+                new TaskStage()
+                {
+                    Code = "3",
+                    Title = "Выполнено"
+                },
+            });
         }
     }
 }

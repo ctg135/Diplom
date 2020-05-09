@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Client.DataModels;
+using Client.ViewModels;
 
 namespace Client.Models
 {
@@ -48,7 +49,7 @@ namespace Client.Models
         /// Получает информацию о работнике
         /// </summary>
         /// <returns></returns>
-        Task<Worker> GetWorkerInfo();
+        Task<Worker1> GetWorkerInfo();
         /// <summary>
         /// Получение информации о последнем установленном статусе
         /// </summary>
@@ -77,11 +78,45 @@ namespace Client.Models
         /// Получение плана на сегодня
         /// </summary>
         /// <returns></returns>
-        Task<Plan> GetTodayPlan();
+        Task<Plan1> GetTodayPlan();
         /// <summary>
         /// Функция для проверки подключения к серверу
         /// </summary>
         /// <returns></returns>
         Task<AuthorizationResult> CheckConnect();
+        /// <summary>
+        /// Получение списка планов
+        /// </summary>
+        /// <returns></returns>
+        Task<List<PlanType>> GetPlanTypes();
+        /// <summary>
+        /// Получение стадий задач
+        /// </summary>
+        /// <returns></returns>
+        Task<List<TaskStage>> GetTaskStages();
+        /// <summary>
+        /// Полуение списка задач по фильтру
+        /// </summary>
+        /// <param name="Filter">Фильтр задач по стадии</param>
+        /// <returns></returns>
+        Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter);
+    }
+    /// <summary>
+    /// Нумерация стадий задач
+    /// </summary>
+    public enum TaskStages
+    {
+        /// <summary>
+        /// Задача не принята
+        /// </summary>
+        NotAccepted,
+        /// <summary>
+        /// Задача в процессе выполнения
+        /// </summary>
+        Processing,
+        /// <summary>
+        /// Задача завершена
+        /// </summary>
+        Completed
     }
 }

@@ -16,7 +16,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout>
-                            <Frame CornerRadius="0" Margin="3">
+                            <Frame CornerRadius="0" Margin="0" WidthRequest="150">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>

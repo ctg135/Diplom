@@ -17,7 +17,7 @@ namespace Client
         /// <summary>
         /// Информация о работнике
         /// </summary>
-        public static Worker WorkerInfo { get; set; }
+        public static Worker1 WorkerInfo { get; set; }
         /// <summary>
         /// Активный статус работника
         /// </summary>
@@ -38,6 +38,14 @@ namespace Client
         /// Клиент для таймера
         /// </summary>
         private static IClientModel TimerClient { get; set; }
+        /// <summary>
+        /// Словарь типов планов <code>{Код - Полное название}</code>
+        /// </summary>
+        public static Dictionary<string, string> PlanTypes { get; set; }
+        /// <summary>
+        /// Словарь стадий задач <code>{Код - Стадия}</code>
+        /// </summary>
+        public static Dictionary<string, string> TaskStages { get; set; }
         /// <summary>
         /// Функция таймера для проверки подключения
         /// </summary>
@@ -113,11 +121,20 @@ namespace Client
             Statuses = statuses;
             StatusCodes = statusCodes;
 
+            PlanTypes = new Dictionary<string, string>();
+
+            foreach (var type in await Client.GetPlanTypes())
+            {
+                PlanTypes.Add(type.Code, type.Title);
+            }
+
             WorkerInfo = await Client.GetWorkerInfo();
 
-            WorkerStatus = await Client.GetLastStatusCode();
 
-            SetUpConnectionChecker(2 * 60 * 1000, Client);
+
+            //WorkerStatus = await Client.GetLastStatusCode();
+
+            //SetUpConnectionChecker(2 * 60 * 1000, Client);
         }
         /// <summary>
         /// Очистка всех данных
