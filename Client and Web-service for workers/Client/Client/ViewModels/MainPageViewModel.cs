@@ -17,6 +17,8 @@ namespace Client.ViewModels
         public ICommand ExitAcc { get; private set; }
         public ICommand SetNewStatus { get; private set; }
         public ICommand UpdateData { get; private set; }
+
+        public event EventHandler NavigateToTaskDetail;
         /// <summary>
         /// Статус работника
         /// </summary>
@@ -98,6 +100,7 @@ namespace Client.ViewModels
             try
             {
                 Globals.WorkerStatus = await Client.GetLastStatusCode();
+
                 PlanToday = await Client.GetTodayPlan();
                 string type = PlanToday.TypePlan;
                 PlanToday.TypePlan = Globals.PlanTypes[type].ToLower();
@@ -105,7 +108,19 @@ namespace Client.ViewModels
                 {
                     PlanToday.TypePlan += $" с {PlanToday.StartDay} до {PlanToday.EndDay}";
                 }
-                Tasks = new Tasks( await Client.GetTasks(new TaskStages[] { TaskStages.NotAccepted, TaskStages.Processing }));
+
+                foreach (var task in Tasks.Items)
+                {
+                    task.OpeningDetails -= Task_OpeningDetails;
+                }
+                Tasks = new Tasks( await Client.GetTasks(new TaskStages[] { TaskStages.NotAccepted, TaskStages.Processing, TaskStages.Completed }));
+                foreach (var task in Tasks.Items)
+                {
+                    task.OpeningDetails += Task_OpeningDetails;
+                    task.Stage = Globals.TaskStages[task.Stage];
+                }
+
+
             }
             catch (Exception exc)
             {
@@ -116,6 +131,11 @@ namespace Client.ViewModels
             NotifyPropertyChanged(nameof(Status));
             NotifyPropertyChanged(nameof(PlanToday));
             NotifyPropertyChanged(nameof(Tasks));
+        }
+
+        private void Task_OpeningDetails(object sender, EventArgs e)
+        {
+            NavigateToTaskDetail(sender, new EventArgs());
         }
     }
     /// <summary>

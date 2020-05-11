@@ -100,6 +100,16 @@ namespace Client.Models
         /// <param name="Filter">Фильтр задач по стадии</param>
         /// <returns></returns>
         Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter);
+        /// <summary>
+        /// Принятие задачи
+        /// </summary>
+        /// <returns></returns>
+        Task AcceptTask(string TaskId);
+        /// <summary>
+        /// Завершение задачи
+        /// </summary>
+        /// <returns></returns>
+        Task CompleteTask(string TaskId);
     }
     /// <summary>
     /// Нумерация стадий задач

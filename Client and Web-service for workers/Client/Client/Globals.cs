@@ -130,7 +130,12 @@ namespace Client
 
             WorkerInfo = await Client.GetWorkerInfo();
 
-
+            var stages = await Client.GetTaskStages();
+            TaskStages = new Dictionary<string, string>();
+            foreach(var stage in stages)
+            {
+                TaskStages.Add(stage.Code, stage.Title);
+            }
 
             //WorkerStatus = await Client.GetLastStatusCode();
 

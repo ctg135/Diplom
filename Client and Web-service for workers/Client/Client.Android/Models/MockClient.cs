@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -165,8 +166,8 @@ namespace Client.Droid.Models
                 {
                     tasks.Add(new Tasks.Task()
                     {
-                        Id = "0",
-                        Stage = "Ожидает принятия",
+                        Id = "1",
+                        Stage = "1",
                         Boss = "Сам я",
                         DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
                         Description = "Копать картоху"
@@ -176,8 +177,8 @@ namespace Client.Droid.Models
                 {
                     tasks.Add(new Tasks.Task()
                     {
-                        Id = "1",
-                        Stage = "Выполняется",
+                        Id = "2",
+                        Stage = "2",
                         Boss = "Сам я",
                         DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
                         Description = "Деплом"
@@ -187,8 +188,8 @@ namespace Client.Droid.Models
                 {
                     tasks.Add(new Tasks.Task()
                     {
-                        Id = "2",
-                        Stage = "Завершено",
+                        Id = "3",
+                        Stage = "3",
                         Boss = "Сам я",
                         DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
                         Description = "Курсач"
@@ -219,6 +220,18 @@ namespace Client.Droid.Models
                     Title = "Выполнено"
                 },
             });
+        }
+
+        public Task AcceptTask(string TaskId)
+        {
+            System.Diagnostics.Debug.WriteLine($"Задача №{TaskId} принята");
+            return Task.CompletedTask;
+        }
+
+        public Task CompleteTask(string TaskId)
+        {
+            System.Diagnostics.Debug.WriteLine($"Задача №{TaskId} завершена");
+            return Task.CompletedTask;
         }
     }
 }

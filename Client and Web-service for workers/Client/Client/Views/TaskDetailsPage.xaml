@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Client.Views.TaskDetailsPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="{Binding Item.Stage}"/>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Выдал: "/>
+                        <Span Text="{Binding Item.Boss}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Дата выдачи: "/>
+                        <Span Text="{Binding Item.DateSetted}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Label Text="{Binding Item.Description}"/>
+            <Button 
+                Text="{Binding ButtonText}"
+                IsVisible="{Binding ButtonVisibility}"
+                Command="{Binding ButtonCommand}"
+            />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

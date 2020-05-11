@@ -21,6 +21,12 @@ namespace Client.Views
         {
             InitializeComponent();
             this.BindingContext = ServiceLocator.Current.GetInstance<MainPageViewModel>();
+            (this.BindingContext as MainPageViewModel).NavigateToTaskDetail += MainPage_NavigateToTaskDetail;
+        }
+
+        private async void MainPage_NavigateToTaskDetail(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new TaskDetailsPage(sender as Tasks.Task));
         }
 
         private void ContentPage_Appearing(object sender, EventArgs e)
