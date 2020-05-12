@@ -19,5 +19,10 @@ namespace Client.Views
             InitializeComponent();
             BindingContext = new SettingsPageViewModel();
         }
+        public SettingsPage(bool AuthoButtonVisivle = true)
+        {
+            InitializeComponent();
+            BindingContext = new SettingsPageViewModel(AuthoButtonVisivle);
+        }
     }
 }

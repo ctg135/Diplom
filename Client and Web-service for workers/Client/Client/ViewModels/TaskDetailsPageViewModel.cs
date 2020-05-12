@@ -19,6 +19,8 @@ namespace Client.ViewModels
         public TaskDetailsPageViewModel(Tasks.Task Item)
         {
             this.Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
+            this.Client.Session = Globals.Config.GetItem("Session").Result;
+            this.Client.Server = Globals.Config.GetItem("Server").Result;
             this.Item = Item;
             ButtonVisibility = new bool();
             ButtonText = string.Empty;

@@ -91,7 +91,7 @@ namespace Client.ViewModels
         /// </summary>
         private async void OpenSettingsPageAsync()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new SettingsPage());
+            await Application.Current.MainPage.Navigation.PushAsync(new SettingsPage(false));
         }
         /// <summary>
         /// Команда для обновления настроек

@@ -113,7 +113,7 @@ namespace Client.ViewModels
                 {
                     task.OpeningDetails -= Task_OpeningDetails;
                 }
-                Tasks = new Tasks( await Client.GetTasks(new TaskStages[] { TaskStages.NotAccepted, TaskStages.Processing, TaskStages.Completed }));
+                Tasks = new Tasks( await Client.GetTasks(new TaskStages[] { TaskStages.NotAccepted, TaskStages.Processing }));
                 foreach (var task in Tasks.Items)
                 {
                     task.OpeningDetails += Task_OpeningDetails;

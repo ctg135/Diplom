@@ -7,15 +7,34 @@
              Title="Окно настроек"
              x:Class="Client.Views.SettingsPage">
     <ContentPage.Content>
-
-        <TableView>
-            <TableRoot>
-                <TableSection Title="Подключение">
-                    <TextCell Text="Сервер для подключения:" TextColor="Black" />
-                    <EntryCell Text="{Binding Server}"/>
-                </TableSection>
-            </TableRoot>
-        </TableView>
-
+        <StackLayout>
+            
+            <TableView VerticalOptions="StartAndExpand">
+                <TableRoot>
+                    <TableSection Title="Подключение">
+                        <TextCell Text="Сервер для подключения:" TextColor="Black" />
+                        <EntryCell Text="{Binding Server}"/>
+                    </TableSection>
+                    <TableSection Title="Сохраненный график">
+                        <ViewCell>
+                            <Button Text="Просмотреть" Command="{Binding ViewSavedPlans}"/>
+                        </ViewCell>
+                        <ViewCell>
+                            <Button Text="Очистить" Command="{Binding ClearSavedPlans}"/>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+            <TableView IsVisible="{Binding ButtonLogOutVisible}" VerticalOptions="Start">
+                <TableRoot>
+                    <TableSection Title="Аккаунт">
+                        <ViewCell>
+                            <Button Text="Выйти" Command="{Binding LogOut}"/>
+                        </ViewCell>
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+        
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

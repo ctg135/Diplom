@@ -91,7 +91,7 @@ namespace Client
         /// </summary>
         public static void DestroyConnectionChecker()
         {
-            ConnectionCheckerTimer.Dispose();
+            //ConnectionCheckerTimer.Dispose();
             TimerClient = null;
         }
         /// <summary>
