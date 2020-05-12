@@ -4,16 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Title="График"
+             Title="Просмотр графиков"
              x:Class="Client.Views.GraphicPage">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Выйти" Command="{Binding Exit}" />
-    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <StackLayout>
-            
+
             <Label 
                 Text="Отобразить по датам" 
                 TextColor="Black"
@@ -22,120 +18,73 @@
                 VerticalTextAlignment="Center"
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Center"
-                />
+            />
 
-            <Grid HeightRequest="80">
+            <StackLayout Orientation="Horizontal">
+                <DatePicker Date="{Binding StartDate}" />
+                <Label Text="-" HeightRequest="1" VerticalTextAlignment="Center"/>
+                <DatePicker Date="{Binding EndDate}"/>
+            </StackLayout>
+
+            <Label Text="Фильтр"/>
+
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Label
-                    Text="С"
-                    Grid.Column="0" 
-                    VerticalOptions="Center"
-                    VerticalTextAlignment="Center"
-                    HorizontalOptions="End"
-                    HorizontalTextAlignment="End"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Рабочие дни"
                 />
-                <DatePicker
-                    Date="{Binding StartDate}"
+                <Switch 
+                    Grid.Row="0"
                     Grid.Column="1"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
+                    IsToggled="{Binding WorkDaysSelected}"
                 />
-                <Label 
-                    Text="по"
-                    Grid.Column="2"
-                    VerticalOptions="Center"
-                    VerticalTextAlignment="Center"
-                    HorizontalOptions="End"
-                    HorizontalTextAlignment="End"
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Выходные дни"
                 />
-                <DatePicker
-                    Date="{Binding EndDate}"
-                    Grid.Column="3"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
+                <Switch 
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    IsToggled="{Binding DaysOffSelected}"
                 />
-               
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Отпускные"
+                />
+                <Switch 
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    IsToggled="{Binding HolidayDaysSelected}"
+                />
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Больничный"
+                />
+                <Switch 
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    IsToggled="{Binding HospitalDaysSelected}"
+                />
+
             </Grid>
 
-            <Button 
-                Text="Посмотреть"
-                Command="{Binding ShowPlans}"
-            />
-
-            <ListView ItemsSource="{Binding Plans}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="6*"/>
-                                    <ColumnDefinition Width="3*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="3*"/>
-                                    <ColumnDefinition Width="4*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label
-                                    Text="{Binding Date}"
-                                    Grid.Column="0"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    />
-                                <Label
-                                    Text="{Binding StartOfDay}"
-                                    Grid.Column="1"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="End"
-                                    />
-                                <Label
-                                    Text="-"
-                                    Grid.Column="2"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalOptions="Center"
-                                    HorizontalTextAlignment="End"
-                                    />
-                                <Label
-                                    Text="{Binding EndOfDay}"
-                                    Grid.Column="3"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Start"
-                                    />
-                                <Label
-                                    Text="Всего:"
-                                    Grid.Column="4"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="End"
-                                    />
-                                <Label
-                                    Text="{Binding Total}"
-                                    Grid.Column="5"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Start"
-                                    />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Button Text="Смотреть" Command="{Binding ShowPlans}"/>
             
         </StackLayout>
         
     </ContentPage.Content>
-    
 </ContentPage>

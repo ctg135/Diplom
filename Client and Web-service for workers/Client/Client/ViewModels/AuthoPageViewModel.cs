@@ -42,6 +42,10 @@ namespace Client.ViewModels
         /// Пароль
         /// </summary>
         public string Password { get; set; }
+        /// <summary>
+        /// Событие отобржения списка планов
+        /// </summary>
+        public event ViewPlansEvent ViewPlans;
 
         public AuthoPageViewModel(IClientModel Client)
         {
@@ -84,7 +88,7 @@ namespace Client.ViewModels
         {
             IPlanLoader planLoader = ServiceLocator.Current.GetInstance<IPlanLoader>();
 
-            await Application.Current.MainPage.Navigation.PushAsync(new ViewPlansPage(await planLoader.GetPlans()));
+            this.ViewPlans(this, new ViewPlansEventArgs(await planLoader.GetPlans()));
         }
         /// <summary>
         /// Команда открытия страницы настроек

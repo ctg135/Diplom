@@ -20,6 +20,12 @@ namespace Client.Views
         {
             InitializeComponent();
             BindingContext = ServiceLocator.Current.GetInstance<AuthoPageViewModel>();
+            (BindingContext as AuthoPageViewModel).ViewPlans += AuthoPage_ViewPlans;
+        }
+
+        private async void AuthoPage_ViewPlans(object sender, ViewPlansEventArgs args)
+        {
+            await Navigation.PushAsync(new ViewPlansPage(args.Plans));
         }
 
         private void ContentPage_Appearing(object sender, EventArgs e)

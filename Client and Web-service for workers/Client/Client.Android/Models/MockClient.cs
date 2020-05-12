@@ -15,6 +15,7 @@ using Client.Models;
 using Client.DataModels;
 using System.Threading.Tasks;
 using Client.ViewModels;
+using Newtonsoft.Json;
 
 namespace Client.Droid.Models
 {
@@ -25,41 +26,102 @@ namespace Client.Droid.Models
 
         public Task<AuthorizationResult> Authorization(string Login, string Password)
         {
+            System.Diagnostics.Debug.WriteLine($"Паролимся {Login}, {Password}");
             if (Login == Password) return Task.FromResult(AuthorizationResult.Ok);
             else return Task.FromResult(AuthorizationResult.Error);
         }
 
         public Task<AuthorizationResult> Authorization()
         {
+            System.Diagnostics.Debug.WriteLine($"Неработящая авторизация");
             return Task.FromResult(AuthorizationResult.Error);
         }
 
         public Task<AuthorizationResult> CheckConnect()
         {
+            System.Diagnostics.Debug.WriteLine($"Проверка подключения");
             return Task.FromResult(AuthorizationResult.Error);
         }
 
         public Task<StatusCode> GetLastStatusCode()
         {
+            System.Diagnostics.Debug.WriteLine($"Получаем последний статус");
             return Task.FromResult(new StatusCode() { Code = "2", LastUpdate = DateTime.Now.ToString() });
         }
 
-        public Task<List<Plan>> GetPlans(DateTime Start, DateTime End)
+        public Task<List<Plan1>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Debug.WriteLine($"Выводим планы {Start} - {End}, {JsonConvert.SerializeObject(Filter)}");
 
-            List<Plan> plans = new List<Plan>();
-
-            for (int i = 0; Start < End; i++, Start = Start.AddDays(1))
+            List<Plan1> plans = new List<Plan1>();
+            List<Plan1> templateplans = new List<Plan1>()
             {
-                plans.Add(new Plan() { Date = Start.ToString(), Id = i.ToString(), StartOfDay = "8:30", EndOfDay = "9:30", Total = "1" });
-            }
+                new Plan1()
+                {
+                    TypePlan = "1",
+                    DateSet = Start.ToString("dd.MM.yyyy"),
+                    StartDay = "8:30",
+                    EndDay = "10:30"
+                },
+                new Plan1()
+                {
+                    TypePlan = "2",
+                    DateSet = End.ToString("dd.MM.yyyy"),
+                    StartDay = "8:30",
+                    EndDay = "10:30"
+                },
+                new Plan1()
+                {
+                    TypePlan = "3",
+                    DateSet = End.ToString("dd.MM.yyyy"),
+                    StartDay = "8:30",
+                    EndDay = "10:30"
+                },
+                new Plan1()
+                {
+                    TypePlan = "4",
+                    DateSet = End.ToString("dd.MM.yyyy"),
+                    StartDay = "8:30",
+                    EndDay = "10:30"
+                },
+            };
 
+            if (Filter.Length == 0)
+            {
+                plans = templateplans;
+            }
+            else 
+            {
+                foreach(var filter in Filter)
+                {
+                    if (filter == PlanTypes.DayOff)
+                    {
+                        plans.Add(templateplans[1]);
+                    }
+                    else if (filter == PlanTypes.Holiday)
+                    {
+                        plans.Add(templateplans[3]);
+                    }
+                    else if (filter == PlanTypes.Hospital)
+                    {
+                        plans.Add(templateplans[2]);
+                    }
+                    else if (filter == PlanTypes.Working)
+                    {
+                        plans.Add(templateplans[0]);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Неизвестная дрянь '{filter}'");
+                    }
+                }
+            }
             return Task.FromResult(plans);
         }
 
         public Task<List<Status>> GetStatuses()
         {
+            System.Diagnostics.Debug.WriteLine($"Получаем типы статусов");
             List<Status> statuses = new List<Status>() 
             {
                 new Status()
@@ -104,11 +166,14 @@ namespace Client.Droid.Models
 
         public Task<Plan1> GetTodayPlan()
         {
+            System.Diagnostics.Debug.WriteLine($"План на сегодня");
             return Task.FromResult(new Plan1() { DateSet = DateTime.Now.ToString("dd.MM.yyyy"), StartDay = "8:00", EndDay = "16:00", TypePlan = "1" });
         }
 
         public Task<List<PlanType>> GetPlanTypes()
         {
+            System.Diagnostics.Debug.WriteLine($"Типы планов");
+
             List<PlanType> planTypes = new List<PlanType>() 
             {
                 new PlanType()
@@ -143,21 +208,29 @@ namespace Client.Droid.Models
 
         public Task<Worker1> GetWorkerInfo()
         {
+            System.Diagnostics.Debug.WriteLine($"Инфо о работнике");
+
             return Task.FromResult(new Worker1() { Name = "Имя", Patronymic = "Фамилия", Surname = "Отчество",  Department ="Программистический", Position = "Программист" });
         }
 
         public Task<bool> IsSetStatusClientError(string ErrorMessage)
         {
+            System.Diagnostics.Debug.WriteLine($"Ошибка ли в установке статуса?");
+
             throw new NotImplementedException();
         }
 
         public Task SetStatus(string Code)
         {
+            System.Diagnostics.Debug.WriteLine($"Установка нового статуса ${Code}");
+
             throw new NotImplementedException();
         }
 
         public Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter)
         {
+            System.Diagnostics.Debug.WriteLine($"Получение задач по {Filter} ПОКА БЕЗ ДАТЫ!1!");
+
             var tasks = new List<Tasks.Task>();
 
             foreach (var stage in Filter )
@@ -202,6 +275,8 @@ namespace Client.Droid.Models
 
         public Task<List<TaskStage>> GetTaskStages()
         {
+            System.Diagnostics.Debug.WriteLine($"Список готовых стадий");
+
             return Task.FromResult(new List<TaskStage>() 
             {  
                 new TaskStage()

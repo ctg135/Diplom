@@ -72,8 +72,9 @@ namespace Client.Models
         /// </summary>
         /// <param name="Start">Начальная дата</param>
         /// <param name="End">Конечная дата</param>
+        /// <param name="Filter">Фильтр планов</param>
         /// <returns></returns>
-        Task<List<Plan>> GetPlans(DateTime Start, DateTime End);
+        Task<List<Plan1>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter);
         /// <summary>
         /// Получение плана на сегодня
         /// </summary>
@@ -128,5 +129,27 @@ namespace Client.Models
         /// Задача завершена
         /// </summary>
         Completed
+    }
+    /// <summary>
+    /// Нумерация типов планов
+    /// </summary>
+    public enum PlanTypes
+    {
+        /// <summary>
+        /// Тип рабочего дня
+        /// </summary>
+        Working,
+        /// <summary>
+        /// Тип отпуска
+        /// </summary>
+        Holiday,
+        /// <summary>
+        /// Тип больничного
+        /// </summary>
+        Hospital,
+        /// <summary>
+        /// Тип выходного
+        /// </summary>
+        DayOff
     }
 }

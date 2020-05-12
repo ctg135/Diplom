@@ -4,19 +4,47 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
+using static Client.ViewModels.Tasks;
 
 namespace Client.ViewModels
 {
+    /// <summary>
+    /// Модель для просмотра данных о задаче
+    /// </summary>
     class TaskDetailsPageViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Клиент для взаимодействия с сервером
+        /// </summary>
         private IClientModel Client { get; set; }
-        public Tasks.Task Item { get; set; }
+        /// <summary>
+        /// Значение для просмотра
+        /// </summary>
+        public Task Item { get; set; }
+        /// <summary>
+        /// Команда нажатой кнопки 
+        /// </summary>
+        /// <details>
+        /// Команда может быть <c>AcceptTask</c> или <c></c>
+        /// </details>
         public ICommand ButtonCommand { get; set; }
+        /// <summary>
+        /// Текст кнопки
+        /// </summary>
         public string ButtonText { get; set; }
+        /// <summary>
+        /// Опция видимости кнопки
+        /// </summary>
         public bool ButtonVisibility { get; set; }
-
+        /// <summary>
+        /// Событие выхода из страницы
+        /// </summary>
         public event EventHandler Exit;
-        public TaskDetailsPageViewModel(Tasks.Task Item)
+        /// <summary>
+        /// Конструктор модели
+        /// </summary>
+        /// <param name="Item">Элемент для просмотра</param>
+        public TaskDetailsPageViewModel(Task Item)
         {
             this.Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
             this.Client.Session = Globals.Config.GetItem("Session").Result;
@@ -45,15 +73,37 @@ namespace Client.ViewModels
                 throw new Exception($"Необработанная стадия '{Item.Stage}' задачи '{Item.Id}'");
             }
         }
-        private void AcceptTask(object param)
+        /// <summary>
+        /// Команда принятия задачи
+        /// </summary>
+        /// <param name="param"></param>
+        private async void AcceptTask(object param)
         {
-            Client.AcceptTask(Item.Id);
-            Exit(this, new EventArgs());
+            try
+            {
+                await Client.AcceptTask(Item.Id);
+                Exit(this, new EventArgs());
+            }
+            catch(Exception exc)
+            {
+                await FatalError(exc.Message);
+            }
         }
-        private void CompleteTask(object param)
+        /// <summary>
+        /// Команда завершения задачи
+        /// </summary>
+        /// <param name="param"></param>
+        private async void CompleteTask(object param)
         {
-            Client.CompleteTask(Item.Id);
-            Exit(this, new EventArgs());
+            try
+            {
+                await Client.CompleteTask(Item.Id);
+                Exit(this, new EventArgs());
+            }
+            catch (Exception exc)
+            {
+                await FatalError(exc.Message);
+            }
         }
     }
 }
