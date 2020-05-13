@@ -71,6 +71,7 @@
             Command="{Binding SetNewStatus}"
             HorizontalOptions="Center"
             VerticalOptions="Center"
+            IsEnabled="{Binding IsStatusUpdateable}"
         />
     </StackLayout>
 </ContentPage>

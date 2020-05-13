@@ -1,6 +1,7 @@
 ﻿using Client.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -35,7 +36,7 @@ namespace Client.ViewModels
         /// <summary>
         /// Опция видимости кнопки
         /// </summary>
-        public bool ButtonVisibility { get; set; }
+        public bool ButtonActivity { get; set; }
         /// <summary>
         /// Событие выхода из страницы
         /// </summary>
@@ -50,23 +51,38 @@ namespace Client.ViewModels
             this.Client.Session = Globals.Config.GetItem("Session").Result;
             this.Client.Server = Globals.Config.GetItem("Server").Result;
             this.Item = Item;
-            ButtonVisibility = new bool();
+            ButtonActivity = new bool();
             ButtonText = string.Empty;
             if (Item.Stage == Globals.TaskStages["1"]) // Если задача непринята
             {
-                ButtonCommand = new Command(AcceptTask);
                 ButtonText = "Принять задачу";
-                ButtonVisibility = true;
+                if (Globals.WorkerStatus.Code == "2" || Globals.WorkerStatus.Code == "3")
+                {
+                    ButtonActivity = true;
+                    ButtonCommand = new Command(AcceptTask);
+                }
+                else
+                {
+                    ButtonActivity = false;
+                }
             }
             else if (Item.Stage == Globals.TaskStages["2"]) // Если задача выполняется
             {
-                ButtonCommand = new Command(CompleteTask);
                 ButtonText = "Завершить задачу";
-                ButtonVisibility = true;
+                if (Globals.WorkerStatus.Code == "2" || Globals.WorkerStatus.Code == "3")
+                {
+                    ButtonActivity = true;
+                    ButtonCommand = new Command(CompleteTask);
+                }
+                else
+                {
+                    ButtonActivity = false;
+                }
             }
             else if (Item.Stage == Globals.TaskStages["3"]) // Если задача завершена
             {
-                ButtonVisibility = false;
+                ButtonActivity = false;
+                ButtonText = $"Завершена {Item.DateFinished}";
             }
             else
             {
@@ -78,15 +94,22 @@ namespace Client.ViewModels
         /// </summary>
         /// <param name="param"></param>
         private async void AcceptTask(object param)
-        {
-            try
+        {            
+            if (Globals.WorkerStatus.Code == "2" || Globals.WorkerStatus.Code == "3")
             {
-                await Client.AcceptTask(Item.Id);
-                Exit(this, new EventArgs());
+                try
+                {
+                    await Client.AcceptTask(Item.Id);
+                    Exit(this, new EventArgs());
+                }
+                catch (Exception exc)
+                {
+                    await FatalError(exc.Message);
+                }
             }
-            catch(Exception exc)
+            else
             {
-                await FatalError(exc.Message);
+                await Application.Current.MainPage.DisplayAlert("Ошибка", "Задания можно выполнять тоько на работе!", "Ок");
             }
         }
         /// <summary>

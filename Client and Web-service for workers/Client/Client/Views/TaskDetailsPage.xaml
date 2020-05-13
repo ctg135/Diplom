@@ -27,7 +27,7 @@
             <Label Text="{Binding Item.Description}"/>
             <Button 
                 Text="{Binding ButtonText}"
-                IsVisible="{Binding ButtonVisibility}"
+                IsEnabled="{Binding ButtonActivity}"
                 Command="{Binding ButtonCommand}"
             />
         </StackLayout>

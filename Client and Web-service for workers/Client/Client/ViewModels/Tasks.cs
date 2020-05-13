@@ -38,6 +38,10 @@ namespace Client.ViewModels
             /// </summary>
             public string Boss { get; set; }
             /// <summary>
+            /// Дата окончания выполнения задачи
+            /// </summary>
+            public string DateFinished { get; set; }
+            /// <summary>
             /// Команда открытия команды
             /// </summary>
             public ICommand OpenDetails { get; set; }

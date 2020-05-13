@@ -13,8 +13,8 @@ using Android.Widget;
 
 using Client.Models;
 using Client.DataModels;
-using System.Threading.Tasks;
 using Client.ViewModels;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Client.Droid.Models
@@ -265,6 +265,7 @@ namespace Client.Droid.Models
                         Stage = "3",
                         Boss = "Сам я",
                         DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        DateFinished = DateTime.Now.ToString("dd.MM.yyyy"),
                         Description = "Курсач"
                     });
                 }

@@ -13,10 +13,21 @@ namespace Client.ViewModels
 {
     class MainPageViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Клиент для работы с сервером
+        /// </summary>
         private IClientModel Client { get; set; }
-        public ICommand ExitAcc { get; private set; }
+        /// <summary>
+        /// Команда установки нового статуса
+        /// </summary>
         public ICommand SetNewStatus { get; private set; }
+        /// <summary>
+        /// Команда обновления информации на страницы
+        /// </summary>
         public ICommand UpdateData { get; private set; }
+        /// <summary>
+        /// Событие для просмотра задач в подробностях
+        /// </summary>
 
         public event EventHandler NavigateToTaskDetail;
         /// <summary>
@@ -38,9 +49,12 @@ namespace Client.ViewModels
         /// Список задач
         /// </summary>
         public Tasks Tasks { get; set; }
+        /// <summary>
+        /// Может ли статус быть обновлён
+        /// </summary>
+        public bool IsStatusUpdateable { get; set; }
         public MainPageViewModel(IClientModel Client)
         {
-            ExitAcc = new Command(UnAutho);
             SetNewStatus = new Command(SetStatus);
             UpdateData = new Command(UpdateProps);
 
@@ -52,23 +66,15 @@ namespace Client.ViewModels
             Globals.WorkerStatus = StatusCode.Empty();
         }
         /// <summary>
-        /// Комманда выхода
-        /// </summary>
-        private void UnAutho()
-        {
-            Globals.Clear();
-            Application.Current.MainPage = new NavigationPage(new AuthoPage());
-        }
-        /// <summary>
         /// Команда установки статуса
         /// </summary>
         private async void SetStatus()
         {
             string[] buts = new string[3]
             {
-                Globals.StatusCodes["2"].Title,
-                Globals.StatusCodes["3"].Title,
-                Globals.StatusCodes["5"].Title
+                Globals.StatusCodes["2"].Title, // На работе
+                Globals.StatusCodes["3"].Title, // На перерыве
+                Globals.StatusCodes["5"].Title  // Рабочий день закончен
             };
             string butCancel = "Отмена";
             
@@ -119,8 +125,6 @@ namespace Client.ViewModels
                     task.OpeningDetails += Task_OpeningDetails;
                     task.Stage = Globals.TaskStages[task.Stage];
                 }
-
-
             }
             catch (Exception exc)
             {
@@ -128,6 +132,16 @@ namespace Client.ViewModels
                 return;
             }
 
+            if (Globals.WorkerStatus.Code == "1" || Globals.WorkerStatus.Code == "2" || Globals.WorkerStatus.Code == "3")
+            {
+                IsStatusUpdateable = true;
+            }
+            else
+            {
+                IsStatusUpdateable = false;
+            }
+
+            NotifyPropertyChanged(nameof(IsStatusUpdateable));
             NotifyPropertyChanged(nameof(Status));
             NotifyPropertyChanged(nameof(PlanToday));
             NotifyPropertyChanged(nameof(Tasks));
