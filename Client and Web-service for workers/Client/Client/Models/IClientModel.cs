@@ -100,7 +100,7 @@ namespace Client.Models
         /// </summary>
         /// <param name="Filter">Фильтр задач по стадии</param>
         /// <returns></returns>
-        Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter);
+        Task<List<Tasks.Task>> GetTasks(DateTime Created, TaskStages[] Filter);
         /// <summary>
         /// Принятие задачи
         /// </summary>

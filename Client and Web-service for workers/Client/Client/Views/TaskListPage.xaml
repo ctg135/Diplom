@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Client.Views.TaskListPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always" >
+                <StackLayout>
+
+                    <Frame>
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Искать от даты"/>
+                                <Switch x:Name="dateswitch" IsToggled="{Binding IsDateRequired}"/>
+                            </StackLayout>
+                            <DatePicker
+                                Date="{Binding SearchDate}"
+                                IsEnabled="{Binding Source={x:Reference dateswitch}, Path=IsToggled}"
+                            />
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label 
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="Непринятые"
+                                />
+                                <Label 
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Text="Принятые"
+                                />
+                                <Label 
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Text="Законченные"
+                                />
+                                <Switch
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    IsToggled="{Binding NotAcceptedFilter}"
+                                />
+                                <Switch
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    IsToggled="{Binding AcceptedFilter}"
+                                />
+                                <Switch
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    IsToggled="{Binding CompletedFilter}"
+                                />
+                            </Grid>
+                            <Button
+                                Text="Обновить список"
+                                Command="{Binding LoadTasks}"
+                            />
+                        </StackLayout>
+                    </Frame>
+
+                    <CollectionView ItemsSource="{Binding TaskList.Items}">
+
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Span="1" Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Frame>
+                                        <StackLayout>
+                                            <Label Text="{Binding Description}"/>
+                                            <Label Text="{Binding Stage}"/>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding DateSetted}"/>
+                                                <Label Text="{Binding DateFinished}"/>
+                                            </StackLayout>
+                                            <Button Text="Подробнее" Command="{Binding OpenDetails}"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -49,8 +49,10 @@ namespace Client.Views
                 MenuItems = new ObservableCollection<MainMenuItem>(new[]
                 {
                     new MainMenuItem { Id = 0, Title = "Главная",   TargetType = typeof(MainPage) },
-                    new MainMenuItem { Id = 1, Title = "График",    TargetType = typeof(GraphicPage) },
-                    new MainMenuItem { Id = 2, Title = "Настройки", TargetType = typeof(SettingsPage) },
+                    new MainMenuItem { Id = 1, Title = "Задания",   TargetType = typeof(TaskListPage) },
+                    new MainMenuItem { Id = 2, Title = "График",    TargetType = typeof(GraphicPage) },
+                    new MainMenuItem { Id = 3, Title = "Настройки", TargetType = typeof(SettingsPage) },
+                    //new MainMenuItem { Id = 3, Title = "Задания",   TargetType = typeof(TasksViewPage) }
                 });
             }
 

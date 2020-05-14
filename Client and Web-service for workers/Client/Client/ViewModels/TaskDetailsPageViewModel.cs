@@ -82,7 +82,7 @@ namespace Client.ViewModels
             else if (Item.Stage == Globals.TaskStages["3"]) // Если задача завершена
             {
                 ButtonActivity = false;
-                ButtonText = $"Завершена {Item.DateFinished}";
+                ButtonText = Item.DateFinished;
             }
             else
             {

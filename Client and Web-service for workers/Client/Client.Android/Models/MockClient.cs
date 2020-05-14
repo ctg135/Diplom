@@ -227,11 +227,39 @@ namespace Client.Droid.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Tasks.Task>> GetTasks(TaskStages[] Filter)
+        public Task<List<Tasks.Task>> GetTasks(DateTime StartDate, TaskStages[] Filter)
         {
             System.Diagnostics.Debug.WriteLine($"Получение задач по {Filter} ПОКА БЕЗ ДАТЫ!1!");
 
             var tasks = new List<Tasks.Task>();
+            if(Filter.Length == 0)
+            {
+                tasks.Add(new Tasks.Task()
+                {
+                    Id = "1",
+                    Stage = "1",
+                    Boss = "Сам я",
+                    DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                    Description = "Копать картоху"
+                });
+                tasks.Add(new Tasks.Task()
+                {
+                    Id = "2",
+                    Stage = "2",
+                    Boss = "Сам я",
+                    DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                    Description = "Деплом"
+                });
+                tasks.Add(new Tasks.Task()
+                {
+                    Id = "3",
+                    Stage = "3",
+                    Boss = "Сам я",
+                    DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                    DateFinished = DateTime.Now.ToString("dd.MM.yyyy"),
+                    Description = "Курсач"
+                });
+            }
 
             foreach (var stage in Filter )
             {
