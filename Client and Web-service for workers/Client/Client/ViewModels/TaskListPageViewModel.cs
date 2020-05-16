@@ -69,7 +69,7 @@ namespace Client.ViewModels
             foreach (var item in TaskList.Items)
             {
                 item.DateSetted = "Выдано: " + item.DateSetted;
-                if (item.DateFinished == null) item.DateFinished = "Закончено " + item.DateFinished;
+                if (string.IsNullOrEmpty(item.DateFinished)) item.DateFinished = "Закончено " + item.DateFinished;
                 item.OpeningDetails += OnTaskDetailsView;
                 item.Stage = Globals.TaskStages[item.Stage];
             }

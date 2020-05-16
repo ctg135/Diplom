@@ -110,7 +110,7 @@ namespace Client.ViewModels
                     plan.TypePlan = Globals.PlanTypes[plan.TypePlan];
                 }
                 System.Diagnostics.Debug.WriteLine("Выводим графики");
-                this.ViewPlans(this, new ViewPlansEventArgs(Plans));
+                ViewPlans(this, new ViewPlansEventArgs(Plans));
             }
             catch(Exception exc)
             {
@@ -120,6 +120,10 @@ namespace Client.ViewModels
         }
         private async void SaveSelectedPlans(object param)
         {
+            string msg = "Сохраненныё графики будут очищены", title = "Вы уверены?", butOk = "Да", butCancel = "Нет";
+            var res = await Application.Current.MainPage.DisplayAlert(title, msg, butOk, butCancel);
+            if (!res) return;
+
             var Plans = new List<Plan1>();
             if (StartDate > EndDate)
             {
@@ -154,8 +158,7 @@ namespace Client.ViewModels
             try
             {
                 var Plans = await PlanLoader.GetPlans();
-                System.Diagnostics.Debug.WriteLine("Выводим сохр графики");
-                this.ViewPlans(this, new ViewPlansEventArgs(Plans));
+                ViewPlans(this, new ViewPlansEventArgs(Plans));
             }
             catch (Exception exc)
             {

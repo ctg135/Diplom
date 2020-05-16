@@ -80,6 +80,7 @@
     <Compile Include="Models\MockClient.cs" />
     <Compile Include="Models\MockPlanLoader.cs" />
     <Compile Include="Models\XmlConfigManager.cs" />
+    <Compile Include="Models\XmlPlanLoader.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

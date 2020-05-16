@@ -66,24 +66,18 @@ namespace Client.Droid.Models
                 new Plan1()
                 {
                     TypePlan = "2",
-                    DateSet = End.ToString("dd.MM.yyyy"),
-                    StartDay = "8:30",
-                    EndDay = "10:30"
+                    DateSet = End.ToString("dd.MM.yyyy")
                 },
                 new Plan1()
                 {
                     TypePlan = "3",
-                    DateSet = End.ToString("dd.MM.yyyy"),
-                    StartDay = "8:30",
-                    EndDay = "10:30"
+                    DateSet = End.ToString("dd.MM.yyyy")
                 },
                 new Plan1()
                 {
                     TypePlan = "4",
-                    DateSet = End.ToString("dd.MM.yyyy"),
-                    StartDay = "8:30",
-                    EndDay = "10:30"
-                },
+                    DateSet = End.ToString("dd.MM.yyyy")
+                }
             };
 
             if (Filter.Length == 0)

@@ -8,11 +8,7 @@
              Title="Главная"
              x:Class="Client.Views.MainPage"
              Appearing="ContentPage_Appearing"
-             >
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Выйти" Command="{Binding ExitAcc}" />
-    </ContentPage.ToolbarItems>
+>
 
     <ContentPage.Resources>
         <local:ToString1518 x:Key="Str1518"/>
