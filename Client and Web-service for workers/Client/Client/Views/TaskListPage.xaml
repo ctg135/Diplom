@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:converters="clr-namespace:Client.Views.Converters"
              mc:Ignorable="d"
+             Appearing="ContentPage_Appearing"
              x:Class="Client.Views.TaskListPage">
     <ContentPage.Resources>
         <converters:ToShorterString x:Key="Cutter"/>
