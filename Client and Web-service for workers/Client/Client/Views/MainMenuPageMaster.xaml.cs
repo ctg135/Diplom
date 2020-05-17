@@ -48,11 +48,10 @@ namespace Client.Views
             {
                 MenuItems = new ObservableCollection<MainMenuItem>(new[]
                 {
-                    new MainMenuItem { Id = 0, Title = "Главная",   TargetType = typeof(MainPage) },
-                    new MainMenuItem { Id = 1, Title = "Задания",   TargetType = typeof(TaskListPage) },
-                    new MainMenuItem { Id = 2, Title = "График",    TargetType = typeof(GraphicPage) },
-                    new MainMenuItem { Id = 3, Title = "Настройки", TargetType = typeof(SettingsPage) },
-                    //new MainMenuItem { Id = 3, Title = "Задания",   TargetType = typeof(TasksViewPage) }
+                    new MainMenuItem { Id = 0, Title = "Главная",   TargetType = typeof(MainPage), IconSource = ImageSource.FromResource("Client.Images.MainMenuIcon.home.png") },
+                    new MainMenuItem { Id = 1, Title = "Задания",   TargetType = typeof(TaskListPage), IconSource = ImageSource.FromResource("Client.Images.MainMenuIcon.tasks.png") },
+                    new MainMenuItem { Id = 2, Title = "График",    TargetType = typeof(GraphicPage), IconSource = ImageSource.FromResource("Client.Images.MainMenuIcon.calendar.png") },
+                    new MainMenuItem { Id = 3, Title = "Настройки", TargetType = typeof(SettingsPage), IconSource = ImageSource.FromResource("Client.Images.MainMenuIcon.cog.png") },
                 });
             }
 

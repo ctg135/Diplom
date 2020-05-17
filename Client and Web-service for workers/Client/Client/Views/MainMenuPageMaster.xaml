@@ -36,11 +36,31 @@
         <DataTemplate>
           <ViewCell>
             <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-              <Label VerticalOptions="FillAndExpand" 
-                    VerticalTextAlignment="Center" 
-                    Text="{Binding Title}" 
-                    d:Text="{Binding .}"
-                    FontSize="24"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image
+                                    Source="{Binding IconSource}"
+                                    Aspect="AspectFit"
+                                    HeightRequest="30"
+                                    WidthRequest="30"
+                                />
+
+                                <Label Grid.Column="1" VerticalOptions="FillAndExpand" 
+                                    VerticalTextAlignment="Center" 
+                                    Text="{Binding Title}" 
+                                    d:Text="{Binding .}"
+                                    FontSize="24"
+                                />
+                                
+
+                            </Grid>
             </StackLayout>
           </ViewCell>
         </DataTemplate>

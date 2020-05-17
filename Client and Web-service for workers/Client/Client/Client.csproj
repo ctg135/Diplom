@@ -6,6 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\MainMenuIcon\calendar.png" />
+    <None Remove="Images\MainMenuIcon\cog.png" />
+    <None Remove="Images\MainMenuIcon\home.png" />
+    <None Remove="Images\MainMenuIcon\tasks.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\MainMenuIcon\calendar.png" />
+    <EmbeddedResource Include="Images\MainMenuIcon\cog.png" />
+    <EmbeddedResource Include="Images\MainMenuIcon\home.png" />
+    <EmbeddedResource Include="Images\MainMenuIcon\tasks.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.0.0" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />

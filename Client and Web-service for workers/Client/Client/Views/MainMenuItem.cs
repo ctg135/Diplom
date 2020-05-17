@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Client.Views
 {
@@ -17,5 +18,6 @@ namespace Client.Views
         public string Title { get; set; }
 
         public Type TargetType { get; set; }
+        public ImageSource IconSource { get; set; }
     }
 }
