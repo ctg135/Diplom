@@ -152,24 +152,4 @@ namespace Client.ViewModels
             NavigateToTaskDetail(sender, new EventArgs());
         }
     }
-    /// <summary>
-    /// Конвертер строки в строку с 15 символами и "..." на конце
-    /// </summary>
-    public class ToString1518 : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string res = value as string;
-            if (res.Length > 15)
-            {
-                res = res.Remove(15);
-                res += "...";
-            }
-            return res;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
-    }
 }

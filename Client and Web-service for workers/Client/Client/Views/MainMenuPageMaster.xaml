@@ -12,8 +12,8 @@
               HasUnevenRows="true"
               ItemsSource="{Binding MenuItems}">
             <ListView.Header>
-        <Grid BackgroundColor="#03A9F4">
-            <Grid.ColumnDefinitions>
+                <Grid BackgroundColor="#87aa76">
+                    <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
@@ -27,8 +27,8 @@
             <StackLayout 
                 Grid.Column="1"
                 Grid.Row="2">
-                    <Label Text="{Binding WorkerName}" FontSize="Title"/>
-                    <Label Text="{Binding WorkerPosition}"/>
+                    <Label Text="{Binding WorkerName}" FontSize="Title" TextColor="#FFF"/>
+                    <Label Text="{Binding WorkerPosition}" TextColor="#FFF"/>
                 </StackLayout>
                 </Grid>
       </ListView.Header>

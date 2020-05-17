@@ -6,6 +6,17 @@
              mc:Ignorable="d"
              x:Class="Client.App">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#87aa76"/>
+                <Setter Property="TextColor" Value="#FFF"/>
+                <Setter Property="Font" Value="Gothic"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+            <Style TargetType="Switch">
+                <Setter Property="OnColor" Value="#95df76"/>
+                <Setter Property="ThumbColor" Value="#519c37"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

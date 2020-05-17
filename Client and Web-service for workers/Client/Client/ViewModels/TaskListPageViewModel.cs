@@ -33,7 +33,7 @@ namespace Client.ViewModels
             LoadTasks = new Command(UpdateTaskList);
             this.Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
 
-            IsDateRequired = true;
+            IsDateRequired = false;
             NotAcceptedFilter = true;
             AcceptedFilter = true;
             CompletedFilter = false;
@@ -69,7 +69,7 @@ namespace Client.ViewModels
             foreach (var item in TaskList.Items)
             {
                 item.DateSetted = "Выдано: " + item.DateSetted;
-                if (string.IsNullOrEmpty(item.DateFinished)) item.DateFinished = "Закончено " + item.DateFinished;
+                if (!string.IsNullOrWhiteSpace(item.DateFinished)) item.DateFinished = "Закончено " + item.DateFinished;
                 item.OpeningDetails += OnTaskDetailsView;
                 item.Stage = Globals.TaskStages[item.Stage];
             }

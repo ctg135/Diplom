@@ -6,19 +6,21 @@
              mc:Ignorable="d"
              x:Class="Client.Views.ViewPlansPage"
              Padding="5"
-             Title="{Binding Plans.Count, StringFormat='Всего: {0:#}'}">
+             Title="{Binding Plans.Count, StringFormat='Всего записей: {0:#}'}">
     <ContentPage.Content>
         <StackLayout>
             <CollectionView ItemsSource="{Binding Plans}">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Span="1" Orientation="Vertical" VerticalItemSpacing="5" />
+                    <GridItemsLayout Span="1" Orientation="Vertical" VerticalItemSpacing="0" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout>
-                            <Frame CornerRadius="0" Margin="0" WidthRequest="150">
+                            <Frame CornerRadius="0" Margin="3" WidthRequest="150" HeightRequest="100" Padding="0">
                                 <Grid>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
@@ -27,25 +29,30 @@
                                     </Grid.ColumnDefinitions>
                                     <Label 
                                         Grid.Column="0" 
+                                        Grid.Row="1"
                                         Text="{Binding DateSet}" 
                                         HorizontalOptions="CenterAndExpand" 
                                         VerticalOptions="CenterAndExpand" 
-                                        FontSize="18"
+                                        FontSize="Subtitle"
                                         TextColor="Black"
                                     />
-                                    <StackLayout Grid.Column="1" Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
-                                        <Label  
-                                            TextColor="DarkBlue"
-                                            Text="{Binding TypePlan}"
-                                            HorizontalOptions="CenterAndExpand" 
-                                            FontSize="20" 
-                                        />
-                                        <Label 
-                                            FontAttributes="Italic" 
-                                            HorizontalOptions="CenterAndExpand"
-                                            Text="{Binding Range}"
-                                        />
-                                    </StackLayout>
+                                    <Label  
+                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        TextColor="DarkBlue"
+                                        Text="{Binding TypePlan}"
+                                        HorizontalOptions="CenterAndExpand"
+                                        VerticalOptions="Start"
+                                        FontSize="Large"
+                                    />
+                                    <Label 
+                                        Grid.Column="1"
+                                        Grid.Row="2"
+                                        FontAttributes="Italic" 
+                                        HorizontalOptions="CenterAndExpand"
+                                        VerticalOptions="Start"
+                                        Text="{Binding Range}"
+                                    />
                                 </Grid>
                             </Frame>
                         </StackLayout>

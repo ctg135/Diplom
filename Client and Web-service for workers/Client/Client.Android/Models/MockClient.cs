@@ -204,7 +204,7 @@ namespace Client.Droid.Models
         {
             System.Diagnostics.Debug.WriteLine($"Инфо о работнике");
 
-            return Task.FromResult(new Worker1() { Name = "Имя", Patronymic = "Фамилия", Surname = "Отчество",  Department ="Программистический", Position = "Программист" });
+            return Task.FromResult(new Worker1() { Name = "Имя", Patronymic = "Отчество", Surname = "Фамилия",  Department ="Программистический", Position = "Программист" });
         }
 
         public Task<bool> IsSetStatusClientError(string ErrorMessage)
@@ -277,6 +277,30 @@ namespace Client.Droid.Models
                         Boss = "Сам я",
                         DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
                         Description = "Деплом"
+                    });
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "6",
+                        Stage = "2",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Пипец какой длинный текст тута Пипец какой длинный текст тута\n Пипец какой длинный текст тута"
+                    });
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "7",
+                        Stage = "2",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Текст короче "
+                    });
+                    tasks.Add(new Tasks.Task()
+                    {
+                        Id = "2",
+                        Stage = "2",
+                        Boss = "Сам я",
+                        DateSetted = DateTime.Now.ToString("dd.MM.yyyy"),
+                        Description = "Кусь"
                     });
                 }
                 if (stage == TaskStages.Completed)

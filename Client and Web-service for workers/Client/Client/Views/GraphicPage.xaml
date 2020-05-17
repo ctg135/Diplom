@@ -6,27 +6,40 @@
              mc:Ignorable="d"
              Title="Просмотр графиков"
              x:Class="Client.Views.GraphicPage">
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="Label" x:Key="Header">
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="TextColor" Value="#192114"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="CornerRadius" Value="0"/>
+            </Style>
+            <Style x:Name="DatesRange" TargetType="StackLayout">
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
 
             <Label 
                 Text="Отобразить по датам" 
-                TextColor="Black"
-                FontSize="Large"
-                VerticalOptions="Center"
-                VerticalTextAlignment="Center"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
+                Style="{StaticResource Header}"
             />
 
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal" >
                 <DatePicker Date="{Binding StartDate}" />
                 <Label Text="-" HeightRequest="1" VerticalTextAlignment="Center"/>
                 <DatePicker Date="{Binding EndDate}"/>
             </StackLayout>
 
-            <Label Text="Фильтр"/>
+            <Label Text="Фильтр" Style="{StaticResource Header}"/>
 
             <Grid>
                 <Grid.RowDefinitions>

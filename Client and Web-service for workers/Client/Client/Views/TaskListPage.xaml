@@ -3,22 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Client.Views.Converters"
              mc:Ignorable="d"
              x:Class="Client.Views.TaskListPage">
+    <ContentPage.Resources>
+        <converters:ToShorterString x:Key="Cutter"/>
+        <ResourceDictionary>
+            <Style x:Key="TaskFrame" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style x:Key="TaskStage" TargetType="Label">
+                <Setter Property="TextColor" Value="#ff4d14"/>
+            </Style>
+            <Style x:Key="TaskDate" TargetType="Label">
+                <Setter Property="TextColor" Value="#75a269"/>
+                <Setter Property="FontAttributes" Value="Italic"/>
+            </Style>
+            <Style x:Key="TaskDescription" TargetType="Label">
+                <Setter Property="TextColor" Value="#000"/>
+                <Setter Property="MaxLines" Value="1"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+            <Style x:Key="DayType" TargetType="Label">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="TextColor" Value="#192114"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <ScrollView HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always" >
                 <StackLayout>
-
                     <Frame>
                         <StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Искать от даты"/>
-                                <Switch x:Name="dateswitch" IsToggled="{Binding IsDateRequired}"/>
-                            </StackLayout>
+                            <Grid Margin="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="Искать от даты"/>
+                                <Switch x:Name="dateswitch" Grid.Column="1" IsToggled="{Binding IsDateRequired}"/>
+                            </Grid>
                             <DatePicker
                                 Date="{Binding SearchDate}"
                                 IsEnabled="{Binding Source={x:Reference dateswitch}, Path=IsToggled}"
+                                HorizontalOptions="Center"
                             />
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -70,20 +103,24 @@
                     </Frame>
 
                     <CollectionView ItemsSource="{Binding TaskList.Items}">
-
                         <CollectionView.ItemsLayout>
                             <GridItemsLayout Span="1" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <StackLayout HeightRequest="100">
+                                <Label Text="Заданий нету" TextColor="#192114" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </StackLayout>
+                        </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout>
-                                    <Frame>
+                                    <Frame Style="{StaticResource TaskFrame}">
                                         <StackLayout>
-                                            <Label Text="{Binding Description}"/>
-                                            <Label Text="{Binding Stage}"/>
+                                            <Label Text="{Binding Description, Converter={StaticResource Cutter}, ConverterParameter='32'}" Style="{StaticResource TaskDescription}"/>
+                                            <Label Text="{Binding Stage}" Style="{StaticResource TaskStage}"/>
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding DateSetted}"/>
-                                                <Label Text="{Binding DateFinished}"/>
+                                                <Label Text="{Binding DateSetted}" Style="{StaticResource TaskDate}"/>
+                                                <Label Text="{Binding DateFinished}" Style="{StaticResource TaskDate}"/>
                                             </StackLayout>
                                             <Button Text="Подробнее" Command="{Binding OpenDetails}"/>
                                         </StackLayout>

@@ -5,36 +5,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              Title="Окно настроек"
+             Padding="10"
              x:Class="Client.Views.SettingsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="HeaderSection" TargetType="Label">
+                <Setter Property="TextColor" Value="Accent"/>
+                <Setter Property="FontSize" Value="Large"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#192114"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            
-            <TableView VerticalOptions="StartAndExpand">
-                <TableRoot>
-                    <TableSection Title="Подключение">
-                        <TextCell Text="Сервер для подключения:" TextColor="Black" />
-                        <EntryCell Text="{Binding Server}"/>
-                    </TableSection>
-                    <TableSection Title="Сохраненный график">
-                        <ViewCell>
-                            <Button Text="Просмотреть" Command="{Binding ViewSavedPlans}"/>
-                        </ViewCell>
-                        <ViewCell>
-                            <Button Text="Очистить" Command="{Binding ClearSavedPlans}"/>
-                        </ViewCell>
-                    </TableSection>
-                </TableRoot>
-            </TableView>
-            <TableView IsVisible="{Binding ButtonLogOutVisible}" VerticalOptions="Start">
-                <TableRoot>
-                    <TableSection Title="Аккаунт">
-                        <ViewCell>
-                            <Button Text="Выйти" Command="{Binding LogOut}"/>
-                        </ViewCell>
-                    </TableSection>
-                </TableRoot>
-            </TableView>
-        
+
+            <Label Text="Подключение" Style="{StaticResource HeaderSection}"/>
+
+            <Label Text="Сервер для подключения:" />
+            <Entry Text="{Binding Server}"/>
+
+
+            <Label Text="Сохранённые планы" Style="{StaticResource HeaderSection}"/>
+
+            <Button Text="Просмотреть" Command="{Binding ViewSavedPlans}"/>
+            <Button Text="Очистить" Command="{Binding ClearSavedPlans}"/>
+
+
+            <StackLayout IsVisible="{Binding ButtonLogOutVisible}">
+                <Label Text="Аккаунт" Style="{StaticResource HeaderSection}"/>
+                <Button Text="Выйти" Command="{Binding LogOut}"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

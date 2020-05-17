@@ -88,6 +88,10 @@ namespace Client.ViewModels
             {
                 throw new Exception($"Необработанная стадия '{Item.Stage}' задачи '{Item.Id}'");
             }
+            if (Item.DateSetted.StartsWith("Выдано: "))
+            {
+                Item.DateSetted = Item.DateSetted.Substring(8);
+            }
         }
         /// <summary>
         /// Команда принятия задачи

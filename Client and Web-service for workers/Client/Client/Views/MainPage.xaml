@@ -3,33 +3,68 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Client.ViewModels"
+             xmlns:converters="clr-namespace:Client.Views.Converters"
              mc:Ignorable="d"
              Title="Главная"
              x:Class="Client.Views.MainPage"
              Appearing="ContentPage_Appearing"
 >
-
     <ContentPage.Resources>
-        <local:ToString1518 x:Key="Str1518"/>
+        <converters:ToShorterString x:Key="Cutter"/>
+        <ResourceDictionary>
+            <Style TargetType="CollectionView">
+                <Setter Property="BackgroundColor" Value="#e9f4e2"/>
+                <Setter Property="HeightRequest" Value="400"/>
+            </Style>
+            <Style x:Key="TasksHeader" TargetType="Label">
+                <Setter Property="BackgroundColor" Value="#e9f4e2"/>
+                <Setter Property="TextColor" Value="#3b5a2e"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="TaskFrame" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+            <Style x:Key="TaskStage" TargetType="Label">
+                <Setter Property="TextColor" Value="#ff4d14"/>
+            </Style>
+            <Style x:Key="TaskDate" TargetType="Label">
+                <Setter Property="TextColor" Value="#75a269"/>
+                <Setter Property="FontAttributes" Value="Italic"/>
+            </Style>
+            <Style x:Key="TaskDescription" TargetType="Label">
+                <Setter Property="TextColor" Value="#000"/>
+                <Setter Property="MaxLines" Value="1"/>
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+            <Style x:Key="DayType" TargetType="Label">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="TextColor" Value="#192114"/>
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
-    <StackLayout>
+    <StackLayout Spacing="0" BackgroundColor="#fff">
 
-        <Label Text="Задачи к выполнению"/>
+        <Label Text="Задания" Style="{StaticResource Key=TasksHeader}"/>
 
-        <CollectionView ItemsSource="{Binding Tasks.Items}" HeightRequest="300">
+        <CollectionView ItemsSource="{Binding Tasks.Items}">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Span="1" Orientation="Horizontal" HorizontalItemSpacing="5" />
+                <GridItemsLayout Span="2" Orientation="Horizontal" HorizontalItemSpacing="0" />
             </CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <Label Text="Заданий нету" TextColor="#192114" HorizontalOptions="Center" VerticalOptions="Center" />
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Frame WidthRequest="150">
+                        <Frame Style="{StaticResource Key=TaskFrame}">
                             <StackLayout>
-                                <Label Text="{Binding Stage}"/>
-                                <Label Text="{Binding DateSetted}"/>
-                                <Label Text="{Binding Description, Converter={StaticResource Str1518}}" MaxLines="1"/>
+                                <Label Text="{Binding Stage}" Style="{StaticResource Key=TaskStage}"/>
+                                <Label Text="{Binding DateSetted}" Style="{StaticResource Key=TaskDate}"/>
+                                <Label Text="{Binding Description, Converter={StaticResource Cutter}, ConverterParameter='15'}" Style="{StaticResource Key=TaskDescription}"/>
                                 <Button Text="Подробнее" Command="{Binding OpenDetails}"/>
                             </StackLayout>
                         </Frame>
@@ -38,32 +73,10 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Label Text="{Binding PlanToday.TypePlan, StringFormat='Сегодня {0}'}"/>
-        <Label Text="{Binding TimeRange}"/>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Label 
-                Text="Статус" 
-                Grid.Column="0"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-            />
-            <Label 
-                Text="{Binding Status}" 
-                Grid.Column="1"
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-            />
-        </Grid>
+        <Label Text="{Binding PlanToday.TypePlan, StringFormat='Сегодня {0}'}" Style="{StaticResource Key=DayType}" />
+
         <Button 
-            Text="Установить статус" 
+            Text="{Binding Status, StringFormat='Статус: {0}'}" 
             Command="{Binding SetNewStatus}"
             HorizontalOptions="Center"
             VerticalOptions="Center"

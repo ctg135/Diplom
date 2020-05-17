@@ -5,31 +5,75 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Client.Views.TaskDetailsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#192114"/>
+                <Setter Property="FontSize" Value="Body"/>
+            </Style>
+            <Style x:Key="TaskStage" TargetType="Label">
+                <Setter Property="TextColor" Value="#ff4d14"/>
+                <Setter Property="FontSize" Value="Body"/>
+            </Style>
+            <Style x:Key="ActionButton" TargetType="Button">
+                <Setter Property="VerticalOptions" Value="End"/>
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+            <Style x:Key="Bolder" TargetType="Span">
+                <Setter Property="TextColor" Value="#120a8f"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="Body"/>
+            </Style>
+            <Style x:Key="DescriptionFrame" TargetType="Frame">
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="{Binding Item.Stage}"/>
-            <Label>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Выдал: "/>
-                        <Span Text="{Binding Item.Boss}"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Label>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Дата выдачи: "/>
-                        <Span Text="{Binding Item.DateSetted}"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Label Text="{Binding Item.Description}"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" Padding="8">
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Выдал: "/>
+                            <Span Text="{Binding Item.Boss}" Style="{StaticResource Bolder}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Дата выдачи: "/>
+                            <Span Text="{Binding Item.DateSetted}" Style="{d:StaticResource Bolder}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label  
+                    Text="{Binding Item.Stage}" 
+                    Style="{StaticResource TaskStage}"
+                />
+            </StackLayout>
+            
+            <Frame Grid.Row="1" Style="{StaticResource DescriptionFrame}">
+                <Label Text="{Binding Item.Description}"/>
+            </Frame>
+                
             <Button 
+                Grid.Row="2"
                 Text="{Binding ButtonText}"
                 IsEnabled="{Binding ButtonActivity}"
                 Command="{Binding ButtonCommand}"
+                Style="{StaticResource ActionButton}"
             />
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
