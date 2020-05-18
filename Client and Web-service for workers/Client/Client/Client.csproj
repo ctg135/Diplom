@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <AssemblyName>WorkTime Client</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <Authors>Салабаев Роман Сергеевич МП-41</Authors>
+    <Product>WorkTime Client</Product>
+    <PackageId>WorkTime Client</PackageId>
+    <Version>1.0.0</Version>
+    <Company>РКТ МАИ 2020г.</Company>
+    <Description>Программный продукт решает проблему распределения рабочего времени кадров. Он позволяет просмотреть количество отработанных часов и выполненных работником заданий для отслеживания эффективности его работы. Также, таким образом можно более точно определить график работы сотрудника, так как каждый сотрудник работает эффективнее в разное время.</Description>
+    <RepositoryUrl>https://github.com/ctg135/WebService-Client-ForWorkers</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
