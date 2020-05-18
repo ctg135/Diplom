@@ -23,33 +23,33 @@ namespace Client.Droid.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Plan1>> GetPlans()
+        public Task<List<Plan>> GetPlans()
         {
             System.Diagnostics.Debug.WriteLine($"Получаем сохраненки");
-            List<Plan1> plans = new List<Plan1>()
+            List<Plan> plans = new List<Plan>()
             {
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "ваорш",
                     DateSet = "08.05.2020",
                     StartDay = "8:30",
                     EndDay = "10:30"
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "ваорш",
                     DateSet = "09.05.2020y",
                     StartDay = "8:30",
                     EndDay = "10:30"
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "ваорш",
                     DateSet = "10.05.2020",
                     StartDay = "8:30",
                     EndDay = "10:30"
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "ваорш",
                     DateSet = "11.05.2020",
@@ -61,7 +61,7 @@ namespace Client.Droid.Models
             return Task.FromResult(plans);
         }
 
-        public Task SetPlans(List<Plan1> Plans)
+        public Task SetPlans(List<Plan> Plans)
         {
             System.Diagnostics.Debug.WriteLine($"Устанавливаем сохраненку {JsonConvert.SerializeObject(Plans)}");
 

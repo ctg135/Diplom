@@ -49,31 +49,31 @@ namespace Client.Droid.Models
             return Task.FromResult(new StatusCode() { Code = "2", LastUpdate = DateTime.Now.ToString() });
         }
 
-        public Task<List<Plan1>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter)
+        public Task<List<Plan>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter)
         {
             System.Diagnostics.Debug.WriteLine($"Выводим планы {Start} - {End}, {JsonConvert.SerializeObject(Filter)}");
 
-            List<Plan1> plans = new List<Plan1>();
-            List<Plan1> templateplans = new List<Plan1>()
+            List<Plan> plans = new List<Plan>();
+            List<Plan> templateplans = new List<Plan>()
             {
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "1",
                     DateSet = Start.ToString("dd.MM.yyyy"),
                     StartDay = "8:30",
                     EndDay = "10:30"
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "2",
                     DateSet = End.ToString("dd.MM.yyyy")
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "3",
                     DateSet = End.ToString("dd.MM.yyyy")
                 },
-                new Plan1()
+                new Plan()
                 {
                     TypePlan = "4",
                     DateSet = End.ToString("dd.MM.yyyy")
@@ -158,10 +158,10 @@ namespace Client.Droid.Models
             return Task.FromResult(statuses);
         }
 
-        public Task<Plan1> GetTodayPlan()
+        public Task<Plan> GetTodayPlan()
         {
             System.Diagnostics.Debug.WriteLine($"План на сегодня");
-            return Task.FromResult(new Plan1() { DateSet = DateTime.Now.ToString("dd.MM.yyyy"), StartDay = "8:00", EndDay = "16:00", TypePlan = "1" });
+            return Task.FromResult(new Plan() { DateSet = DateTime.Now.ToString("dd.MM.yyyy"), StartDay = "8:00", EndDay = "16:00", TypePlan = "1" });
         }
 
         public Task<List<PlanType>> GetPlanTypes()
@@ -200,11 +200,11 @@ namespace Client.Droid.Models
             return Task.FromResult(planTypes);
         }
 
-        public Task<Worker1> GetWorkerInfo()
+        public Task<Worker> GetWorkerInfo()
         {
             System.Diagnostics.Debug.WriteLine($"Инфо о работнике");
 
-            return Task.FromResult(new Worker1() { Name = "Имя", Patronymic = "Отчество", Surname = "Фамилия",  Department ="Программистический", Position = "Программист" });
+            return Task.FromResult(new Worker() { Name = "Имя", Patronymic = "Отчество", Surname = "Фамилия",  Department ="Программистический", Position = "Программист" });
         }
 
         public Task<bool> IsSetStatusClientError(string ErrorMessage)

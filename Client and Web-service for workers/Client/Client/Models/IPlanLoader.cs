@@ -13,12 +13,12 @@ namespace Client.Models
         /// </summary>
         /// <param name="Plans">Список планов</param>
         /// <returns></returns>
-        Task SetPlans(List<Plan1> Plans);
+        Task SetPlans(List<Plan> Plans);
         /// <summary>
         /// Считывает все планы из памяти
         /// </summary>
         /// <returns></returns>
-        Task<List<Plan1>> GetPlans();
+        Task<List<Plan>> GetPlans();
         /// <summary>
         /// Очищает все планы в памяти
         /// </summary>

@@ -49,7 +49,7 @@ namespace Client.Models
         /// Получает информацию о работнике
         /// </summary>
         /// <returns></returns>
-        Task<Worker1> GetWorkerInfo();
+        Task<Worker> GetWorkerInfo();
         /// <summary>
         /// Получение информации о последнем установленном статусе
         /// </summary>
@@ -62,29 +62,18 @@ namespace Client.Models
         /// <returns></returns>
         Task SetStatus(string Code);
         /// <summary>
-        /// Проверяет, ошибка является ошибкой клиента для устанвоки статуса
-        /// </summary>
-        /// <param name="ErrorMessage">Сообщение об ошибке</param>
-        /// <returns>true, если является ошибкой клиента</returns>
-        Task<bool> IsSetStatusClientError(string ErrorMessage);
-        /// <summary>
         /// Получение планов сотрудника по датам
         /// </summary>
         /// <param name="Start">Начальная дата</param>
         /// <param name="End">Конечная дата</param>
         /// <param name="Filter">Фильтр планов</param>
         /// <returns></returns>
-        Task<List<Plan1>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter);
+        Task<List<Plan>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter);
         /// <summary>
         /// Получение плана на сегодня
         /// </summary>
         /// <returns></returns>
-        Task<Plan1> GetTodayPlan();
-        /// <summary>
-        /// Функция для проверки подключения к серверу
-        /// </summary>
-        /// <returns></returns>
-        Task<AuthorizationResult> CheckConnect();
+        Task<Plan> GetTodayPlan();
         /// <summary>
         /// Получение списка планов
         /// </summary>

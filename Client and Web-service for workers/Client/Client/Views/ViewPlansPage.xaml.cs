@@ -14,7 +14,7 @@ namespace Client.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewPlansPage : ContentPage
     {
-        public ViewPlansPage(List<Plan1> PlanList)
+        public ViewPlansPage(List<Plan> PlanList)
         {
             this.BindingContext = new VeiwPlansPageViewModel(PlanList);
             InitializeComponent();

@@ -6,14 +6,13 @@ namespace Client.DataModels
 {
     public class Plan
     {
-        public string Id { get; set; }
-        public string Date { get; set; }
-        public string StartOfDay { get; set; }
-        public string EndOfDay { get; set; }
-        public string Total { get; set; }
+        public string DateSet { get; set; }
+        public string StartDay { get; set; }
+        public string EndDay { get; set; }
+        public string TypePlan { get; set; }
         public static Plan Empty()
         {
-            return new Plan() { Date = "-", EndOfDay = "-", StartOfDay = "-", Total = "-", Id = "0" };
+            return new Plan() { DateSet = "-", EndDay = "-", StartDay = "-", TypePlan = "0" };
         }
     }
 }

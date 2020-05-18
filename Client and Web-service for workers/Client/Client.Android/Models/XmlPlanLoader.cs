@@ -99,16 +99,16 @@ namespace Client.Droid.Models
             await Task.CompletedTask;
         }
 
-        public async Task<List<Plan1>> GetPlans()
+        public async Task<List<Plan>> GetPlans()
         {
-            List<Plan1> plans = new List<Plan1>();
+            List<Plan> plans = new List<Plan>();
 
             XmlDocument doc = new XmlDocument();
             doc.Load(PlansFileFolder);
 
             foreach (XmlNode planNode in doc.DocumentElement.SelectNodes(PlanNode))
             {
-                plans.Add(new Plan1()
+                plans.Add(new Plan()
                 {
                     DateSet  = planNode.SelectSingleNode(DateSetNode).InnerText,
                     TypePlan = planNode.SelectSingleNode(TypePlanNode).InnerText,
@@ -120,7 +120,7 @@ namespace Client.Droid.Models
             return await Task.FromResult(plans);
         }
 
-        public async Task SetPlans(List<Plan1> Plans)
+        public async Task SetPlans(List<Plan> Plans)
         {
             if (Plans.Count > 0)
             {

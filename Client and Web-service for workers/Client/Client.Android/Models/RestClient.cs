@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,13 @@ namespace Client.Droid.Models
             public const string Processing = "2";
             public const string Completed = "3";
         }
+        private class Plans
+        {
+            public const string Working = "1";
+            public const string DayOff = "2";
+            public const string Hospital = "3";
+            public const string Holiday = "4";
+        }
         /// <summary>
         /// Информация о клиенте
         /// </summary>
@@ -83,7 +91,7 @@ namespace Client.Droid.Models
             {
                 Method = Method,
                 RequestUri = new Uri(Server + Controller),
-                Content = new StringContent(Content)
+                Content = new StringContent(Content ?? "")
             })
             using (var client = CreateDefaultClient())
             {
@@ -112,79 +120,341 @@ namespace Client.Droid.Models
         public string Session { get; set; }
         public string Server { get; set; }
 
-        public Task AcceptTask(string TaskId)
+        public async Task AcceptTask(string TaskId)
         {
-            throw new NotImplementedException();
+            var reqData = new Request.TaskNewStage() { Session = Session, TaskId = TaskId, Stage = TaskStageData.Processing };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Task, HttpMethod.Put, reqContent);
+
+            switch(res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
         }
 
-        public Task<AuthorizationResult> Authorization(string Login, string Password)
+        public async Task<AuthorizationResult> Authorization(string Login, string Password)
         {
-            throw new NotImplementedException();
+            var reqData = new Request.AuthoLogin() { Login = Login, Password = GetHashString(Password) };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Autho, HttpMethod.Post, reqContent);
+            
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                case System.Net.HttpStatusCode.Unauthorized:
+                    return AuthorizationResult.Error;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+            var resContent = JsonConvert.DeserializeObject<Response.AuthoResult>(await res.Content.ReadAsStringAsync());
+            Session = resContent.Session;
+            return AuthorizationResult.Ok;
         }
 
-        public Task<AuthorizationResult> Authorization()
+        public async Task<AuthorizationResult> Authorization()
         {
-            throw new NotImplementedException();
+            var reqData = new Request.AuthoSession() { Session = Session };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Autho, HttpMethod.Put, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    return AuthorizationResult.Ok;
+                case System.Net.HttpStatusCode.Unauthorized:
+                    return AuthorizationResult.Error;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
         }
 
-        public Task<AuthorizationResult> CheckConnect()
+        public async Task CompleteTask(string TaskId)
         {
-            throw new NotImplementedException();
+            var reqData = new Request.TaskNewStage() { Session = Session, TaskId = TaskId, Stage = TaskStageData.Completed };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Task, HttpMethod.Put, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
         }
 
-        public Task CompleteTask(string TaskId)
+        public async Task<StatusCode> GetLastStatusCode()
         {
-            throw new NotImplementedException();
+            var reqData = new Request.StatusUserRequest() { Session = Session };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Status, HttpMethod.Post, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<Response.Status>(await res.Content.ReadAsStringAsync());
+
+            return new StatusCode()
+            {
+                Code = resContent.StatusCode ?? "",
+                LastUpdate = resContent.Updated ?? ""
+            };
         }
 
-        public Task<StatusCode> GetLastStatusCode()
+        public async Task<List<Plan>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter)
         {
-            throw new NotImplementedException();
+            var filter = new List<string>();
+            foreach (var filt in Filter)
+            {
+                if (filt == PlanTypes.DayOff)
+                {
+                    filter.Add(Plans.DayOff);
+                }
+                else if (filt == PlanTypes.Holiday)
+                {
+                    filter.Add(Plans.Holiday);
+                }
+                else if (filt == PlanTypes.Hospital)
+                {
+                    filter.Add(Plans.Hospital);
+                }
+                else if (filt == PlanTypes.Working)
+                {
+                    filter.Add(Plans.Working);
+                }
+            }
+
+            var reqData = new Request.PlansRequest() { Session = Session, StartDate = Start.ToString("dd.MM.yyyy"), EndDate = End.ToString("dd.MM.yyyy"), PlanCodes = filter.ToArray() };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Plan, HttpMethod.Post, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<List<Response.Plan>>(await res.Content.ReadAsStringAsync());
+            var result = new List<Plan>();
+
+            foreach (var plan in resContent)
+            {
+                result.Add(new Plan()
+                {
+                    DateSet = plan.Date ?? "",
+                    TypePlan = plan.PlanCode ?? "",
+                    StartDay = plan.DayStart ?? "",
+                    EndDay = plan.DayEnd ?? ""
+                });
+            }
+
+            return result;
         }
 
-        public Task<List<Plan1>> GetPlans(DateTime Start, DateTime End, PlanTypes[] Filter)
+        public async Task<List<PlanType>> GetPlanTypes()
         {
-            throw new NotImplementedException();
+            var res = await SendMessage(Controller.Plan, HttpMethod.Get);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<List<Response.PlanType>>(await res.Content.ReadAsStringAsync());
+            var result = new List<PlanType>();
+
+            foreach (var type in resContent)
+            {
+                result.Add(new PlanType()
+                {
+                    Code = type.PlanCode ?? "",
+                    Title = type.Title?? ""
+                });
+            }
+
+            return result;
         }
 
-        public Task<List<PlanType>> GetPlanTypes()
+        public async Task<List<Status>> GetStatuses()
         {
-            throw new NotImplementedException();
+            var res = await SendMessage(Controller.Status, HttpMethod.Get);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<List<Response.StatusType>>(await res.Content.ReadAsStringAsync());
+            var result = new List<Status>();
+
+            foreach (var type in resContent)
+            {
+                result.Add(new Status()
+                {
+                    Code = type.StatusCode ?? "",
+                    Title = type.Title ?? ""
+                });
+            }
+
+            return result;
         }
 
-        public Task<List<Status>> GetStatuses()
+        public async Task<List<Tasks.Task>> GetTasks(DateTime Created, TaskStages[] Filter)
         {
-            throw new NotImplementedException();
+            var filter = new List<string>();
+
+            foreach(var filt in Filter)
+            {
+                if (filt == TaskStages.NotAccepted)
+                {
+                    filter.Add(TaskStageData.NotAccepted);
+                }
+                else if (filt == TaskStages.Processing)
+                {
+                    filter.Add(TaskStageData.Processing);
+                }
+                else if (filt == TaskStages.Completed)
+                {
+                    filter.Add(TaskStageData.Completed);
+                }
+            }
+
+            var reqData = new Request.TaskRequest() 
+            { 
+                Session = Session,
+                DateCreation = Created == DateTime.MinValue ? "" : Created.ToString("dd.MM.yyyy"),
+                TaskStages = filter
+            };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Task, HttpMethod.Post, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<List<Response.Task>>(await res.Content.ReadAsStringAsync());
+            var result = new List<Tasks.Task>();
+
+            foreach (var type in resContent)
+            {
+                result.Add(new Tasks.Task()
+                {
+                    Id = type.TaskId ?? "",
+                    Boss = type.SetterWorkerName ?? "",
+                    DateSetted = type.Created ?? "",
+                    DateFinished = type.Finished ?? "",
+                    Description = type.Description ?? "",
+                    Stage = type.Stage ?? ""
+                });
+            }
+
+            return result;
         }
 
-        public Task<List<Tasks.Task>> GetTasks(DateTime Created, TaskStages[] Filter)
+        public async Task<List<TaskStage>> GetTaskStages()
         {
-            throw new NotImplementedException();
+            var res = await SendMessage(Controller.Task, HttpMethod.Get);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
+
+            var resContent = JsonConvert.DeserializeObject<List<Response.TaskStage>>(await res.Content.ReadAsStringAsync());
+            var result = new List<TaskStage>();
+
+            foreach (var type in resContent)
+            {
+                result.Add(new TaskStage()
+                {
+                    Code = type.Stage ?? "",
+                    Title = type.Title ?? ""
+                });
+            }
+
+            return result;
         }
 
-        public Task<List<TaskStage>> GetTaskStages()
+        public async Task<Plan> GetTodayPlan()
         {
-            throw new NotImplementedException();
+            var res = Plan.Empty();
+            var resl = await GetPlans(DateTime.Now, DateTime.Now, new PlanTypes[0]);
+            if (resl.Count > 0)
+                res = resl[0];
+            return res;
         }
 
-        public Task<Plan1> GetTodayPlan()
+        public async Task<Worker> GetWorkerInfo()
         {
-            throw new NotImplementedException();
-        }
+            var reqData = new Request.WorkerInfoRequest() { Session = Session };
+            string reqContent = JsonConvert.SerializeObject(reqData);
 
-        public Task<Worker1> GetWorkerInfo()
-        {
-            throw new NotImplementedException();
-        }
+            var res = await SendMessage(Controller.Worker, HttpMethod.Post, reqContent);
 
-        public Task<bool> IsSetStatusClientError(string ErrorMessage)
-        {
-            throw new NotImplementedException();
-        }
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
 
-        public Task SetStatus(string Code)
+            var resContent = JsonConvert.DeserializeObject<Response.WorkerInfo>(await res.Content.ReadAsStringAsync());
+
+            return new Worker()
+            {
+                Name = resContent.Name ?? "",
+                Surname = resContent.Surname ?? "",
+                Patronymic = resContent.Patronymic ?? "",
+                Position = resContent.Position ?? "",
+                Department = resContent.Department ?? ""
+            };
+        }
+        public async Task SetStatus(string Code)
         {
-            throw new NotImplementedException();
+            var reqData = new Request.NewStatusCode() { Session = Session, StatusCode = Code };
+            string reqContent = JsonConvert.SerializeObject(reqData);
+
+            var res = await SendMessage(Controller.Status, HttpMethod.Put, reqContent);
+
+            switch (res.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception(JObject.Parse(await res.Content.ReadAsStringAsync())["Message"].ToString());
+            }
         }
         #endregion
     }

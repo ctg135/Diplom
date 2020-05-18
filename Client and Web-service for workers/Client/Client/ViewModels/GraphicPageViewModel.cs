@@ -89,7 +89,7 @@ namespace Client.ViewModels
         /// </summary>
         private async void LoadPlans()
         {
-            var Plans = new List<Plan1>();
+            var Plans = new List<Plan>();
             if (StartDate > EndDate)
             {
                 await Application.Current.MainPage.DisplayAlert("Ошибка ввода", "Начальная дата не может быть больше конечной", "Ок");
@@ -124,7 +124,7 @@ namespace Client.ViewModels
             var res = await Application.Current.MainPage.DisplayAlert(title, msg, butOk, butCancel);
             if (!res) return;
 
-            var Plans = new List<Plan1>();
+            var Plans = new List<Plan>();
             if (StartDate > EndDate)
             {
                 await Application.Current.MainPage.DisplayAlert("Ошибка ввода", "Начальная дата не может быть больше конечной", "Ок");

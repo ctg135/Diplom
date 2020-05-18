@@ -18,12 +18,12 @@ namespace Client.ViewModels
         /// <summary>
         /// Список планов для просмотра
         /// </summary>
-        public List<Plan1> Plans { get; private set; }
+        public List<Plan> Plans { get; private set; }
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="Plans">Список планов для отображения</param>
-        public ViewPlansEventArgs(List<Plan1> Plans)
+        public ViewPlansEventArgs(List<Plan> Plans)
         {
             this.Plans = Plans;
         }

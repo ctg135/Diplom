@@ -17,7 +17,7 @@ namespace Client
         /// <summary>
         /// Информация о работнике
         /// </summary>
-        public static Worker1 WorkerInfo { get; set; }
+        public static Worker WorkerInfo { get; set; }
         /// <summary>
         /// Активный статус работника
         /// </summary>

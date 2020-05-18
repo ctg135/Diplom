@@ -39,7 +39,7 @@ namespace Client.ViewModels
         /// Создание модели
         /// </summary>
         /// <param name="PlanList">Список планов для отображения</param>
-        public VeiwPlansPageViewModel(List<Plan1> PlanList)
+        public VeiwPlansPageViewModel(List<Plan> PlanList)
         {
             Plans = new List<MyPlan>();
 

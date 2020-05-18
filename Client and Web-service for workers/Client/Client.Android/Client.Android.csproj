@@ -56,6 +56,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
+    <Reference Include="Web-Service.Data">
+      <HintPath>..\..\Web-Service.Data\bin\Debug\Web-Service.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
@@ -79,6 +82,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\MockClient.cs" />
     <Compile Include="Models\MockPlanLoader.cs" />
+    <Compile Include="Models\RestClient.cs" />
     <Compile Include="Models\XmlConfigManager.cs" />
     <Compile Include="Models\XmlPlanLoader.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

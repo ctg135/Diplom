@@ -44,7 +44,7 @@ namespace Client.ViewModels
         /// <summary>
         /// График на сегодня
         /// </summary>
-        public Plan1 PlanToday { get; set; }
+        public Plan PlanToday { get; set; }
         /// <summary>
         /// Список задач
         /// </summary>
@@ -62,7 +62,7 @@ namespace Client.ViewModels
             this.Client.Session = Globals.Config.GetItem("Session").Result;
             this.Client.Server = Globals.Config.GetItem("Server").Result;
             Tasks = new Tasks();
-            PlanToday = Plan1.Empty();
+            PlanToday = Plan.Empty();
             Globals.WorkerStatus = StatusCode.Empty();
         }
         /// <summary>
