@@ -63,10 +63,20 @@ namespace Client.ViewModels
         /// Функция при выходе из аккаунта
         /// </summary>
         /// <param name="param"></param>
-        private void LogOuted(object param)
+        private async void LogOuted(object param)
         {
-            Globals.Clear();
-            Application.Current.MainPage = new NavigationPage(new AuthoPage());
+            string title = "Потдтверждение";
+            string message = "Вы уверены, что хотите выйти из аккаунта?";
+            string butAccept = "Да";
+            string butCancel = "Нет";
+
+            var res = await Application.Current.MainPage.DisplayAlert(title, message, butAccept, butCancel);
+
+            if (res == true)
+            {
+                Globals.Clear();
+                Application.Current.MainPage = new NavigationPage(new AuthoPage());
+            }
         }
         /// <summary>
         /// Функция просмотра сохраненных планов

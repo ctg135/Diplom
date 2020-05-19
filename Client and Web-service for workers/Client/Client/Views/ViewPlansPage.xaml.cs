@@ -18,7 +18,15 @@ namespace Client.Views
         {
             this.BindingContext = new VeiwPlansPageViewModel(PlanList);
             InitializeComponent();
-            Title = $"Всего {PlanList.Count.ToString()}";
+        }
+
+        private void OnLeftSwipeCalendar(object sender, SwipedEventArgs e)
+        {
+            calendar.NextMonth();
+        }
+        private void OnRightSwipeCalendar(object sender, SwipedEventArgs e)
+        {
+            calendar.PreviousMonth();
         }
     }
 }

@@ -3,62 +3,83 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:calendar="clr-namespace:XamForms.Controls;assembly=XamForms.Controls.Calendar"
              mc:Ignorable="d"
              x:Class="Client.Views.ViewPlansPage"
              Padding="5"
-             Title="{Binding Plans.Count, StringFormat='Всего записей: {0:#}'}">
+             Title="Просмотр дат">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="calendar:Calendar">
+                <Setter Property="SelectedBorderColor" Value="Accent"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontAttributes" Value="Italic"/>
+                <Setter Property="FontSize" Value="18"/>
+            </Style>
+            <Style x:Key="Colors" TargetType="StackLayout">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <CollectionView ItemsSource="{Binding Plans}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Span="1" Orientation="Vertical" VerticalItemSpacing="0" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <Frame CornerRadius="0" Margin="3" WidthRequest="150" HeightRequest="100" Padding="0">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label 
-                                        Grid.Column="0" 
-                                        Grid.Row="1"
-                                        Text="{Binding DateSet}" 
-                                        HorizontalOptions="CenterAndExpand" 
-                                        VerticalOptions="CenterAndExpand" 
-                                        FontSize="Subtitle"
-                                        TextColor="Black"
-                                    />
-                                    <Label  
-                                        Grid.Column="1"
-                                        Grid.Row="1"
-                                        TextColor="DarkBlue"
-                                        Text="{Binding TypePlan}"
-                                        HorizontalOptions="CenterAndExpand"
-                                        VerticalOptions="Start"
-                                        FontSize="Large"
-                                    />
-                                    <Label 
-                                        Grid.Column="1"
-                                        Grid.Row="2"
-                                        FontAttributes="Italic" 
-                                        HorizontalOptions="CenterAndExpand"
-                                        VerticalOptions="Start"
-                                        Text="{Binding Range}"
-                                    />
-                                </Grid>
-                            </Frame>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <calendar:Calendar
+                SpecialDates="{Binding Dates}"
+                DateCommand="{Binding DayInfo}"
+                SelectedDate="{Binding TodayDate}" 
+                x:Name="calendar"
+                MultiSelectDates="False" 
+                WeekdaysTextColor="#293d26" 
+                StartDay="Monday"
+            >
+                <calendar:Calendar.GestureRecognizers>
+                    <SwipeGestureRecognizer Direction="Left" Swiped="OnLeftSwipeCalendar"/>
+                    <SwipeGestureRecognizer Direction="Right" Swiped="OnRightSwipeCalendar"/>
+                </calendar:Calendar.GestureRecognizers>
+            </calendar:Calendar>
+            <StackLayout Style="{StaticResource Colors}">
+                <StackLayout Orientation="Horizontal">
+                    <BoxView
+                        Color="#95e089"
+                        WidthRequest="25"
+                        HeightRequest="25"
+                    />
+                    <Label
+                        Text="- Рабочий день"
+                        />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <BoxView
+                        Color="#66f9ff"
+                        WidthRequest="25"
+                        HeightRequest="25"
+                    />
+                    <Label
+                        Text="- Выходной"
+                        />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <BoxView
+                        Color="#b647df"
+                        WidthRequest="25"
+                        HeightRequest="25"
+                    />
+                    <Label
+                        Text="- Больничный"
+                        />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <BoxView
+                        Color="#f66b30"
+                        WidthRequest="25"
+                        HeightRequest="25"
+                    />
+                    <Label
+                        Text="- Отпуск"
+                        />
+                </StackLayout>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

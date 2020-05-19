@@ -87,8 +87,17 @@ namespace Client.ViewModels
         private async void OpenSaved()
         {
             IPlanLoader planLoader = ServiceLocator.Current.GetInstance<IPlanLoader>();
-
-            this.ViewPlans(this, new ViewPlansEventArgs(await planLoader.GetPlans()));
+            var plans = await planLoader.GetPlans();
+            if (Globals.PlanTypes == null)
+            {
+                Globals.PlanTypes = new Dictionary<string, string>();
+                Globals.PlanTypes.Add("1", "Рабочий день");
+                Globals.PlanTypes.Add("2", "Выходной");
+                Globals.PlanTypes.Add("3", "Больничный");
+                Globals.PlanTypes.Add("4", "Отпуск");
+                ViewPlans(this, new ViewPlansEventArgs(plans));
+            }
+                
         }
         /// <summary>
         /// Команда открытия страницы настроек

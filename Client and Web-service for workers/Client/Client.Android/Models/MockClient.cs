@@ -66,17 +66,17 @@ namespace Client.Droid.Models
                 new Plan()
                 {
                     TypePlan = "2",
-                    DateSet = End.ToString("dd.MM.yyyy")
+                    DateSet = Start.AddDays(1).ToString("dd.MM.yyyy")
                 },
                 new Plan()
                 {
                     TypePlan = "3",
-                    DateSet = End.ToString("dd.MM.yyyy")
+                    DateSet = Start.AddDays(2).ToString("dd.MM.yyyy")
                 },
                 new Plan()
                 {
                     TypePlan = "4",
-                    DateSet = End.ToString("dd.MM.yyyy")
+                    DateSet = Start.AddDays(3).ToString("dd.MM.yyyy")
                 }
             };
 
@@ -188,7 +188,7 @@ namespace Client.Droid.Models
                 new PlanType()
                 {
                     Code = "4",
-                    Title = "Отпускной"
+                    Title = "Отпуск"
                 },
                 new PlanType()
                 {
@@ -334,7 +334,7 @@ namespace Client.Droid.Models
                 new TaskStage()
                 {
                     Code = "2",
-                    Title = "Принят к выполнению"
+                    Title = "Принято к выполнению"
                 },
                 new TaskStage()
                 {

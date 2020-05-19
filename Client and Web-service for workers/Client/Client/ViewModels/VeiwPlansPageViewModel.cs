@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
+using System.Windows.Input;
 using Client.DataModels;
 using Client.Views;
 using Xamarin.Forms;
+using XamForms.Controls;
 
 namespace Client.ViewModels
 {
@@ -31,29 +34,120 @@ namespace Client.ViewModels
             /// </summary>
             public string Range { get; set; }
         }
+        #region ViewData
         /// <summary>
-        /// Список плавно для отображения
+        /// Дата сегодня
         /// </summary>
-        public List<MyPlan> Plans { get; set; }
+        public DateTime TodayDate { get; private set; }
+        /// <summary>
+        /// Список дат для отображения
+        /// </summary>
+        public ObservableCollection<SpecialDate> Dates { get; private set; }
+        /// <summary>
+        /// Комманда для получения информации о дне
+        /// </summary>
+        public ICommand DayInfo { get; private set; }
+        #endregion
+        private Dictionary<DateTime, MyPlan> dates { get; set; }
+
         /// <summary>
         /// Создание модели
         /// </summary>
         /// <param name="PlanList">Список планов для отображения</param>
         public VeiwPlansPageViewModel(List<Plan> PlanList)
         {
-            Plans = new List<MyPlan>();
+            DayInfo = new Command(ShowDayInfo);
+            TodayDate = DateTime.Now;
+
+            var specials = new List<SpecialDate>();
+            dates = new Dictionary<DateTime, MyPlan>();
 
             foreach (var plan in PlanList)
             {
-                if (string.IsNullOrEmpty(plan.StartDay) || string.IsNullOrEmpty(plan.EndDay))
+                MyPlan newp = new MyPlan() { DateSet = plan.DateSet, TypePlan = plan.TypePlan };
+                System.Diagnostics.Debug.WriteLine(Globals.PlanTypes["1"]);
+
+                if (plan.TypePlan == Globals.PlanTypes["1"]) // Если рабочий
                 {
-                    Plans.Add(new MyPlan() { DateSet = plan.DateSet, TypePlan = plan.TypePlan, Range = "" });
+                    newp.Range = $"С {plan.StartDay} по {plan.EndDay}";
+                    specials.Add(SpecialDateFabric.GetWorking(DateTime.Parse(plan.DateSet)));
+                } 
+                else if (plan.TypePlan == Globals.PlanTypes["2"]) // Если выходной
+                {
+                    specials.Add(SpecialDateFabric.GetDayOff(DateTime.Parse(plan.DateSet)));
                 }
-                else
+                else if (plan.TypePlan == Globals.PlanTypes["3"]) // Если больничный 
                 {
-                    Plans.Add(new MyPlan() { DateSet = plan.DateSet, TypePlan = plan.TypePlan, Range = $"С {plan.StartDay} по {plan.EndDay}" });
+                    specials.Add(SpecialDateFabric.GetHospital(DateTime.Parse(plan.DateSet)));
+                }
+                else if (plan.TypePlan == Globals.PlanTypes["4"]) // Если отпуск
+                {
+                    specials.Add(SpecialDateFabric.GetHoliday(DateTime.Parse(plan.DateSet)));
                 }
 
+                dates.Add(DateTime.Parse(plan.DateSet), newp);
+            }
+
+            Dates = new ObservableCollection<SpecialDate>(specials);
+        }
+        private async void ShowDayInfo(object param)
+        {
+            var plan = new MyPlan();
+            try
+            {
+                plan = dates[(DateTime)param];
+            }
+            catch (Exception)
+            {
+                plan = new MyPlan() { TypePlan = "График не задан", Range = "" };
+            }
+            finally
+            {
+                string message = plan.TypePlan;
+                if (!string.IsNullOrEmpty(plan.Range))
+                {
+                    message += $"\n{plan.Range}";
+                }
+                await Application.Current.MainPage.DisplayAlert(((DateTime)param).ToString("dd MMMM, dddd"), message, "Ок");
+            }
+        }
+        private class SpecialDateFabric
+        {
+            public static SpecialDate GetWorking(DateTime Date)
+            {
+                return new SpecialDate(Date)
+                {
+                    BackgroundColor = Color.FromHex("95e089"),
+                    TextColor = Color.Black,
+                    Selectable = true
+                };
+            }
+            public static SpecialDate GetHospital(DateTime Date)
+            {
+                return new SpecialDate(Date)
+                {
+                    BackgroundColor = Color.FromHex("b647df"),
+                    TextColor = Color.White,
+                    Selectable = true
+                };
+            }
+            public static SpecialDate GetHoliday(DateTime Date)
+            {
+                return new SpecialDate(Date)
+                {
+                    BackgroundColor = Color.FromHex("f66b30"),
+                    TextColor = Color.Black,
+                    Selectable = true
+                };
+            }
+            public static SpecialDate GetDayOff(DateTime Date)
+            {
+                return new SpecialDate(Date)
+                {
+                    BackgroundColor = Color.FromHex("66f9ff"),
+                    TextColor = Color.Black,
+                    Selectable = true
+                };
             }
         }
     }
