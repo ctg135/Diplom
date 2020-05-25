@@ -3,53 +3,67 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:images="clr-namespace:Client"
              mc:Ignorable="d"
              Title="Авторизация"
              Appearing="ContentPage_Appearing"
-             x:Class="Client.Views.AuthoPage">
+             x:Class="Client.Views.AuthoPage"
+             Padding="0">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Настройки" Order="Primary" Command="{Binding OpenSettings}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="9*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
+        <AbsoluteLayout VerticalOptions="Fill" HorizontalOptions="Fill" Padding="0" Margin="0">
+            <Image
+                Source="{images:ImageResource Source=Client.Images.autho_background.jpg}" 
+                AbsoluteLayout.LayoutBounds="0, .5, 1, 1.5"  
+                AbsoluteLayout.LayoutFlags="SizeProportional"
+            />
 
-            <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
-                <Entry
-                    Text="{Binding Login}"
-                    Placeholder="Логин"
-                    WidthRequest="200"
-                    HorizontalTextAlignment="Center"
-                    VerticalOptions="End" 
-                    HorizontalOptions="Center"
-                    />
-                <Entry
-                    Text="{Binding Password}"
-                    Placeholder="Пароль"
-                    IsPassword="True"
-                    WidthRequest="200"
-                    HorizontalTextAlignment="Center"
-                    VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand" 
-                    />
+            <Grid 
+                AbsoluteLayout.LayoutBounds=".5, 1, 1, 1" 
+                AbsoluteLayout.LayoutFlags="All" 
+                VerticalOptions="Center">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand">
+                    <Entry
+                        Text="{Binding Login}"
+                        Placeholder="Логин"
+                        WidthRequest="200"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="End" 
+                        HorizontalOptions="Center"
+                        />
+                    <Entry
+                        Text="{Binding Password}"
+                        Placeholder="Пароль"
+                        IsPassword="True"
+                        WidthRequest="200"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand" 
+                        />
+                    <Button 
+                        Text="Войти"
+                        VerticalOptions="CenterAndExpand" 
+                        HorizontalOptions="CenterAndExpand" 
+                        Command="{Binding Authorize}"
+                        />
+                </StackLayout>
                 <Button 
-                    Text="Войти"
+                    Text="Сохраненный график"
+                    Grid.Row="2"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" 
-                    Command="{Binding Authorize}"
+                    Command="{Binding OpenSavedPlans}"
                     />
-            </StackLayout>
-            <Button 
-                Text="Сохраненный график"
-                Grid.Row="2"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" 
-                Command="{Binding OpenSavedPlans}"
-                />
-        </Grid>
+            </Grid>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

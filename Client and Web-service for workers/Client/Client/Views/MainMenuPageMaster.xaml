@@ -1,41 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="Client.Views.MainMenuPageMaster"
-             Title="Master">
-  <StackLayout>
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:images="clr-namespace:Client"
+                mc:Ignorable="d"
+                x:Class="Client.Views.MainMenuPageMaster"
+                Title="Master">
+    <StackLayout>
         <ListView x:Name="MenuItemsListView"
-              SeparatorVisibility="None"
-              HasUnevenRows="true"
-              ItemsSource="{Binding MenuItems}">
+                SeparatorVisibility="None"
+                HasUnevenRows="true"
+                ItemsSource="{Binding MenuItems}">
             <ListView.Header>
-                <Grid BackgroundColor="#87aa76">
-                    <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="80"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-            </Grid.RowDefinitions>
-            <StackLayout 
-                Grid.Column="1"
-                Grid.Row="2">
-                    <Label Text="{Binding WorkerName}" FontSize="Title" TextColor="#FFF"/>
-                    <Label Text="{Binding WorkerPosition}" TextColor="#FFF"/>
-                </StackLayout>
-                </Grid>
-      </ListView.Header>
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell>
-            <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
+                <AbsoluteLayout BackgroundColor="Bisque" HeightRequest="220">
+                    <Frame   
+                            Margin="0"
+                            Padding="0"
+                            AbsoluteLayout.LayoutFlags="All"
+                            AbsoluteLayout.LayoutBounds="1, 1, 1, 1">
+                        <Image 
+                                Source="{images:ImageResource Source=Client.Images.menu_background.png}"  
+                                Aspect="Fill"
+                            />
+                    </Frame>
+                    <StackLayout 
+                            AbsoluteLayout.LayoutBounds="0.1, 1, 200, 70" 
+                            AbsoluteLayout.LayoutFlags="PositionProportional">
+                        <Label Text="{Binding WorkerName}" FontSize="Title" TextColor="#ddeedd"/>
+                        <Label Text="{Binding WorkerPosition}" TextColor="#ddeedd"/>
+                    </StackLayout>
+                </AbsoluteLayout>
+            </ListView.Header>          
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -44,27 +44,22 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="4*"/>
                                 </Grid.ColumnDefinitions>
-
                                 <Image
                                     Source="{Binding IconSource}"
                                     Aspect="AspectFit"
                                     HeightRequest="30"
                                     WidthRequest="30"
                                 />
-
                                 <Label Grid.Column="1" VerticalOptions="FillAndExpand" 
                                     VerticalTextAlignment="Center" 
                                     Text="{Binding Title}" 
-                                    d:Text="{Binding .}"
                                     FontSize="24"
                                 />
-                                
-
                             </Grid>
-            </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-  </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>

@@ -15,17 +15,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\autho_background.jpg" />
     <None Remove="Images\MainMenuIcon\calendar.png" />
     <None Remove="Images\MainMenuIcon\cog.png" />
     <None Remove="Images\MainMenuIcon\home.png" />
     <None Remove="Images\MainMenuIcon\tasks.png" />
+    <None Remove="Images\menu_background.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\autho_background.jpg" />
     <EmbeddedResource Include="Images\MainMenuIcon\calendar.png" />
     <EmbeddedResource Include="Images\MainMenuIcon\cog.png" />
     <EmbeddedResource Include="Images\MainMenuIcon\home.png" />
     <EmbeddedResource Include="Images\MainMenuIcon\tasks.png" />
+    <EmbeddedResource Include="Images\menu_background.png" />
   </ItemGroup>
 
   <ItemGroup>
