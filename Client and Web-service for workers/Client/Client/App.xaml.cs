@@ -1,13 +1,10 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
-
 using Client.IoC;
 using Client.Views;
 using CommonServiceLocator;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Client
 {

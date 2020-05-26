@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Autofac;
-
+﻿using Autofac;
 using Client.Models;
 
 namespace Client.Droid.IoC
@@ -22,7 +10,7 @@ namespace Client.Droid.IoC
             base.Load(builder);
 
             builder.RegisterType<Models.XmlPlanLoader>().As<IPlanLoader>();
-            builder.RegisterType<Models.MockClient>().As<IClientModel>();
+            builder.RegisterType<Models.RestClient>().As<IClientModel>();
             builder.RegisterType<Models.XmlConfigManager>().As<IConfigManager>();
         }
     }

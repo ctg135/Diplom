@@ -110,7 +110,7 @@ namespace Web_Service.Controllers
                 Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate:dd.MM.yyyy} и {EndDate:dd.MM.yyyy} типов {req.PlanCodes}30");
 
                 var plans = new List<Data.Response.Plan>();
-                if (req.PlanCodes == null)
+                if (req.PlanCodes == null || new List<string>(req.PlanCodes).Count == 0)
                 {
                     plans = new List<Data.Response.Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
                 }

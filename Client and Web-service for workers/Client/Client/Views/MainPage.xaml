@@ -55,7 +55,9 @@
                 <GridItemsLayout Span="2" Orientation="Horizontal" HorizontalItemSpacing="0" />
             </CollectionView.ItemsLayout>
             <CollectionView.EmptyView>
-                <Label Text="Заданий нету" TextColor="#192114" HorizontalOptions="Center" VerticalOptions="Center" />
+                <StackLayout VerticalOptions="Center">
+                    <Label Text="Заданий нету" TextColor="#192114" HorizontalOptions="Center" VerticalOptions="Center" />
+                </StackLayout>
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>

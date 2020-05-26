@@ -6,7 +6,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Projects\Sites\DiplomRelesase</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\Public\dopl\WebSite</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -21,9 +21,6 @@
     <File Include="bin/Google.Protobuf.dll">
       <publishTime>04/18/2020 01:24:59</publishTime>
     </File>
-    <File Include="bin/log4net.dll">
-      <publishTime>03/31/2020 11:33:38</publishTime>
-    </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>04/18/2020 01:25:01</publishTime>
     </File>
@@ -37,7 +34,7 @@
       <publishTime>04/18/2020 01:25:05</publishTime>
     </File>
     <File Include="bin/NLog.config">
-      <publishTime>01/05/2020 21:20:57</publishTime>
+      <publishTime>05/01/2020 21:20:57</publishTime>
     </File>
     <File Include="bin/NLog.dll">
       <publishTime>03/20/2020 16:52:32</publishTime>
@@ -184,43 +181,43 @@
       <publishTime>04/18/2020 01:25:02</publishTime>
     </File>
     <File Include="bin/ru/System.Net.Http.Formatting.resources.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>11/28/2018 13:00:56</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Helpers.resources.dll">
-      <publishTime>04/18/2020 01:25:01</publishTime>
+      <publishTime>11/28/2018 13:04:46</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Http.resources.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>11/28/2018 13:01:22</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Http.WebHost.resources.dll">
-      <publishTime>04/18/2020 01:25:01</publishTime>
+      <publishTime>11/28/2018 13:03:14</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Mvc.resources.dll">
-      <publishTime>04/18/2020 01:24:59</publishTime>
+      <publishTime>11/28/2018 13:00:10</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Optimization.resources.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>02/11/2014 15:28:42</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Razor.resources.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>11/28/2018 13:00:32</publishTime>
     </File>
     <File Include="bin/ru/System.Web.WebPages.Deployment.resources.dll">
-      <publishTime>04/18/2020 01:25:01</publishTime>
+      <publishTime>11/28/2018 13:04:46</publishTime>
     </File>
     <File Include="bin/ru/System.Web.WebPages.Razor.resources.dll">
-      <publishTime>04/18/2020 01:25:01</publishTime>
+      <publishTime>11/28/2018 13:04:46</publishTime>
     </File>
     <File Include="bin/ru/System.Web.WebPages.resources.dll">
-      <publishTime>04/18/2020 01:25:01</publishTime>
+      <publishTime>11/28/2018 13:04:46</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>04/18/2020 01:25:00</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>04/18/2020 01:25:01</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>04/18/2020 01:25:00</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
       <publishTime>04/18/2020 01:25:01</publishTime>
@@ -229,10 +226,10 @@
       <publishTime>04/18/2020 01:24:59</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>04/18/2020 01:25:00</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>04/18/2020 01:25:00</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Deployment.dll">
       <publishTime>04/18/2020 01:25:01</publishTime>
@@ -250,16 +247,13 @@
       <publishTime>05/25/2020 17:54:53</publishTime>
     </File>
     <File Include="bin/Web-Service.dll">
-      <publishTime>05/25/2020 22:04:25</publishTime>
+      <publishTime>05/26/2020 10:56:07</publishTime>
     </File>
     <File Include="bin/Web-Service.pdb">
-      <publishTime>05/25/2020 22:04:25</publishTime>
+      <publishTime>05/26/2020 10:56:07</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>04/18/2020 01:25:06</publishTime>
-    </File>
-    <File Include="Config.xml">
-      <publishTime>03/19/2020 16:46:58</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>04/18/2020 01:24:59</publishTime>
@@ -268,13 +262,13 @@
       <publishTime>04/18/2020 01:24:57</publishTime>
     </File>
     <File Include="NLog.config">
-      <publishTime>01/05/2020 21:20:57</publishTime>
+      <publishTime>05/01/2020 21:20:57</publishTime>
     </File>
     <File Include="Views/Home/Index.aspx">
       <publishTime>05/05/2020 20:28:40</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/25/2020 17:55:38</publishTime>
+      <publishTime>05/26/2020 10:56:10</publishTime>
     </File>
   </ItemGroup>
 </Project>

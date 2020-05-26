@@ -8,7 +8,8 @@
              Title="Авторизация"
              Appearing="ContentPage_Appearing"
              x:Class="Client.Views.AuthoPage"
-             Padding="0">
+             Padding="0"
+             BackgroundColor="White">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Настройки" Order="Primary" Command="{Binding OpenSettings}"/>
     </ContentPage.ToolbarItems>

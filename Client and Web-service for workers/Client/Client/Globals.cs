@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Client.DataModels;
+using Client.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Models;
-using Client.DataModels;
 
 namespace Client
 {
@@ -91,7 +90,7 @@ namespace Client
         /// </summary>
         public static void DestroyConnectionChecker()
         {
-            //ConnectionCheckerTimer.Dispose();
+            ConnectionCheckerTimer.Dispose();
             TimerClient = null;
         }
         /// <summary>
@@ -127,6 +126,7 @@ namespace Client
             {
                 PlanTypes.Add(type.Code, type.Title);
             }
+            PlanTypes.Add("0", "выходной");
 
             WorkerInfo = await Client.GetWorkerInfo();
 
@@ -136,10 +136,9 @@ namespace Client
             {
                 TaskStages.Add(stage.Code, stage.Title);
             }
+            WorkerStatus = await Client.GetLastStatusCode();
 
-            //WorkerStatus = await Client.GetLastStatusCode();
-
-            //SetUpConnectionChecker(2 * 60 * 1000, Client);
+            SetUpConnectionChecker(2 * 60 * 1000, Client);
         }
         /// <summary>
         /// Очистка всех данных

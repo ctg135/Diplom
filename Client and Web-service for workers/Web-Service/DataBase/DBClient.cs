@@ -651,14 +651,14 @@ namespace Web_Service.DataBase
             Logger.TaskLog.Trace($"ВЫполнение запроса {query}");
 
             foreach(DataRow row in table.Rows)
-            {
+            {                
                 tasks.Add(
                     new Data.Response.Task()
                     {
                         TaskId = row["Id"].ToString(),
                         Description = row["Description"].ToString(),
                         Created = DateTime.Parse(row["Created"].ToString()).ToString("dd.MM.yyyy"),
-                        Finished = DateTime.Parse(row["Finished"].ToString()).ToString("dd.MM.yyyy"),
+                        Finished = string.IsNullOrEmpty(row["Finished"].ToString()) ? null : DateTime.Parse(row["Finished"].ToString()).ToString("dd.MM.yyyy"),
                         SetterWorkerName = GetWorkerName(row["SetterWorker"].ToString()),
                         Stage = row["Stage"].ToString()
                     });

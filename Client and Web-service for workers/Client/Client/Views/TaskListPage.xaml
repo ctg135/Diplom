@@ -117,7 +117,7 @@
                                 <StackLayout>
                                     <Frame Style="{StaticResource TaskFrame}">
                                         <StackLayout>
-                                            <Label Text="{Binding Description, Converter={StaticResource Cutter}, ConverterParameter='32'}" Style="{StaticResource TaskDescription}"/>
+                                            <Label Text="{Binding Description, Converter={StaticResource Cutter}, ConverterParameter='30'}" Style="{StaticResource TaskDescription}"/>
                                             <Label Text="{Binding Stage}" Style="{StaticResource TaskStage}"/>
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{Binding DateSetted}" Style="{StaticResource TaskDate}"/>

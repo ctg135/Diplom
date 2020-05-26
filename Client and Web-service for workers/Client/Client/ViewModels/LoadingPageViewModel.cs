@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-using Client.Models;
+﻿using Client.Models;
 using Client.Views;
+using System;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Client.ViewModels

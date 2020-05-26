@@ -95,7 +95,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
             Logger.TaskLog.Trace($"POST Определен работник #{WorkerId}");
-            // Проверка на адекватный массив
+            
 
             if (req.TaskStages != null)
             {

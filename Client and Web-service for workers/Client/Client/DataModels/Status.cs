@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Client.DataModels
+﻿namespace Client.DataModels
 {
     public class Status
     {

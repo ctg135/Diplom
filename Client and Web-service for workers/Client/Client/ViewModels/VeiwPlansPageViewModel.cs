@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Client.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
 using System.Windows.Input;
-using Client.DataModels;
-using Client.Views;
 using Xamarin.Forms;
 using XamForms.Controls;
 
@@ -65,7 +62,6 @@ namespace Client.ViewModels
             foreach (var plan in PlanList)
             {
                 MyPlan newp = new MyPlan() { DateSet = plan.DateSet, TypePlan = plan.TypePlan };
-                System.Diagnostics.Debug.WriteLine(Globals.PlanTypes["1"]);
 
                 if (plan.TypePlan == Globals.PlanTypes["1"]) // Если рабочий
                 {

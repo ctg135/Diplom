@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿using Client.Models;
 using Client.Views;
-using Client.Models;
-using Client.DataModels;
-using Plugin.Settings;
 using CommonServiceLocator;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Client.ViewModels
 {
@@ -95,9 +91,8 @@ namespace Client.ViewModels
                 Globals.PlanTypes.Add("2", "Выходной");
                 Globals.PlanTypes.Add("3", "Больничный");
                 Globals.PlanTypes.Add("4", "Отпуск");
-                ViewPlans(this, new ViewPlansEventArgs(plans));
             }
-                
+            ViewPlans(this, new ViewPlansEventArgs(plans));
         }
         /// <summary>
         /// Команда открытия страницы настроек

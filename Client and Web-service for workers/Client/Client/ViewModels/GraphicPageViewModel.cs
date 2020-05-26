@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Client.DataModels;
-using System.Collections.ObjectModel;
-using Xamarin.Forms;
-using System.Globalization;
-using System.Windows.Input;
+﻿using Client.DataModels;
 using Client.Models;
-using Client.Views;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Client.ViewModels
 {
@@ -107,9 +103,10 @@ namespace Client.ViewModels
                 Plans = await Client.GetPlans(StartDate, EndDate, filter.ToArray());
                 foreach (var plan in Plans)
                 {
+                    plan.StartDay = ToShorter(plan.StartDay);
+                    plan.EndDay = ToShorter(plan.EndDay);
                     plan.TypePlan = Globals.PlanTypes[plan.TypePlan];
                 }
-                System.Diagnostics.Debug.WriteLine("Выводим графики");
                 ViewPlans(this, new ViewPlansEventArgs(Plans));
             }
             catch(Exception exc)
@@ -142,6 +139,8 @@ namespace Client.ViewModels
                 Plans = await Client.GetPlans(StartDate, EndDate, filter.ToArray());
                 foreach (var plan in Plans)
                 {
+                    plan.StartDay = ToShorter(plan.StartDay);
+                    plan.EndDay = ToShorter(plan.EndDay);
                     plan.TypePlan = Globals.PlanTypes[plan.TypePlan];
                 }
                 await PlanLoader.SetPlans(Plans);
@@ -165,6 +164,11 @@ namespace Client.ViewModels
                 await FatalError(exc.Message);
                 return;
             }
+        }
+        private string ToShorter(string param)
+        {
+            if (param.Length > 5) param = param.Remove(5);
+            return param;
         }
     }
 }

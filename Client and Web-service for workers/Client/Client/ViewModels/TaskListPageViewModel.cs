@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Client.Models;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Client.Models;
 
 namespace Client.ViewModels
 {
@@ -31,7 +29,10 @@ namespace Client.ViewModels
         public TaskListPageViewModel()
         {
             LoadTasks = new Command(UpdateTaskList);
+
             this.Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
+            Client.Server = Globals.Config.GetItem("Server").Result;
+            Client.Session = Globals.Config.GetItem("Session").Result;
 
             IsDateRequired = false;
             NotAcceptedFilter = true;

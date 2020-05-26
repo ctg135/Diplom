@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-
-using Client.ViewModels;
-
+﻿using Client.ViewModels;
 using CommonServiceLocator;
+using System;
+using System.ComponentModel;
+using Xamarin.Forms;
 
 namespace Client.Views
 {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
+﻿using Client.DataModels;
+using Client.Models;
+using System;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Client.DataModels;
-using Client.Models;
-using Client.Views;
-using System.Globalization;
 
 namespace Client.ViewModels
 {
@@ -61,6 +56,7 @@ namespace Client.ViewModels
             this.Client = Client;
             this.Client.Session = Globals.Config.GetItem("Session").Result;
             this.Client.Server = Globals.Config.GetItem("Server").Result;
+
             Tasks = new Tasks();
             PlanToday = Plan.Empty();
             Globals.WorkerStatus = StatusCode.Empty();
@@ -96,6 +92,16 @@ namespace Client.ViewModels
                 return;
             }
 
+            if (Globals.WorkerStatus.Code == "1" || Globals.WorkerStatus.Code == "2" || Globals.WorkerStatus.Code == "3")
+            {
+                IsStatusUpdateable = true;
+            }
+            else
+            {
+                IsStatusUpdateable = false;
+            }
+
+            NotifyPropertyChanged(nameof(IsStatusUpdateable));
             NotifyPropertyChanged(nameof(Status));
         }
         /// <summary>
@@ -112,7 +118,7 @@ namespace Client.ViewModels
                 PlanToday.TypePlan = Globals.PlanTypes[type].ToLower();
                 if (type == "1")
                 {
-                    PlanToday.TypePlan += $" с {PlanToday.StartDay} до {PlanToday.EndDay}";
+                    PlanToday.TypePlan += $" с {ToShorter(PlanToday.StartDay)} до {ToShorter(PlanToday.EndDay)}";
                 }
 
                 foreach (var task in Tasks.Items)
@@ -146,10 +152,14 @@ namespace Client.ViewModels
             NotifyPropertyChanged(nameof(PlanToday));
             NotifyPropertyChanged(nameof(Tasks));
         }
-
         private void Task_OpeningDetails(object sender, EventArgs e)
         {
             NavigateToTaskDetail(sender, new EventArgs());
+        }
+        private string ToShorter(string param)
+        {
+            if (param.Length > 5) param = param.Remove(5);
+            return param;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Client.DataModels;
+using System;
 using System.Collections.Generic;
-using Client.DataModels;
 
 namespace Client.ViewModels
 {

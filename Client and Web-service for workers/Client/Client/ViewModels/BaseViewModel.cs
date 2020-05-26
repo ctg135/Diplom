@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Client.Views;
 using System.ComponentModel;
-
-using Xamarin.Forms;
 using System.Threading.Tasks;
-using Client.Views;
+using Xamarin.Forms;
 
 namespace Client.ViewModels
 {

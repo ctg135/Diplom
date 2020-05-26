@@ -19,6 +19,7 @@ using Xamarin.Essentials;
 using System.Security.Cryptography;
 using Request = Web_Service.Data.Request;
 using Response = Web_Service.Data.Response;
+using D = System.Diagnostics;
 
 namespace Client.Droid.Models
 {
@@ -47,6 +48,9 @@ namespace Client.Droid.Models
             public const string Processing = "2";
             public const string Completed = "3";
         }
+        /// <summary>
+        /// Класс типов планов
+        /// </summary>
         private class Plans
         {
             public const string Working = "1";
@@ -87,17 +91,15 @@ namespace Client.Droid.Models
         {
             HttpResponseMessage response = new HttpResponseMessage();
 
-            using (HttpRequestMessage request = new HttpRequestMessage()
+            HttpRequestMessage request = new HttpRequestMessage()
             {
                 Method = Method,
                 RequestUri = new Uri(Server + Controller),
-                Content = new StringContent(Content ?? "")
-            })
-            using (var client = CreateDefaultClient())
-            {
-                response = await client.SendAsync(request);
-            }
-
+                Content = Content == null ? null : new StringContent(Content)
+            };
+            var client = CreateDefaultClient();
+            
+            response = await client.SendAsync(request);
             return await Task.FromResult(response);
         }
         /// <summary>
