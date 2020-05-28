@@ -9,20 +9,6 @@ namespace Web_Service.Controllers
     public class MessageTemplate
     {
         /// <summary>
-        /// Сообщение о плохой ошибке
-        /// </summary>
-        public static HttpResponseMessage BadMessage
-        {
-            get
-            {
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent("{\"Message\":\"Некорректное содержимое сообщения\"}"),
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-            }
-        }
-        /// <summary>
         /// Сообщение об ошибке сериализации
         /// </summary>
         public static HttpResponseMessage SerializationError

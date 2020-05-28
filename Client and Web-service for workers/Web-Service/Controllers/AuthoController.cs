@@ -32,6 +32,7 @@ namespace Web_Service.Controllers
             try
             {
                 data = JsonConvert.DeserializeObject<Data.Request.AuthoLogin>(await request.Content.ReadAsStringAsync());
+                Logger.AuthoLog.Debug($"POST Login:'{data.Login}', Password:'{data.Password}'");
             }
             catch(Exception exc)
             {
@@ -43,7 +44,7 @@ namespace Web_Service.Controllers
             {
                 Logger.AuthoLog.Warn("POST Пустые данные авторизации");
             }
-
+            Logger.AuthoLog.Trace("POST Создание сессии");
             try
             {
                 sessionHash = Authentication.CreateSession(
@@ -64,7 +65,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.SessionNotCreated;
             }
 
-            Logger.AuthoLog.Info($"POST Сессия {sessionHash} в базе данных");
+            Logger.AuthoLog.Debug($"POST Сессия {sessionHash} в базе данных");
             
             response.Content = new StringContent(JsonConvert.SerializeObject(new Data.Response.AuthoResult() { Session = sessionHash }));
             response.StatusCode = HttpStatusCode.OK;
@@ -90,6 +91,7 @@ namespace Web_Service.Controllers
             try
             {
                 req = JsonConvert.DeserializeObject<Data.Request.AuthoSession>(await request.Content.ReadAsStringAsync());
+                Logger.AuthoLog.Debug($"Session:'{req.Session}'");
             }
             catch (Exception exc)
             {
@@ -104,6 +106,7 @@ namespace Web_Service.Controllers
 
             try
             {
+                Logger.AuthoLog.Trace("Авторизация сессии");
                 authores = Authentication.Authenticate(req.Session, ClientInfo);
             }
             catch (Exception exc)
@@ -115,13 +118,13 @@ namespace Web_Service.Controllers
             switch(authores)
             {
                 case AuthenticationResult.Ok:
-                    Logger.AuthoLog.Info($"PUT Сессия {req.Session} авторизирована");
+                    Logger.AuthoLog.Debug($"PUT Сессия {req.Session} авторизирована");
                     return new HttpResponseMessage() { StatusCode = HttpStatusCode.OK };
                 case AuthenticationResult.ClientNotFound:
-                    Logger.AuthoLog.Info("PUT Клиент не был найден");
+                    Logger.AuthoLog.Debug("PUT Клиент не был найден");
                     return MessageTemplate.ClientNotFound;
                 case AuthenticationResult.SessionNotFound:
-                    Logger.AuthoLog.Info("PUT Сессия не была найдена");
+                    Logger.AuthoLog.Debug("PUT Сессия не была найдена");
                     return MessageTemplate.SessionNotFound;
                 default:
                     Logger.AuthoLog.Fatal("PUT Необработанная ошибка");

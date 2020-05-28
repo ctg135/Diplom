@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,8 +29,10 @@ namespace Web_Service.Controllers
 
             try
             {
-                string plans = JsonConvert.SerializeObject(DBClient.GetPlanTypes());
+                var pl = DBClient.GetPlanTypes();
+                string plans = JsonConvert.SerializeObject(pl);
                 response.Content = new StringContent(plans);
+                Logger.PlanLog.Debug($"GET Всего планов:'{pl.ToArray().Length}'");
             }
             catch (Exception exc)
             {
@@ -60,6 +63,7 @@ namespace Web_Service.Controllers
 
             try
             {
+                Logger.PlanLog.Debug($"POST Содержимое сообщения '{request.Content.ReadAsStringAsync()}'");
                 req = JsonConvert.DeserializeObject<Data.Request.PlansRequest>(await request.Content.ReadAsStringAsync());
                 StartDate = DateTime.Parse(req.StartDate);
                 EndDate = DateTime.Parse(req.EndDate);
@@ -75,15 +79,20 @@ namespace Web_Service.Controllers
                 Logger.PlanLog.Warn("POST Пустая строка сессии");
             }
 
+            Logger.PlanLog.Trace("POST Проверка на значение даты");
+
             if (StartDate > EndDate)
             {
                 Logger.PlanLog.Error("POST Некорректный дипазон дат");
                 return MessageTemplate.BadDatesGived;
             }
 
+            Logger.PlanLog.Trace("POST Авторизация сессии");
+
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.PlanLog.Debug($"POST Сессия {req.Session} авторизована");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -94,7 +103,7 @@ namespace Web_Service.Controllers
                     Logger.PlanLog.Error("POST Клиент не найден");
                     return MessageTemplate.ClientNotFound;
             }
-
+            Logger.PlanLog.Trace("POST Поиск работника по сессии");
             try
             {
                 WorkerId = DBClient.GetWorkerId(req.Session);
@@ -104,24 +113,26 @@ namespace Web_Service.Controllers
                 Logger.PlanLog.Fatal(exc, "POST Работник не найден");
                 return MessageTemplate.InternalError;
             }
-
+            Logger.PlanLog.Debug($"POST Найден работник #{WorkerId}");
             try
             {
-                Logger.PlanLog.Debug($"POST Поиск планов для #{WorkerId} между {StartDate:dd.MM.yyyy} и {EndDate:dd.MM.yyyy} типов {req.PlanCodes}30");
+                Logger.PlanLog.Trace($"POST Поиск планов");
+                Logger.PlanLog.Debug($"POST От {StartDate:dd.MM.yyyy} по {EndDate:dd.MM.yyyy} типов {req.PlanCodes.ToArray()}");
 
                 var plans = new List<Data.Response.Plan>();
-                if (req.PlanCodes == null || new List<string>(req.PlanCodes).Count == 0)
+                Logger.PlanLog.Trace($"POST Опредление списка планов");
+                if (req.PlanCodes == null || req.PlanCodes.ToArray().Length == 0)
                 {
+                    Logger.PlanLog.Trace($"POST Поиск без фильтра");
                     plans = new List<Data.Response.Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate));
                 }
                 else
                 {
+                    Logger.PlanLog.Trace($"POST Поиск с фильтром");
                     plans = new List<Data.Response.Plan>(DBClient.GetPlans(WorkerId, StartDate, EndDate, new List<string>(req.PlanCodes)));
                 }
-                
+                Logger.PlanLog.Debug($"POST Всего найдено {plans.Count}");
                 response.Content = new StringContent(JsonConvert.SerializeObject(plans));
-
-                Logger.PlanLog.Debug($"POST Всего найдено {plans.Count} планов для #{WorkerId}");
             }
             catch (Exception exc)
             {

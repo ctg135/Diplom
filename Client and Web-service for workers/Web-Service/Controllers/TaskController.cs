@@ -57,7 +57,9 @@ namespace Web_Service.Controllers
 
             try
             {
-                req = JsonConvert.DeserializeObject<Data.Request.TaskRequest>(await request.Content.ReadAsStringAsync());
+                var a = await request.Content.ReadAsStringAsync();
+                Logger.TaskLog.Debug($"POST Содержимое сообщения {a}");
+                req = JsonConvert.DeserializeObject<Data.Request.TaskRequest>(a);
             }
             catch (Exception exc)
             {
@@ -65,11 +67,12 @@ namespace Web_Service.Controllers
                 return MessageTemplate.SerializationError;
             }
 
-            Logger.TaskLog.Debug($"POST Авторизация сессии {req.Session}");
+            Logger.TaskLog.Trace($"POST Авторизация сессии {req.Session}");
 
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.TaskLog.Debug($"POST Сессия авторизована");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -81,21 +84,20 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.TaskLog.Debug("POST Определение работника по сессии");
+            Logger.TaskLog.Trace("POST Определение работника по сессии");
 
             string WorkerId = string.Empty;
 
             try
             {
                 WorkerId = DBClient.GetWorkerId(req.Session);
+                Logger.TaskLog.Debug($"POST Определен работник #{WorkerId}");
             }
             catch (Exception exc)
             {
                 Logger.TaskLog.Fatal(exc, "POST Работник не найден");
                 return MessageTemplate.InternalError;
             }
-            Logger.TaskLog.Trace($"POST Определен работник #{WorkerId}");
-            
 
             if (req.TaskStages != null)
             {
@@ -109,13 +111,13 @@ namespace Web_Service.Controllers
                 }
             }
 
-            // Выполнение выборки
+            Logger.TaskLog.Trace($"POST Выполнение выборки");
 
             try
             {
-                Logger.TaskLog.Debug($"POST Поиск задач по дате {req.DateCreation} и стадиям {req.TaskStages.ToArray()}");
+                Logger.TaskLog.Trace($"POST Поиск задач по дате {req.DateCreation} и стадиям {req.TaskStages.ToArray()}");
                 var tasks = DBClient.GetTasks(WorkerId, req.DateCreation, req.TaskStages);
-                Logger.TaskLog.Trace($"POST найдено {tasks.ToList().Count} задач");
+                Logger.TaskLog.Debug($"POST найдено {tasks.ToList().Count} задач");
                 response.Content = new StringContent(JsonConvert.SerializeObject(tasks));
             }
             catch (Exception exc)
@@ -145,7 +147,9 @@ namespace Web_Service.Controllers
 
             try
             {
-                req = JsonConvert.DeserializeObject<Data.Request.TaskNewStage>(await request.Content.ReadAsStringAsync());
+                var a = await request.Content.ReadAsStringAsync();
+                Logger.TaskLog.Debug($"PUT Полученное сообщение");
+                req = JsonConvert.DeserializeObject<Data.Request.TaskNewStage>(a);
             }
             catch (Exception exc)
             {
@@ -158,11 +162,12 @@ namespace Web_Service.Controllers
                 Logger.TaskLog.Warn("PUT Пустой номер сессии");
             }
 
-            Logger.TaskLog.Debug($"PUT Авторизация сессии {req.Session}");
+            Logger.TaskLog.Trace($"PUT Авторизация сессии {req.Session}");
 
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.TaskLog.Debug($"PUT Сессия авторизована");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -174,16 +179,14 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            // Проверка работника
-
             try
             {
-                Logger.TaskLog.Debug($"PUT Поиск работника по сессии '{req.Session}'");
+                Logger.TaskLog.Trace($"PUT Поиск работника по сессии");
                 WorkerId = DBClient.GetWorkerId(req.Session);
-                Logger.TaskLog.Trace($"PUT Авторизирован #{WorkerId}");
-                Logger.TaskLog.Debug($"PUT Поиск выполняемого для задачи '{req.TaskId}'");
+                Logger.TaskLog.Debug($"PUT Авторизирован #{WorkerId}");
+                Logger.TaskLog.Trace($"PUT Поиск выполняемого для задачи '{req.TaskId}'");
                 SettedWorkerId = DBClient.GetWorkerIdFromTask(req.TaskId);
-                Logger.TaskLog.Trace($"PUT Назначен #{SettedWorkerId}");
+                Logger.TaskLog.Debug($"PUT Назначен #{SettedWorkerId}");
                 if (WorkerId != SettedWorkerId) throw new Exception("Работник изменяет не свою задачу");
             }
             catch (Exception exc)
@@ -192,28 +195,22 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
 
-            if (string.IsNullOrEmpty(SettedWorkerId))
-            {
-                Logger.TaskLog.Fatal("PUT Задача не имеет назначенного работника");
-                return MessageTemplate.InternalError;
-            }
-
             if (DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode != DBClient.State_Working)
             {
-                Logger.TaskLog.Info("Сотрудник не на рабочем месте");
+                Logger.TaskLog.Error("Сотрудник не на рабочем месте");
                 return MessageTemplate.BadStatusWorker;
             }
 
-            // Проверка стадии
+            Logger.TaskLog.Trace($"PUT Проврка стадии задачи на возможность установить");
 
             if (req.Stage == DBClient.TaskStage_NotAccepted)
             {
-                Logger.TaskLog.Info("PUT Нельзя установить задаче стадии непринятой");
+                Logger.TaskLog.Error("PUT Нельзя установить задаче стадии непринятой");
                 return MessageTemplate.BadTaskStage;
             }
             else if (!(req.Stage == DBClient.TaskStage_Completed || req.Stage == DBClient.TaskStage_Accepted))
             {
-                Logger.TaskLog.Info($"PUT Некорректный номер стадии '{req.Stage}'");
+                Logger.TaskLog.Error($"PUT Некорректный номер стадии '{req.Stage}'");
                 return MessageTemplate.BadTaskStage;
             }
 
@@ -235,22 +232,22 @@ namespace Web_Service.Controllers
 
             if (PreviousStage == req.Stage)
             {
-                Logger.TaskLog.Info("PUT Стадии совпали");
+                Logger.TaskLog.Error("PUT Стадии совпали");
                 return response;
             }
             else if (PreviousStage == DBClient.TaskStage_Completed)
             {
-                Logger.TaskLog.Info("PUT Задача уже завершена");
+                Logger.TaskLog.Error("PUT Задача уже завершена");
                 return MessageTemplate.BadTaskStage;
             }
             else if (PreviousStage == DBClient.TaskStage_NotAccepted && req.Stage != DBClient.TaskStage_Accepted)
             {
-                Logger.TaskLog.Info("PUT Задача ещё не принята");
+                Logger.TaskLog.Error("PUT Задача ещё не принята");
                 return MessageTemplate.BadTaskStage;
             }
             else if (PreviousStage == DBClient.TaskStage_Accepted && req.Stage != DBClient.TaskStage_Completed)
             {
-                Logger.TaskLog.Info("PUT Задача должна быть выполнена");
+                Logger.TaskLog.Error("PUT Задача должна быть выполнена");
                 return MessageTemplate.BadTaskStage;
             }
 
@@ -258,6 +255,7 @@ namespace Web_Service.Controllers
 
             try
             {
+                Logger.TaskLog.Trace("PUT Обновление стадии");
                 DBClient.UpdateTaskStage(req.TaskId, req.Stage);
             }
             catch (Exception exc)

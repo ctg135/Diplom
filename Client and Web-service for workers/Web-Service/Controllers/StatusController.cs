@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -27,7 +28,9 @@ namespace Web_Service.Controllers
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
-                string statuses = JsonConvert.SerializeObject(DBClient.GetStatusTypes());
+                var a = DBClient.GetStatusTypes();
+                Logger.StatusLog.Debug($"GET Найдено {a.ToArray().Length} статусов");
+                string statuses = JsonConvert.SerializeObject(a);
                 response.Content = new StringContent(statuses);
             }
             catch (Exception exc)
@@ -59,7 +62,9 @@ namespace Web_Service.Controllers
 
             try
             {
-                req = JsonConvert.DeserializeObject<Data.Request.StatusUserRequest>(await request.Content.ReadAsStringAsync());                
+                var a = await request.Content.ReadAsStringAsync();
+                Logger.StatusLog.Debug($"POST Содержимое сообщения '{a}'");
+                req = JsonConvert.DeserializeObject<Data.Request.StatusUserRequest>(a);                
             }
             catch (Exception exc)
             {
@@ -72,11 +77,12 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Warn("POST Пустой номер сессии");
             }
 
-            Logger.StatusLog.Debug($"POST Авторизация сессии {req.Session}");
+            Logger.StatusLog.Trace($"POST Авторизация сессии {req.Session}");
 
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.StatusLog.Debug("POST Сессия авторизована");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -88,11 +94,12 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.StatusLog.Debug($"POST Поиск работника по сессии {req.Session}");
+            Logger.StatusLog.Trace($"POST Поиск работника по сессии {req.Session}");
 
             try
             {
                 WorkerId = DBClient.GetWorkerId(req.Session);
+                Logger.StatusLog.Debug($"Надйен #{WorkerId}");
             }
             catch(Exception exc)
             {
@@ -100,12 +107,14 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
 
-            Logger.StatusLog.Debug("POST Просмотр статуса для #" + WorkerId);
+            Logger.StatusLog.Trace("POST Просмотр статуса");
 
             try
             {
                 var status = DBClient.GetStatus(WorkerId, DateTime.Now);
-                response.Content = new StringContent(JsonConvert.SerializeObject(status));
+                var con = JsonConvert.SerializeObject(status);
+                Logger.StatusLog.Debug($"POST Найден статус {con}");
+                response.Content = new StringContent(con);
             }
             catch(Exception exc)
             {
@@ -134,7 +143,9 @@ namespace Web_Service.Controllers
 
             try
             {
-                req = JsonConvert.DeserializeObject<Data.Request.NewStatusCode>(await request.Content.ReadAsStringAsync());
+                var a = await request.Content.ReadAsStringAsync();
+                Logger.StatusLog.Debug($"PUT Содержиоме:{a}");
+                req = JsonConvert.DeserializeObject<Data.Request.NewStatusCode>(a);
             }
             catch (Exception exc)
             {
@@ -147,9 +158,12 @@ namespace Web_Service.Controllers
                 Logger.StatusLog.Warn("PUT Пустой номер сессии");
             }
 
+            Logger.StatusLog.Trace($"POST Авторизация сессии {req.Session}");
+
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.StatusLog.Debug($"PUT Сессия авторизована");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -165,7 +179,9 @@ namespace Web_Service.Controllers
 
             try
             {
+                Logger.StatusLog.Trace($"PUT Поиск работника");
                 WorkerId = DBClient.GetWorkerId(req.Session);
+                Logger.StatusLog.Debug($"PUT Найден работник #{WorkerId}");
             }
             catch (Exception exc)
             {
@@ -173,10 +189,11 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
 
-            Logger.StatusLog.Debug($"PUT установка статуса '{req.StatusCode}' для #{WorkerId}");
+            Logger.StatusLog.Trace($"PUT установка статуса '{req.StatusCode}'");
 
             var currentStatus = DBClient.GetStatus(WorkerId, DateTime.Now).StatusCode;
-
+            Logger.StatusLog.Debug($"PUT Установленный статус {currentStatus}");
+            Logger.StatusLog.Trace("PUT Проверка статуса на корректность");
             if (currentStatus == req.StatusCode)
             {
                 Logger.StatusLog.Info($"PUT Такой статус {req.StatusCode} уже установлен");
@@ -204,8 +221,11 @@ namespace Web_Service.Controllers
                 return MessageTemplate.StatusSet_BadStatusCodeGiven;
             }
 
+            Logger.StatusLog.Debug($"PUT Статус может быть установлен");
+
             try
             {
+                Logger.StatusLog.Trace($"PUT Ведение журнала");
                 DBClient.LogStatus(WorkerId, req.StatusCode, DateTime.Now);
             }
             catch(Exception exc)

@@ -27,7 +27,9 @@ namespace Web_Service.Controllers
 
             try
             {
-                req = JsonConvert.DeserializeObject<Data.Request.WorkerInfoRequest>(await request.Content.ReadAsStringAsync());
+                var a = await request.Content.ReadAsStringAsync();
+                Logger.WorkerLog.Debug($"POST Содержимое сообщения {a}");
+                req = JsonConvert.DeserializeObject<Data.Request.WorkerInfoRequest>(a);
             }
             catch (Exception exc)
             {
@@ -40,11 +42,12 @@ namespace Web_Service.Controllers
                 Logger.WorkerLog.Warn("POST Пустой номер сессии");
             }
 
-            Logger.StatusLog.Debug($"POST Авторизация сессии {req.Session}");
+            Logger.StatusLog.Trace($"POST Авторизация сессии {req.Session}");
 
             switch (Authentication.Authenticate(req.Session, ClientInfo))
             {
                 case AuthenticationResult.Ok:
+                    Logger.WorkerLog.Debug($"POST Авторизация пройдена");
                     break;
 
                 case AuthenticationResult.SessionNotFound:
@@ -56,11 +59,12 @@ namespace Web_Service.Controllers
                     return MessageTemplate.ClientNotFound;
             }
 
-            Logger.WorkerLog.Debug($"POST Поиск работника по сессии {req.Session}");
+            Logger.WorkerLog.Trace($"POST Поиск работника по сессии");
 
             try
             {
                 WorkerId = DBClient.GetWorkerId(req.Session);
+                Logger.WorkerLog.Debug($"POST Найден #{WorkerId}");
             }
             catch (Exception exc)
             {
@@ -68,6 +72,7 @@ namespace Web_Service.Controllers
                 return MessageTemplate.InternalError;
             }
 
+            Logger.WorkerLog.Trace("Получение инфомрации о работнике");
             var worker = new Data.Response.WorkerInfo();
 
             try

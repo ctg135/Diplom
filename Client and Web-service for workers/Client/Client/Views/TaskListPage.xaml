@@ -19,7 +19,6 @@
             </Style>
             <Style x:Key="TaskDate" TargetType="Label">
                 <Setter Property="TextColor" Value="#75a269"/>
-                <Setter Property="FontAttributes" Value="Italic"/>
             </Style>
             <Style x:Key="TaskDescription" TargetType="Label">
                 <Setter Property="TextColor" Value="#000"/>

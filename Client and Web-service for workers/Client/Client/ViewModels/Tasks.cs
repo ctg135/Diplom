@@ -47,6 +47,7 @@ namespace Client.ViewModels
             public event EventHandler OpeningDetails;
             public Task()
             {
+                OpeningDetails += (object sender, EventArgs EventArgs) => { };
                 OpenDetails = new Command(OpenDetailsCommand);
             }
             /// <summary>
