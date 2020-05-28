@@ -113,7 +113,7 @@ namespace Web_Service.Controllers
 
             try
             {
-                Logger.TaskLog.Debug($"POST Поиск задач по дате {req.DateCreation} и стадиям {req.TaskStages}");
+                Logger.TaskLog.Debug($"POST Поиск задач по дате {req.DateCreation} и стадиям {req.TaskStages.ToArray()}");
                 var tasks = DBClient.GetTasks(WorkerId, req.DateCreation, req.TaskStages);
                 Logger.TaskLog.Trace($"POST найдено {tasks.ToList().Count} задач");
                 response.Content = new StringContent(JsonConvert.SerializeObject(tasks));

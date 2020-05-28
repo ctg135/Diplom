@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Web_Service.Loggers;
 
 namespace Web_Service.DataBase
@@ -635,7 +636,7 @@ namespace Web_Service.DataBase
                 query += $" AND `Created` > DATE('{date:yyyy-MM-dd}')";
             }
 
-            if (Stages != null)
+            if (Stages != null && Stages.ToArray().Length != 0)
             {
                 query += " AND `Stage` IN (";
                 foreach (string stage in Stages)

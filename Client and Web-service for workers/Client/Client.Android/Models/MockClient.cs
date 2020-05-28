@@ -178,11 +178,6 @@ namespace Client.Droid.Models
                 {
                     Code = "4",
                     Title = "Отпуск"
-                },
-                new PlanType()
-                {
-                    Code = "0",
-                    Title = "-"
                 }
             };
 

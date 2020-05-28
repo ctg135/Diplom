@@ -11,10 +11,9 @@ namespace Client.Views
         public TaskListPage()
         {
             InitializeComponent();
-            BindingContext = new TaskListPageViewModel();
+            BindingContext = CommonServiceLocator.ServiceLocator.Current.GetInstance<TaskListPageViewModel>();
             (BindingContext as TaskListPageViewModel).OpenDetailsPage += async (object sender, EventArgs args) => { await Navigation.PushAsync(new TaskDetailsPage(sender as Tasks.Task)); };
         }
-
         private void ContentPage_Appearing(object sender, EventArgs e)
         {
             (BindingContext as TaskListPageViewModel).LoadTasks.Execute(new object());

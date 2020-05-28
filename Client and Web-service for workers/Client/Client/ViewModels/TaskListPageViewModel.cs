@@ -26,11 +26,11 @@ namespace Client.ViewModels
             OpenDetailsPage(sender, args);
         }
 
-        public TaskListPageViewModel()
+        public TaskListPageViewModel(IClientModel Client)
         {
             LoadTasks = new Command(UpdateTaskList);
 
-            this.Client = CommonServiceLocator.ServiceLocator.Current.GetInstance<IClientModel>();
+            this.Client = Client;
             Client.Server = Globals.Config.GetItem("Server").Result;
             Client.Session = Globals.Config.GetItem("Session").Result;
 
